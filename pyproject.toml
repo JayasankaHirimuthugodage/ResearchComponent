@@ -1,0 +1,6 @@
+[project]
+name = "slc-research-training"
+version = "0.1.0"
+description = "Offline validation and reproducible split tooling for the SLC research component"
+requires-python = ">=3.10"
+dependencies = []
