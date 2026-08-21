@@ -1,6 +1,19 @@
 [project]
 name = "slc-research-training"
 version = "0.1.0"
-description = "Offline validation and reproducible split tooling for the SLC research component"
+description = "Offline validation, reproducible splitting, and development-only model comparison for the SLC research component"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "numpy>=2.2,<3",
+    "scikit-learn>=1.6,<2",
+]
+
+[project.optional-dependencies]
+notebook = [
+    "ipykernel>=6.29,<7",
+    "jupyterlab>=4.3,<5",
+    "matplotlib>=3.10,<4",
+    "nbconvert>=7.16,<8",
+    "nbformat>=5.10,<6",
+    "pandas>=2.2,<3",
+]

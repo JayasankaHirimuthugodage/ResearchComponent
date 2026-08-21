@@ -1,4 +1,4 @@
-# Phase-0 decision log
+# Research decision log
 
 Date: 2026-08-20
 
@@ -87,3 +87,24 @@ Operational ML sensitivity/specificity constraints and threshold utility remain 
 ## Next approval gate
 
 Recommended next phase: implement schema/leakage validation and create the reproducible participant-level development/final-test split described in [ml-training-plan.md](ml-training-plan.md). Verify those gates before fitting a model. Model training follows only after feature, target, group and untouched-test boundaries pass their checks.
+
+## Phase-1 development baseline decisions
+
+Date: 2026-08-21
+
+| Decision | Rationale / evidence |
+|---|---|
+| Fit one binary classifier per domain for each candidate | Preserves domain-specific evaluation and explanation; three targets do not require three datasets |
+| Start with class-weighted, L2-regularized logistic regression | Appropriate interpretable baseline for 405 development records and 42–48 positives per domain |
+| Use one shared five-fold, five-repeat allocation | Enables paired candidate/domain comparison and prevents selectively easier validation partitions |
+| Stratify on the three-label combination, then search for checkpoint balance | Every observed combination has at least five development records; deterministic secondary balancing reduces checkpoint skew without changing the label-first design |
+| Fit checkpoint encoding and questionnaire scaling inside each training fold | Prevents preprocessing leakage and keeps the complete inference transformation together |
+| Version probability `0.50` as approved for the current logistic configuration | The project owner supplied the exact statement: “The operational predicted-probability threshold of 0.50 was reviewed and approved by the consultant pediatrician for this model version.” This remains distinct from the observed score `<= 50` target rule |
+| Keep final-test evaluation unavailable from the development CLI | Prevents iterative model comparison from consuming the locked 102-participant evaluation set |
+| Emit only aggregate evaluation and coefficient-stability evidence | Supports explainability research without writing participant predictions or identifiers |
+| Use synthetic fixtures for local contract tests but not training | Tests leakage/fold/report behavior without augmenting the small research dataset |
+| Keep the experiment framework-neutral | Later candidates and a future service/monorepo adapter can reuse contracts without importing HTTP or database concerns |
+
+The repository assigns `domain-probability-threshold-v1` to the approved cutoff and scopes it to `logistic-l2-balanced-v1`. These are repository traceability identifiers, not fabricated clinical document identifiers. The consultant pediatrician's identity, approval date and authoritative document reference remain unrecorded.
+
+Implementation and local commands are documented in [development-experiment.md](development-experiment.md). Candidate expansion, tuning, calibration, threshold revalidation for a changed model configuration, final-test evaluation and model serialization remain separate approval gates.

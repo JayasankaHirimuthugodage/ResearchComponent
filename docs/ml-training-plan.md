@@ -99,7 +99,9 @@ Observed domain positive rates are 10.45%–12.03%.
 - If synthetic resampling is considered later, verify that ordinal questionnaire/checkpoint semantics are not violated.
 - Compare calibration before relying on probabilities internally.
 
-Do not assume a 0.5 threshold. Select one threshold per domain using only out-of-fold development predictions and a preapproved utility/safety criterion. Sensitivity-specificity trade-offs and minimum acceptable sensitivity require research-supervisor and pediatric input; they are not invented here. Freeze threshold versions before final-test evaluation.
+The project owner reports that the operational predicted-probability threshold of `0.50` was reviewed and approved by the consultant pediatrician for the current logistic model version. It is recorded as `domain-probability-threshold-v1` for `logistic-l2-balanced-v1`. This approval is distinct from the follow-up score `<= 50` target definition and does not automatically transfer to a different estimator, calibration method, retraining cycle or model version. The reviewer identity, approval date and authoritative document reference remain unrecorded rather than inferred.
+
+Any alternative threshold must be selected using development data only and treated as unapproved until it receives the required research/clinical governance. Never select or revise a threshold from final-test performance.
 
 ## Evaluation
 
@@ -151,7 +153,7 @@ Before running experiments, document:
 - calibration and complexity considerations;
 - how ties/overlapping uncertainty will favor the simpler, more interpretable model.
 
-Select using development results only. Freeze preprocessing, estimator configuration, calibration and thresholds. Then evaluate the untouched final test set once. Any subsequent change creates a new model-selection cycle and requires a new untouched test strategy or explicit acknowledgement that the prior test has become development data.
+Select using development results only. Freeze preprocessing, estimator configuration and calibration, and confirm that the approved threshold version applies to that exact frozen configuration. Then evaluate the untouched final test set once. Any subsequent change creates a new model-selection cycle and requires threshold revalidation plus a new untouched test strategy or explicit acknowledgement that the prior test has become development data.
 
 ## Required outputs of a future approved training phase
 

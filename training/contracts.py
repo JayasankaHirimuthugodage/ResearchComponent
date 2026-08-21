@@ -12,6 +12,23 @@ EXPECTED_DATASET_SHA256 = (
     "96521381C630E7AF4A551007C55F5703DDAAAEEDFCA3C3A09435A8082688F4D5"
 )
 EXPECTED_ROW_COUNT = 507
+EXPECTED_DEVELOPMENT_PARTICIPANT_COUNT = 405
+EXPECTED_FINAL_TEST_PARTICIPANT_COUNT = 102
+EXPECTED_SPLIT_FINGERPRINT_SHA256 = (
+    "490DBB5B94F298C4A196ED2320DEBF73C2FBE5DFBAF44D498E1814DF1524A5CF"
+)
+
+FEATURE_SCHEMA_VERSION = "primary-t0-16-v1"
+TARGET_DEFINITION_VERSION = "followup-domain-score-le-50-v1"
+DEVELOPMENT_SPLIT_SCHEMA_VERSION = "participant-development-final-test-v1"
+LOGISTIC_MODEL_CONFIGURATION_VERSION = "logistic-l2-balanced-v1"
+DECISION_THRESHOLD_VERSION = "domain-probability-threshold-v1"
+APPROVED_DECISION_THRESHOLD = 0.50
+DECISION_THRESHOLD_APPROVAL_STATUS = "consultant_pediatrician_reviewed_and_approved"
+DECISION_THRESHOLD_APPROVAL_STATEMENT = (
+    "The operational predicted-probability threshold of 0.50 was reviewed and "
+    "approved by the consultant pediatrician for this model version."
+)
 
 PARTICIPANT_COLUMN = "participant_number"
 ASSESSMENT_ID_COLUMN = "baseline_assessment_id"
@@ -157,4 +174,3 @@ def default_dataset_path() -> Path:
     """Return the canonical local processed-dataset path."""
 
     return repository_root() / DATASET_RELATIVE_PATH
-
