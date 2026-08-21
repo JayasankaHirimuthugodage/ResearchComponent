@@ -24,7 +24,7 @@ from training.contracts import (
     default_dataset_path,
     repository_root,
 )
-from training.dataset_validation import (
+from training.data.dataset_validation import (
     read_csv_records,
     require_valid,
     sha256_file,

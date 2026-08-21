@@ -10,7 +10,7 @@ from typing import Sequence
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 
-from training.development_data import ModelingRecord
+from training.data.development_data import ModelingRecord
 
 
 DEFAULT_CV_SEED = 20260821

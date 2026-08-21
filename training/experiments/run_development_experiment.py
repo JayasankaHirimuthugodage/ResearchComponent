@@ -19,19 +19,19 @@ from training.contracts import (
 import numpy
 import sklearn
 
-from training.cross_validation import (
+from training.experiments.cross_validation import (
     DEFAULT_CV_SEED,
     DEFAULT_FOLD_SEARCH_ITERATIONS,
     DEFAULT_N_REPEATS,
     DEFAULT_N_SPLITS,
 )
-from training.development_data import (
+from training.data.development_data import (
     default_manifest_path,
     default_split_summary_path,
     load_development_dataset,
 )
-from training.evaluation import run_development_cross_validation
-from training.modeling import DEFAULT_MODEL_SEED
+from training.experiments.evaluation import run_development_cross_validation
+from training.models.common import DEFAULT_MODEL_SEED
 
 
 def _atomic_json_write(path: Path, value: object, *, force: bool) -> None:

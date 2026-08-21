@@ -16,7 +16,7 @@ from training.contracts import (
     TARGET_COLUMNS,
     default_dataset_path,
 )
-from training.dataset_validation import (
+from training.data.dataset_validation import (
     read_csv_records,
     sha256_file,
     validate_dataset,

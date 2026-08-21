@@ -19,9 +19,9 @@ from training.contracts import (
     FEATURE_SCHEMA_VERSION,
     QUESTION_COLUMNS,
 )
-from training.demo_fitting import fit_demo_prediction_service
-from training.development_data import ModelingRecord
-from training.modeling import REGULARIZED_LOGISTIC
+from training.data.development_data import ModelingRecord
+from training.models.demo_fitting import fit_demo_prediction_service
+from training.models.logistic import REGULARIZED_LOGISTIC
 
 
 def submission_from_fixture(filename: str) -> QuestionnaireSubmission:

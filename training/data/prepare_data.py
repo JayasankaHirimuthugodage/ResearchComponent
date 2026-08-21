@@ -12,8 +12,8 @@ import sys
 from pathlib import Path
 
 from training.contracts import PARTICIPANT_COLUMN, default_dataset_path, repository_root
-from training.dataset_validation import read_csv_records, require_valid, validate_dataset
-from training.splitting import (
+from training.data.dataset_validation import read_csv_records, require_valid, validate_dataset
+from training.data.splitting import (
     DEFAULT_SEARCH_ITERATIONS,
     DEFAULT_SPLIT_SEED,
     DEFAULT_TEST_FRACTION,
@@ -138,4 +138,3 @@ if __name__ == "__main__":
     except Exception as error:  # Aggregate-only CLI failure; never print participant rows.
         print(f"ERROR: {error}", file=sys.stderr)
         raise SystemExit(1)
-

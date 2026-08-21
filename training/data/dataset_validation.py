@@ -590,4 +590,3 @@ def require_valid(report: dict[str, object]) -> None:
         raise DatasetValidationError(
             f"Dataset validation failed with {summary.get('error_count', 'unknown')} error(s)."
         )
-

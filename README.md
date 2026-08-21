@@ -37,6 +37,7 @@ The CSV is privacy-sensitive and must not be committed, transmitted or published
 - [Research and ML specification](docs/research-ml-specification.md)
 - [Future ML training plan](docs/ml-training-plan.md)
 - [Development-only model comparison](docs/development-experiment.md)
+- [Training package map](training/README.md)
 - [Local development prediction demo](docs/development-prediction-demo.md)
 - [Future service architecture](docs/service-architecture-plan.md)
 - [Decision log](docs/decision-log.md)
@@ -53,7 +54,7 @@ python -B -m unittest discover -v
 The first candidate can be evaluated on the development partition only:
 
 ```powershell
-python -B -m training.run_development_experiment
+python -B -m training.experiments.run_development_experiment
 ```
 
 The generated aggregate report is ignored by Git. See [development-experiment.md](docs/development-experiment.md) for the feature boundary, three-model interpretation, metrics and future candidate-extension point.

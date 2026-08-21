@@ -17,7 +17,7 @@ from training.contracts import (
     DECISION_THRESHOLD_APPROVAL_STATEMENT,
     DECISION_THRESHOLD_APPROVAL_STATUS,
 )
-from training.demo_fitting import fit_development_demo_predictor
+from training.models.demo_fitting import fit_development_demo_predictor
 
 
 FIXTURE_DIRECTORY = Path(__file__).resolve().parent / "fixtures"

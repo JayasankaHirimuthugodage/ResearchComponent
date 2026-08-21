@@ -66,7 +66,7 @@ python -B -m unittest discover -v
 Run the default development-only baseline experiment:
 
 ```powershell
-python -B -m training.run_development_experiment
+python -B -m training.experiments.run_development_experiment
 ```
 
 The generated report is written to `reports/generated/development-logistic-report.json`, which is excluded from Git. The command refuses to overwrite an existing report unless `--force` is supplied intentionally.

@@ -255,4 +255,3 @@ def create_participant_split(
         "final_test": _partition_distribution(labels, test_ids),
     }
     return manifest, summary
-

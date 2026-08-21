@@ -70,6 +70,6 @@ The reusable code is outside Streamlit:
 - `inference/contracts.py` defines transport-independent request/result objects;
 - `inference/questionnaire.py` validates and encodes the versioned catalogue;
 - `inference/predictor.py` owns the three-domain threshold use case through a small model-runtime port; and
-- `training/demo_fitting.py` is the development-only scikit-learn adapter.
+- `training/models/demo_fitting.py` is the development-only scikit-learn adapter.
 
 A future HTTP adapter can construct the same `QuestionnaireSubmission` and call the same application service. Transport, authentication, storage and production model loading can therefore be added without embedding Streamlit, HTTP or database types in the inference boundary.

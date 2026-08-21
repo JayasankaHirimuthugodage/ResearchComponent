@@ -17,13 +17,13 @@ from training.contracts import (
     FEATURE_SCHEMA_VERSION,
     TARGET_COLUMNS,
 )
-from training.development_data import ModelingRecord, load_development_dataset
-from training.modeling import (
+from training.data.development_data import ModelingRecord, load_development_dataset
+from training.models.common import (
     DEFAULT_MODEL_SEED,
-    REGULARIZED_LOGISTIC,
     build_candidate_pipeline,
     modeling_arrays,
 )
+from training.models.logistic import REGULARIZED_LOGISTIC
 
 
 @dataclass(frozen=True)

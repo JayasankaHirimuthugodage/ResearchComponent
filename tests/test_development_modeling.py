@@ -15,14 +15,15 @@ from training.contracts import (
     QUESTION_COLUMNS,
     TARGET_COLUMNS,
 )
-from training.cross_validation import create_shared_folds
-from training.development_data import ModelingRecord, select_development_records
-from training.evaluation import (
+from training.data.development_data import ModelingRecord, select_development_records
+from training.experiments.cross_validation import create_shared_folds
+from training.experiments.evaluation import (
     binary_probability_metrics,
     decision_threshold_metadata,
     run_development_cross_validation,
 )
-from training.modeling import REGULARIZED_LOGISTIC, modeling_arrays
+from training.models.common import modeling_arrays
+from training.models.logistic import REGULARIZED_LOGISTIC
 
 
 def synthetic_modeling_records(

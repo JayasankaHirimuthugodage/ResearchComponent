@@ -4,8 +4,8 @@ import json
 import unittest
 
 from training.contracts import PARTICIPANT_COLUMN, default_dataset_path
-from training.dataset_validation import read_csv_records, sha256_file
-from training.splitting import create_participant_split, participant_labels
+from training.data.dataset_validation import read_csv_records, sha256_file
+from training.data.splitting import create_participant_split, participant_labels
 
 
 class ParticipantSplitTests(unittest.TestCase):
@@ -66,4 +66,3 @@ class ParticipantSplitTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

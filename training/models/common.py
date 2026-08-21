@@ -1,4 +1,4 @@
-"""Reusable preprocessing and estimator candidates for offline comparison."""
+"""Shared preprocessing and candidate-pipeline construction."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ from typing import Callable, Mapping, Sequence
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.compose import ColumnTransformer
-from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
@@ -16,11 +15,10 @@ from training.contracts import (
     BINARY_VALUES,
     CHECKPOINT_IDS,
     FEATURE_COLUMNS,
-    LOGISTIC_MODEL_CONFIGURATION_VERSION,
     QUESTION_COLUMNS,
     SCOREABLE_RESPONSE_VALUES,
 )
-from training.development_data import ModelingRecord
+from training.data.development_data import ModelingRecord
 
 
 DEFAULT_MODEL_SEED = 20260822
@@ -35,35 +33,6 @@ class CandidateSpec:
     estimator_factory: Callable[[int], BaseEstimator] = field(repr=False, compare=False)
     scale_questionnaire: bool = True
     public_parameters: Mapping[str, object] = field(default_factory=dict)
-
-
-def _balanced_logistic(seed: int) -> LogisticRegression:
-    return LogisticRegression(
-        penalty="l2",
-        C=1.0,
-        class_weight="balanced",
-        solver="liblinear",
-        max_iter=2_000,
-        random_state=seed,
-    )
-
-
-REGULARIZED_LOGISTIC = CandidateSpec(
-    name="logistic_l2_balanced",
-    version=LOGISTIC_MODEL_CONFIGURATION_VERSION,
-    estimator_factory=_balanced_logistic,
-    scale_questionnaire=True,
-    public_parameters={
-        "estimator": "LogisticRegression",
-        "penalty": "l2",
-        "C": 1.0,
-        "class_weight": "balanced",
-        "solver": "liblinear",
-        "max_iter": 2_000,
-    },
-)
-
-DEFAULT_CANDIDATES = (REGULARIZED_LOGISTIC,)
 
 
 def modeling_arrays(

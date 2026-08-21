@@ -26,7 +26,7 @@ from training.contracts import (
     DECISION_THRESHOLD_VERSION,
     TARGET_COLUMNS,
 )
-from training.cross_validation import (
+from training.experiments.cross_validation import (
     DEFAULT_CV_SEED,
     DEFAULT_FOLD_SEARCH_ITERATIONS,
     DEFAULT_N_REPEATS,
@@ -34,15 +34,15 @@ from training.cross_validation import (
     SharedFold,
     create_shared_folds,
 )
-from training.development_data import ModelingRecord
-from training.modeling import (
-    DEFAULT_CANDIDATES,
+from training.data.development_data import ModelingRecord
+from training.models.common import (
     DEFAULT_MODEL_SEED,
     CandidateSpec,
     build_candidate_pipeline,
     modeling_arrays,
     transformed_feature_names,
 )
+from training.models.registry import DEFAULT_CANDIDATES
 
 
 def _safe_ratio(numerator: int, denominator: int) -> float:
