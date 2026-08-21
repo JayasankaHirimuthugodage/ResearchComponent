@@ -15,12 +15,18 @@ from inference.questionnaire import encode_submission, load_questionnaire_catalo
 from training.contracts import (
     APPROVED_DECISION_THRESHOLD,
     CHECKPOINT_IDS,
+    DECISION_THRESHOLD_APPROVAL_STATUS,
     DECISION_THRESHOLD_VERSION,
+    EXPERIMENTAL_DECISION_THRESHOLD_STATUS,
     FEATURE_SCHEMA_VERSION,
     QUESTION_COLUMNS,
 )
 from training.data.development_data import ModelingRecord
-from training.models.demo_fitting import fit_demo_prediction_service
+from training.models.demo_fitting import (
+    fit_demo_candidate_predictors,
+    fit_demo_prediction_service,
+)
+from training.models.extra_trees import REGULARIZED_EXTRA_TREES
 from training.models.logistic import REGULARIZED_LOGISTIC
 
 
@@ -188,6 +194,46 @@ class PredictionApplicationTests(unittest.TestCase):
         self.assertTrue(
             all(0.0 <= item.probability <= 1.0 for item in result.domain_predictions)
         )
+
+    def test_both_candidates_predict_from_the_same_encoded_assessment(self) -> None:
+        candidates = fit_demo_candidate_predictors(synthetic_training_records())
+        encoded = encode_submission(
+            load_questionnaire_catalog(),
+            submission_from_fixture("synthetic_complete_assessment.json"),
+        )
+
+        self.assertEqual(
+            (REGULARIZED_LOGISTIC.name, REGULARIZED_EXTRA_TREES.name),
+            tuple(candidate.candidate_name for candidate in candidates),
+        )
+        results = tuple(
+            candidate.service.predict_encoded(encoded) for candidate in candidates
+        )
+        self.assertEqual(
+            (REGULARIZED_LOGISTIC.version, REGULARIZED_EXTRA_TREES.version),
+            tuple(result.model_version for result in results),
+        )
+        self.assertEqual(
+            (
+                DECISION_THRESHOLD_APPROVAL_STATUS,
+                EXPERIMENTAL_DECISION_THRESHOLD_STATUS,
+            ),
+            tuple(candidate.threshold_status for candidate in candidates),
+        )
+        self.assertEqual(
+            (DECISION_THRESHOLD_VERSION, None),
+            tuple(result.threshold_version for result in results),
+        )
+        self.assertIsNotNone(candidates[0].threshold_approval_statement)
+        self.assertIsNone(candidates[1].threshold_approval_statement)
+        for result in results:
+            self.assertEqual(
+                DOMAIN_IDS,
+                tuple(item.domain for item in result.domain_predictions),
+            )
+            self.assertTrue(
+                all(0.0 <= item.probability <= 1.0 for item in result.domain_predictions)
+            )
 
 
 if __name__ == "__main__":

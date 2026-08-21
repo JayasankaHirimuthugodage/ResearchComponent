@@ -6,6 +6,8 @@ import unittest
 import numpy as np
 
 from training.contracts import (
+    EXTRA_TREES_MODEL_CONFIGURATION_VERSION,
+    EXPERIMENTAL_DECISION_THRESHOLD_STATUS,
     DECISION_THRESHOLD_APPROVAL_STATEMENT,
     DECISION_THRESHOLD_APPROVAL_STATUS,
     DECISION_THRESHOLD_VERSION,
@@ -23,7 +25,9 @@ from training.experiments.evaluation import (
     run_development_cross_validation,
 )
 from training.models.common import modeling_arrays
+from training.models.extra_trees import REGULARIZED_EXTRA_TREES
 from training.models.logistic import REGULARIZED_LOGISTIC
+from training.models.registry import DEFAULT_CANDIDATES
 
 
 def synthetic_modeling_records(
@@ -129,18 +133,31 @@ class DevelopmentModelingContractTests(unittest.TestCase):
             modeling_arrays(records)
 
     def test_different_probability_cutoff_does_not_inherit_approval(self) -> None:
-        metadata = decision_threshold_metadata(0.40)
+        metadata = decision_threshold_metadata(
+            0.40,
+            model_configuration_version=REGULARIZED_LOGISTIC.version,
+        )
 
         self.assertEqual("unapproved_experimental_override", metadata["status"])
         self.assertIsNone(metadata["version"])
         self.assertIsNone(metadata["approval_statement"])
 
-    def test_three_domain_logistic_experiment_emits_aggregate_explanations(self) -> None:
+    def test_same_probability_cutoff_is_experimental_for_extra_trees(self) -> None:
+        metadata = decision_threshold_metadata(
+            0.50,
+            model_configuration_version=REGULARIZED_EXTRA_TREES.version,
+        )
+
+        self.assertEqual(EXPERIMENTAL_DECISION_THRESHOLD_STATUS, metadata["status"])
+        self.assertIsNone(metadata["version"])
+        self.assertIsNone(metadata["approval_statement"])
+
+    def test_two_candidate_experiment_emits_aggregate_explanations(self) -> None:
         records = synthetic_modeling_records(records_per_combination=2)
 
         report = run_development_cross_validation(
             records,
-            candidates=(REGULARIZED_LOGISTIC,),
+            candidates=DEFAULT_CANDIDATES,
             n_splits=2,
             n_repeats=1,
             cv_seed=23,
@@ -151,20 +168,25 @@ class DevelopmentModelingContractTests(unittest.TestCase):
         self.assertTrue(
             report["cross_validation"]["same_folds_for_all_domains_and_candidates"]
         )
+        self.assertEqual(0.50, report["comparison_threshold"]["value"])
         self.assertEqual(
-            DECISION_THRESHOLD_APPROVAL_STATUS,
-            report["decision_threshold"]["status"],
-        )
-        self.assertEqual(
-            DECISION_THRESHOLD_VERSION,
-            report["decision_threshold"]["version"],
-        )
-        self.assertEqual(
-            DECISION_THRESHOLD_APPROVAL_STATEMENT,
-            report["decision_threshold"]["approval_statement"],
+            {REGULARIZED_LOGISTIC.name, REGULARIZED_EXTRA_TREES.name},
+            set(report["candidates"]),
         )
         candidate = report["candidates"][REGULARIZED_LOGISTIC.name]
         self.assertEqual(REGULARIZED_LOGISTIC.version, candidate["model_configuration_version"])
+        self.assertEqual(
+            DECISION_THRESHOLD_APPROVAL_STATUS,
+            candidate["decision_threshold"]["status"],
+        )
+        self.assertEqual(
+            DECISION_THRESHOLD_VERSION,
+            candidate["decision_threshold"]["version"],
+        )
+        self.assertEqual(
+            DECISION_THRESHOLD_APPROVAL_STATEMENT,
+            candidate["decision_threshold"]["approval_statement"],
+        )
         self.assertEqual(3, candidate["models_per_fold"])
         self.assertEqual(set(TARGET_COLUMNS), set(candidate["domains"]))
         for target in TARGET_COLUMNS:
@@ -172,9 +194,32 @@ class DevelopmentModelingContractTests(unittest.TestCase):
             self.assertEqual(2, len(domain["fold_results"]))
             self.assertEqual(
                 len(CHECKPOINT_IDS) - 1 + len(QUESTION_COLUMNS),
-                len(domain["coefficient_stability"]),
+                len(domain["explanation"]["values"]),
+            )
+            self.assertEqual(
+                "standardized_logistic_coefficient_stability",
+                domain["explanation"]["method"],
             )
             self.assertIn("brier_score", domain["averaged_participant_oof_metrics"])
+
+        extra_trees = report["candidates"][REGULARIZED_EXTRA_TREES.name]
+        self.assertEqual(
+            EXTRA_TREES_MODEL_CONFIGURATION_VERSION,
+            extra_trees["model_configuration_version"],
+        )
+        self.assertEqual(
+            EXPERIMENTAL_DECISION_THRESHOLD_STATUS,
+            extra_trees["decision_threshold"]["status"],
+        )
+        self.assertIsNone(extra_trees["decision_threshold"]["approval_statement"])
+        for target in TARGET_COLUMNS:
+            explanation = extra_trees["domains"][target]["explanation"]
+            self.assertEqual(
+                "held_out_permutation_importance_average_precision",
+                explanation["method"],
+            )
+            self.assertEqual("average_precision", explanation["scoring"])
+            self.assertEqual(len(QUESTION_COLUMNS) + 1, len(explanation["values"]))
 
         serialized = json.dumps(report, sort_keys=True)
         self.assertNotIn("synthetic-", serialized)
@@ -182,6 +227,10 @@ class DevelopmentModelingContractTests(unittest.TestCase):
         self.assertEqual(
             "OR of the three domain decisions; no fourth model",
             candidate["derived_any_concern"]["definition"],
+        )
+        self.assertEqual(
+            "OR of the three domain decisions; no fourth model",
+            extra_trees["derived_any_concern"]["definition"],
         )
 
 

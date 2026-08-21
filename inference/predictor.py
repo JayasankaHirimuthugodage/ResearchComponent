@@ -14,7 +14,7 @@ from inference.contracts import (
     PredictionResult,
     QuestionnaireSubmission,
 )
-from inference.questionnaire import QuestionnaireCatalog, encode_submission
+from inference.questionnaire import EncodedAssessment, QuestionnaireCatalog, encode_submission
 
 
 class PositiveProbabilityModel(Protocol):
@@ -33,7 +33,7 @@ class DevelopmentPredictionService:
     model_version: str
     feature_schema_version: str
     threshold: float
-    threshold_version: str
+    threshold_version: str | None
 
     def __post_init__(self) -> None:
         model_copy = dict(self.models)
@@ -44,14 +44,21 @@ class DevelopmentPredictionService:
         for value, name in (
             (self.model_version, "model_version"),
             (self.feature_schema_version, "feature_schema_version"),
-            (self.threshold_version, "threshold_version"),
         ):
             if not value:
                 raise ValueError(f"{name} is required for prediction traceability.")
+        if self.threshold_version is not None and not self.threshold_version:
+            raise ValueError("threshold_version must be non-empty when supplied.")
         object.__setattr__(self, "models", MappingProxyType(model_copy))
 
     def predict(self, submission: QuestionnaireSubmission) -> PredictionResult:
-        encoded = encode_submission(self.catalog, submission)
+        """Validate, encode and predict one questionnaire submission."""
+
+        return self.predict_encoded(encode_submission(self.catalog, submission))
+
+    def predict_encoded(self, encoded: EncodedAssessment) -> PredictionResult:
+        """Predict from one already-validated encoding shared across candidates."""
+
         common = {
             "model_version": self.model_version,
             "feature_schema_version": self.feature_schema_version,

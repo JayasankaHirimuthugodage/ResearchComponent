@@ -7,6 +7,7 @@ from training.models.common import (
     modeling_arrays,
     transformed_feature_names,
 )
+from training.models.extra_trees import REGULARIZED_EXTRA_TREES
 from training.models.logistic import REGULARIZED_LOGISTIC
 from training.models.registry import DEFAULT_CANDIDATES
 
@@ -14,6 +15,7 @@ __all__ = (
     "DEFAULT_CANDIDATES",
     "DEFAULT_MODEL_SEED",
     "CandidateSpec",
+    "REGULARIZED_EXTRA_TREES",
     "REGULARIZED_LOGISTIC",
     "build_candidate_pipeline",
     "modeling_arrays",

@@ -6,17 +6,18 @@ The component is for developmental monitoring and research for children approxim
 
 ## Current status
 
-Phase 0 data validation and splitting are complete. The first approved Phase 1 development experiment is now implemented:
+Phase 0 data validation and splitting are complete. The approved Phase 1 development comparison is now implemented:
 
 - the locally supplied modelling CSV is stored under `data/processed/` and excluded from Git by a narrow ignore rule;
 - the dataset has been audited without transforming participant records;
 - the research objective, target and leakage boundaries are specified;
 - a development-only model-comparison framework uses the frozen 405-participant partition, shared repeated folds and fold-local preprocessing;
-- the first candidate fits three class-weighted, L2-regularized logistic classifiers, one per domain;
-- aggregate metrics, calibration bins and coefficient-stability evidence can be generated without row-level results;
+- the candidate registry compares class-weighted, L2-regularized logistic regression with a regularized Extra Trees configuration, fitting one binary classifier per domain for each candidate;
+- aggregate metrics and calibration bins are paired on shared folds; logistic uses coefficient stability and Extra Trees uses held-out permutation importance;
+- the approved `0.50` threshold metadata remains scoped to logistic, while the same numeric Extra Trees comparison cutoff is explicitly experimental;
 - a versioned questionnaire catalogue contains the supplied wording for 12 checkpoints and maps each checkpoint's 15 questions to the frozen model inputs;
 - framework-neutral inference contracts enforce required fields, unscorable-response handling, three domain decisions and the derived OR decision;
-- a local Streamlit research-review demo accepts manual answers or synthetic quick-fill examples and fits provisional logistic models in memory;
+- a local Streamlit research-review demo accepts manual answers or synthetic quick-fill examples and shows Logistic Regression and Extra Trees outputs side by side from the same answers;
 - the 102-participant final-test partition remains locked and unavailable to the experiment CLI;
 - a future ports-and-adapters service architecture is documented;
 - no production database, application source, API, frontend, recommendation engine or LLM integration has been created.
@@ -51,15 +52,15 @@ python -m pip install -r requirements.lock
 python -B -m unittest discover -v
 ```
 
-The first candidate can be evaluated on the development partition only:
+Both registered candidates can be evaluated on the development partition only:
 
 ```powershell
 python -B -m training.experiments.run_development_experiment
 ```
 
-The generated aggregate report is ignored by Git. See [development-experiment.md](docs/development-experiment.md) for the feature boundary, three-model interpretation, metrics and future candidate-extension point.
+The generated aggregate comparison report is ignored by Git. See [development-experiment.md](docs/development-experiment.md) for the feature boundary, three-model-per-candidate interpretation, metrics and explainability methods.
 
-For human review, `notebooks/logistic-baseline-analysis.ipynb` presents the aggregate report as tables and plots. It does not duplicate the training implementation or display participant-level records. Install the optional notebook environment and launch it locally with:
+For human review, `notebooks/development-model-comparison.ipynb` presents both candidates side by side as aggregate tables and plots. It does not duplicate the training implementation or display participant-level records. Install the optional notebook environment and launch it locally with:
 
 ```powershell
 python -m pip install -r requirements-notebook.txt
@@ -78,7 +79,7 @@ Use only the committed synthetic quick-fill examples during a shared demo unless
 ## Future phases
 
 1. Record authoritative versions of the reviewed scoring, safety and age-correction rules without inferring missing clinical wording.
-2. Compare a compact, predeclared candidate set on the same development folds.
+2. Review the compact, predeclared candidate comparison on the shared development folds.
 3. Review development evidence, freeze the feature schema/model/calibration, and confirm threshold approval still applies to the selected model version.
 4. Implement production inference, deterministic safety rules and service contracts.
 5. Add the approved activity catalogue and deterministic recommendation selection.

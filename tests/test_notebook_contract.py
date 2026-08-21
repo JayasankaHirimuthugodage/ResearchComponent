@@ -12,7 +12,7 @@ from training.contracts import (
 class NotebookContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.path = repository_root() / "notebooks" / "logistic-baseline-analysis.ipynb"
+        cls.path = repository_root() / "notebooks" / "development-model-comparison.ipynb"
         cls.notebook = json.loads(cls.path.read_text(encoding="utf-8"))
 
     def test_notebook_is_valid_basic_v4_structure(self) -> None:
@@ -40,6 +40,9 @@ class NotebookContractTests(unittest.TestCase):
 
         self.assertIn(DECISION_THRESHOLD_APPROVAL_STATEMENT, source)
         self.assertIn("report['final_test_evaluated'] is False", source)
+        self.assertIn("development-model-comparison-report.json", source)
+        self.assertIn("extra_trees_balanced_leaf5", source)
+        self.assertIn("experimental_not_approved_for_model", source)
         self.assertNotIn("data/processed", source)
 
 

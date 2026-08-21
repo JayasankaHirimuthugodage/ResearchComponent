@@ -1,4 +1,4 @@
-"""CLI for the development-only regularized-logistic baseline experiment."""
+"""CLI for the shared-fold development-only candidate comparison."""
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Run shared-fold, development-only evaluation for the three-domain "
-            "regularized-logistic baseline. The locked final-test partition is unavailable here."
+            "candidate registry. The locked final-test partition is unavailable here."
         )
     )
     parser.add_argument("--dataset", type=Path, default=default_dataset_path())
@@ -67,7 +67,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=repository_root()
         / "reports"
         / "generated"
-        / "development-logistic-report.json",
+        / "development-model-comparison-report.json",
     )
     parser.add_argument("--folds", type=int, default=DEFAULT_N_SPLITS)
     parser.add_argument("--repeats", type=int, default=DEFAULT_N_REPEATS)
@@ -104,14 +104,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     report.update(
         {
-            "artifact_schema_version": "1.0",
+            "artifact_schema_version": "1.1",
             "feature_schema_version": FEATURE_SCHEMA_VERSION,
             "target_definition_version": TARGET_DEFINITION_VERSION,
             "development_split_schema_version": DEVELOPMENT_SPLIT_SCHEMA_VERSION,
             "dataset_sha256": development.dataset_sha256,
             "split_fingerprint_sha256": development.split_fingerprint_sha256,
             "manifest_sha256": development.manifest_sha256,
-            "status": "development_baseline_not_final_model",
+            "status": "development_candidate_comparison_not_final_model",
             "final_test_evaluated": False,
             "runtime_versions": {
                 "python": platform.python_version(),

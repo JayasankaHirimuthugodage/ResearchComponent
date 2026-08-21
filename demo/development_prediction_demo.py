@@ -13,11 +13,7 @@ from inference.contracts import (
     SubmissionValidationError,
 )
 from inference.questionnaire import encode_submission, load_questionnaire_catalog
-from training.contracts import (
-    DECISION_THRESHOLD_APPROVAL_STATEMENT,
-    DECISION_THRESHOLD_APPROVAL_STATUS,
-)
-from training.models.demo_fitting import fit_development_demo_predictor
+from training.models.demo_fitting import fit_development_demo_comparison
 
 
 FIXTURE_DIRECTORY = Path(__file__).resolve().parent / "fixtures"
@@ -63,14 +59,14 @@ def main() -> None:
     catalog = load_questionnaire_catalog()
 
     @st.cache_resource(show_spinner=False)
-    def cached_demo_predictor():
-        return fit_development_demo_predictor()
+    def cached_demo_comparison():
+        return fit_development_demo_comparison()
 
     st.title("Three-month developmental prediction — local review demo")
     st.write(
         "Select a baseline checkpoint and enter the 15 baseline answers. The app fits "
-        "three provisional logistic classifiers in memory, then shows one positive-concern "
-        "probability and threshold decision for each future domain."
+        "six provisional classifiers across two research candidates in memory, then "
+        "shows both candidates' positive-concern probabilities and threshold decisions."
     )
     st.caption(
         "No entered answers are written to a file, database, model artifact or network API. "
@@ -155,43 +151,65 @@ def main() -> None:
         )
         return
 
-    with st.spinner("Fitting the development-only models in memory..."):
-        fitted = cached_demo_predictor()
-        result = fitted.service.predict(submission)
+    with st.spinner("Fitting both development-only candidates in memory..."):
+        fitted = cached_demo_comparison()
+        comparison_results = tuple(
+            (candidate, candidate.service.predict_encoded(encoded))
+            for candidate in fitted.candidates
+        )
 
     st.divider()
-    st.header("Prediction output")
-    columns = st.columns(3)
-    for column, prediction in zip(columns, result.domain_predictions, strict=True):
-        decision_text = (
-            "Positive concern flag" if prediction.decision else "No positive concern flag"
-        )
-        column.metric(
-            DOMAIN_DISPLAY_NAMES[prediction.domain],
-            f"{prediction.probability:.1%}",
-        )
-        column.write(f"Decision: **{decision_text}**")
+    st.header("Research model comparison")
+    model_columns = st.columns(len(comparison_results))
+    for model_column, (candidate, result) in zip(
+        model_columns,
+        comparison_results,
+        strict=True,
+    ):
+        with model_column:
+            st.subheader(candidate.display_name)
+            if candidate.threshold_approval_statement:
+                st.caption("0.50 decision threshold: approved for this model version")
+            else:
+                st.caption("0.50 decision threshold: experimental for this model version")
+            for prediction in result.domain_predictions:
+                decision_text = (
+                    "Positive concern flag"
+                    if prediction.decision
+                    else "No positive concern flag"
+                )
+                st.metric(
+                    DOMAIN_DISPLAY_NAMES[prediction.domain],
+                    f"{prediction.probability:.1%}",
+                )
+                st.write(f"Decision: **{decision_text}**")
 
-    if result.overall_concern:
-        st.warning(
-            "Derived overall decision: POSITIVE CONCERN FLAG because at least one "
-            "domain probability is at or above 0.50."
-        )
-    else:
-        st.success(
-            "Derived overall decision: NO POSITIVE CONCERN FLAG because all three "
-            "domain probabilities are below 0.50."
-        )
+            if result.overall_concern:
+                st.warning(
+                    "Derived overall decision: POSITIVE CONCERN FLAG because at least "
+                    "one domain probability is at or above 0.50."
+                )
+            else:
+                st.success(
+                    "Derived overall decision: NO POSITIVE CONCERN FLAG because all "
+                    "three domain probabilities are below 0.50."
+                )
     st.caption("Screening for possible concerns")
 
     with st.expander("Model and contract traceability"):
-        st.write(f"Model version: `{result.model_version}`")
-        st.write(f"Feature schema version: `{result.feature_schema_version}`")
-        st.write(f"Questionnaire schema version: `{result.questionnaire_schema_version}`")
-        st.write(f"Threshold version: `{result.threshold_version}`")
-        st.write(f"Probability threshold: `{result.threshold:.2f}` (inclusive)")
-        st.write(f"Threshold status: `{DECISION_THRESHOLD_APPROVAL_STATUS}`")
-        st.write(DECISION_THRESHOLD_APPROVAL_STATEMENT)
+        for candidate, result in comparison_results:
+            st.markdown(f"**{candidate.display_name}**")
+            st.write(f"Model version: `{result.model_version}`")
+            st.write(f"Feature schema version: `{result.feature_schema_version}`")
+            st.write(
+                f"Questionnaire schema version: `{result.questionnaire_schema_version}`"
+            )
+            threshold_version = result.threshold_version or "not assigned"
+            st.write(f"Threshold version: `{threshold_version}`")
+            st.write(f"Probability threshold: `{result.threshold:.2f}` (inclusive)")
+            st.write(f"Threshold status: `{candidate.threshold_status}`")
+            if candidate.threshold_approval_statement:
+                st.write(candidate.threshold_approval_statement)
         st.write(
             f"Fit scope: `{fitted.provenance.fit_scope}`; "
             f"development participants: `{fitted.provenance.development_participants}`; "

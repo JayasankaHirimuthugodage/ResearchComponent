@@ -126,3 +126,19 @@ Date: 2026-08-22
 | Keep `NOT_SURE` and `NOT_OBSERVED` unscorable | The inference boundary returns `INCOMPLETE` and invokes no model rather than silently converting either response to zero |
 
 The demo's in-memory full-development fit is provisional and is not additional performance evidence. Model comparison remains fold-based and aggregate; selection, final-test evaluation, serialization and production deployment remain separate approval gates.
+
+## Phase-1 Extra Trees comparison decisions
+
+Date: 2026-08-22
+
+| Decision | Rationale / evidence |
+|---|---|
+| Add `extra_trees_balanced_leaf5` as the second candidate | Provides a nonlinear classical comparison suitable for the small tabular dataset without introducing deep learning |
+| Use 300 trees, balanced class weights and minimum leaf size 5 | Predeclared deterministic configuration balances stability, class imbalance and regularization; it is not a tuned optimum |
+| Do not scale questionnaire values for Extra Trees | Tree split decisions do not require feature scaling; checkpoint encoding remains inside each fitted fold |
+| Use the exact same participant folds as logistic | Enables paired comparison and prevents the second candidate from receiving an easier allocation |
+| Use held-out permutation importance scored by average precision | Produces model-appropriate, conceptual-input explanations on validation data rather than misusing logistic coefficients or impurity-only importance |
+| Treat Extra Trees probability `0.50` as experimental | The logistic approval does not transfer to a different model configuration even when the numeric cutoff is identical |
+| Expose both candidates in a separately labelled Streamlit research comparison | The same answers can demonstrate both outputs without implying model selection; Logistic retains its approved threshold metadata and the Extra Trees cutoff remains experimental |
+
+The Extra Trees configuration is versioned as `extra-trees-balanced-leaf5-v1`. It remains a development candidate: no final-test evaluation, calibration selection, model serialization or production routing change is authorized by this comparison.

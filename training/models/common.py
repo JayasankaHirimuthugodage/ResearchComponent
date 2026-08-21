@@ -31,6 +31,7 @@ class CandidateSpec:
     name: str
     version: str
     estimator_factory: Callable[[int], BaseEstimator] = field(repr=False, compare=False)
+    explanation_method: str
     scale_questionnaire: bool = True
     public_parameters: Mapping[str, object] = field(default_factory=dict)
 

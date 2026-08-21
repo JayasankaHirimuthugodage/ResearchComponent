@@ -23,6 +23,7 @@ REGULARIZED_LOGISTIC = CandidateSpec(
     name="logistic_l2_balanced",
     version=LOGISTIC_MODEL_CONFIGURATION_VERSION,
     estimator_factory=_balanced_logistic,
+    explanation_method="standardized_logistic_coefficient_stability",
     scale_questionnaire=True,
     public_parameters={
         "estimator": "LogisticRegression",

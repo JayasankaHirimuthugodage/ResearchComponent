@@ -22,9 +22,11 @@ FEATURE_SCHEMA_VERSION = "primary-t0-16-v1"
 TARGET_DEFINITION_VERSION = "followup-domain-score-le-50-v1"
 DEVELOPMENT_SPLIT_SCHEMA_VERSION = "participant-development-final-test-v1"
 LOGISTIC_MODEL_CONFIGURATION_VERSION = "logistic-l2-balanced-v1"
+EXTRA_TREES_MODEL_CONFIGURATION_VERSION = "extra-trees-balanced-leaf5-v1"
 DECISION_THRESHOLD_VERSION = "domain-probability-threshold-v1"
 APPROVED_DECISION_THRESHOLD = 0.50
 DECISION_THRESHOLD_APPROVAL_STATUS = "consultant_pediatrician_reviewed_and_approved"
+EXPERIMENTAL_DECISION_THRESHOLD_STATUS = "experimental_not_approved_for_model"
 DECISION_THRESHOLD_APPROVAL_STATEMENT = (
     "The operational predicted-probability threshold of 0.50 was reviewed and "
     "approved by the consultant pediatrician for this model version."

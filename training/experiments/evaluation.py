@@ -18,12 +18,16 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
+from sklearn.inspection import permutation_importance
 
 from training.contracts import (
     APPROVED_DECISION_THRESHOLD,
     DECISION_THRESHOLD_APPROVAL_STATEMENT,
     DECISION_THRESHOLD_APPROVAL_STATUS,
     DECISION_THRESHOLD_VERSION,
+    EXPERIMENTAL_DECISION_THRESHOLD_STATUS,
+    FEATURE_COLUMNS,
+    LOGISTIC_MODEL_CONFIGURATION_VERSION,
     TARGET_COLUMNS,
 )
 from training.experiments.cross_validation import (
@@ -43,6 +47,15 @@ from training.models.common import (
     transformed_feature_names,
 )
 from training.models.registry import DEFAULT_CANDIDATES
+
+
+PERMUTATION_IMPORTANCE_REPEATS = 5
+SUPPORTED_EXPLANATION_METHODS = frozenset(
+    {
+        "standardized_logistic_coefficient_stability",
+        "held_out_permutation_importance_average_precision",
+    }
+)
 
 
 def _safe_ratio(numerator: int, denominator: int) -> float:
@@ -125,28 +138,41 @@ def calibration_bins(
     return bins
 
 
-def decision_threshold_metadata(threshold: float) -> dict[str, object]:
-    """Attach pediatric approval only to the exact approved cutoff."""
+def decision_threshold_metadata(
+    threshold: float,
+    *,
+    model_configuration_version: str,
+) -> dict[str, object]:
+    """Attach approval only to the exact cutoff and reviewed model version."""
 
-    threshold_is_approved = bool(
+    cutoff_matches = bool(
         np.isclose(threshold, APPROVED_DECISION_THRESHOLD, rtol=0.0, atol=1e-12)
     )
+    threshold_is_approved = bool(
+        cutoff_matches
+        and model_configuration_version == LOGISTIC_MODEL_CONFIGURATION_VERSION
+    )
+    if threshold_is_approved:
+        status = DECISION_THRESHOLD_APPROVAL_STATUS
+    elif cutoff_matches:
+        status = EXPERIMENTAL_DECISION_THRESHOLD_STATUS
+    else:
+        status = "unapproved_experimental_override"
     return {
         "value": threshold,
         "version": DECISION_THRESHOLD_VERSION if threshold_is_approved else None,
-        "status": (
-            DECISION_THRESHOLD_APPROVAL_STATUS
-            if threshold_is_approved
-            else "unapproved_experimental_override"
-        ),
+        "status": status,
         "approval_statement": (
             DECISION_THRESHOLD_APPROVAL_STATEMENT if threshold_is_approved else None
         ),
-        "scope": "current_model_configuration_only",
+        "model_configuration_version": model_configuration_version,
+        "scope": f"model_configuration:{model_configuration_version}",
         "note": (
             "The probability cutoff creates the model decision and is separate "
             "from the follow-up score <= 50 observed-target definition. Approval "
-            "does not automatically transfer to another model configuration."
+            "does not automatically transfer to another model configuration. A "
+            "numerically identical cutoff remains experimental when the model "
+            "configuration has not been approved."
         ),
     }
 
@@ -212,6 +238,30 @@ def _coefficient_stability(
     return rows
 
 
+def _permutation_importance_stability(
+    feature_names: tuple[str, ...], importance_rows: Sequence[np.ndarray]
+) -> list[dict[str, float | str]]:
+    if not importance_rows:
+        return []
+    matrix = np.vstack(importance_rows)
+    if matrix.shape[1] != len(feature_names):
+        raise RuntimeError("Permutation-importance columns do not match input features.")
+    rows: list[dict[str, float | str]] = []
+    for index, name in enumerate(feature_names):
+        values = matrix[:, index]
+        rows.append(
+            {
+                "feature": name,
+                "mean_importance": float(np.mean(values)),
+                "standard_deviation": (
+                    float(np.std(values, ddof=1)) if len(values) > 1 else 0.0
+                ),
+                "positive_importance_fraction": float(np.mean(values > 0.0)),
+            }
+        )
+    return rows
+
+
 def run_development_cross_validation(
     records: Sequence[ModelingRecord],
     *,
@@ -230,6 +280,11 @@ def run_development_cross_validation(
     candidate_names = [candidate.name for candidate in candidates]
     if len(candidate_names) != len(set(candidate_names)):
         raise ValueError("Estimator candidate names must be unique.")
+    if any(
+        candidate.explanation_method not in SUPPORTED_EXPLANATION_METHODS
+        for candidate in candidates
+    ):
+        raise ValueError("An estimator candidate has an unsupported explanation method.")
 
     features, targets = modeling_arrays(records)
     folds = create_shared_folds(
@@ -260,7 +315,14 @@ def run_development_cross_validation(
             "same_folds_for_all_domains_and_candidates": True,
         },
         "model_seed": model_seed,
-        "decision_threshold": decision_threshold_metadata(threshold),
+        "comparison_threshold": {
+            "value": threshold,
+            "approval_is_candidate_specific": True,
+            "note": (
+                "Candidate-level threshold metadata determines whether this shared "
+                "numeric comparison cutoff is approved or experimental."
+            ),
+        },
         "candidates": candidate_reports,
     }
 
@@ -278,6 +340,7 @@ def run_development_cross_validation(
         }
         coefficient_rows: dict[str, list[np.ndarray]] = defaultdict(list)
         coefficient_names: dict[str, tuple[str, ...]] = {}
+        permutation_rows: dict[str, list[np.ndarray]] = defaultdict(list)
 
         for fold in folds:
             for target_position, target_name in enumerate(TARGET_COLUMNS):
@@ -300,13 +363,40 @@ def run_development_cross_validation(
                 ] = probabilities
 
                 estimator = pipeline.named_steps["estimator"]
-                if hasattr(estimator, "coef_"):
+                if (
+                    candidate.explanation_method
+                    == "standardized_logistic_coefficient_stability"
+                ):
+                    if not hasattr(estimator, "coef_"):
+                        raise RuntimeError("The coefficient explanation requires coef_.")
                     names = transformed_feature_names(pipeline)
                     if target_name in coefficient_names and coefficient_names[target_name] != names:
                         raise RuntimeError("Transformed feature order changed across folds.")
                     coefficient_names[target_name] = names
                     coefficient_rows[target_name].append(
                         np.asarray(estimator.coef_[0], dtype=float)
+                    )
+                elif (
+                    candidate.explanation_method
+                    == "held_out_permutation_importance_average_precision"
+                ):
+                    importance = permutation_importance(
+                        pipeline,
+                        features[fold.validation_indices],
+                        validation_y,
+                        scoring="average_precision",
+                        n_repeats=PERMUTATION_IMPORTANCE_REPEATS,
+                        random_state=seed + 1_000_000,
+                        n_jobs=1,
+                    )
+                    if importance.importances.shape != (
+                        len(FEATURE_COLUMNS),
+                        PERMUTATION_IMPORTANCE_REPEATS,
+                    ):
+                        raise RuntimeError("Permutation importance has an invalid shape.")
+                    permutation_rows[target_name].extend(
+                        np.asarray(row, dtype=float)
+                        for row in importance.importances.T
                     )
 
                 metrics = binary_probability_metrics(
@@ -342,6 +432,30 @@ def run_development_cross_validation(
                 averaged_probabilities[:, target_position],
                 threshold=threshold,
             )
+            if (
+                candidate.explanation_method
+                == "standardized_logistic_coefficient_stability"
+            ):
+                explanation: dict[str, object] = {
+                    "method": candidate.explanation_method,
+                    "feature_level": "transformed_pipeline_feature",
+                    "scoring": None,
+                    "values": _coefficient_stability(
+                        coefficient_names.get(target_name, ()),
+                        coefficient_rows[target_name],
+                    ),
+                }
+            else:
+                explanation = {
+                    "method": candidate.explanation_method,
+                    "feature_level": "original_conceptual_input",
+                    "scoring": "average_precision",
+                    "permutation_repeats_per_fold": PERMUTATION_IMPORTANCE_REPEATS,
+                    "values": _permutation_importance_stability(
+                        FEATURE_COLUMNS,
+                        permutation_rows[target_name],
+                    ),
+                }
             domain_reports[target_name] = {
                 "negative_count": int(len(records) - np.sum(targets[:, target_position])),
                 "positive_count": int(np.sum(targets[:, target_position])),
@@ -352,10 +466,7 @@ def run_development_cross_validation(
                     targets[:, target_position],
                     averaged_probabilities[:, target_position],
                 ),
-                "coefficient_stability": _coefficient_stability(
-                    coefficient_names.get(target_name, ()),
-                    coefficient_rows[target_name],
-                ),
+                "explanation": explanation,
             }
 
         domain_decisions = averaged_probabilities >= threshold
@@ -365,6 +476,11 @@ def run_development_cross_validation(
             "model_configuration_version": candidate.version,
             "parameters": dict(candidate.public_parameters),
             "models_per_fold": len(TARGET_COLUMNS),
+            "decision_threshold": decision_threshold_metadata(
+                threshold,
+                model_configuration_version=candidate.version,
+            ),
+            "explanation_method": candidate.explanation_method,
             "domains": domain_reports,
             "derived_any_concern": {
                 "definition": "OR of the three domain decisions; no fourth model",

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`demo/development_prediction_demo.py` is a local research-review adapter. It lets a reviewer see the real checkpoint-specific question wording, enter answers manually, and observe how the existing provisional logistic configuration produces three future-domain probabilities and decisions.
+`demo/development_prediction_demo.py` is a local research-review adapter. It lets a reviewer see the real checkpoint-specific question wording, enter answers manually, and compare how the provisional Logistic Regression and Extra Trees configurations produce future-domain probabilities and decisions from the same answers.
 
 It is not a parent-facing application, a diagnostic tool, a deployed microservice, or final-test evidence.
 
@@ -24,7 +24,7 @@ The observed training labels and predicted decisions are different operations:
 - In the supplied modelling export, an observed follow-up domain score `<= 50` created that domain's positive training target (`1`).
 - At inference, a predicted positive-class probability `>= 0.50` creates that domain's positive concern decision.
 
-The operational predicted-probability threshold of 0.50 was reviewed and approved by the consultant pediatrician for this model version. The repository versions it as `domain-probability-threshold-v1` for `logistic-l2-balanced-v1`.
+The operational predicted-probability threshold of 0.50 was reviewed and approved by the consultant pediatrician for `logistic-l2-balanced-v1`. The repository versions it as `domain-probability-threshold-v1` for that configuration. The same numeric cutoff is shown for `extra-trees-balanced-leaf5-v1` only as an experimental comparison threshold; it has no assigned threshold version or recorded pediatrician approval for that model configuration.
 
 The three outputs are:
 
@@ -32,13 +32,13 @@ The three outputs are:
 - `cognitive_probability` and its decision; and
 - `social_emotional_probability` and its decision.
 
-A positive decision means the model probability is at or above the approved threshold. It does not mean the child has a diagnosis. The displayed overall concern is a deterministic OR of the three domain decisions; there is no fourth model.
+A positive decision means the model probability is at or above that candidate's displayed 0.50 cutoff. The cutoff is approved for the current Logistic Regression version and experimental for the current Extra Trees version. A positive decision does not mean the child has a diagnosis. Each candidate's displayed overall concern is a deterministic OR of its three domain decisions; there is no fourth model.
 
 ## Model status
 
-When a complete answer set is submitted, the demo fits three L2-regularized, class-weighted logistic classifiers in memory using all 405 records in the frozen development partition. The 102-record final-test partition remains inaccessible to this path. The fit is cached for the local Streamlit process and is not serialized.
+When a complete answer set is submitted, the demo fits six classifiers in memory using all 405 records in the frozen development partition: three L2-regularized, class-weighted logistic classifiers and three regularized Extra Trees classifiers. Each candidate has one classifier per domain. The 102-record final-test partition remains inaccessible to this path. The fits are cached for the local Streamlit process and are not serialized.
 
-This development-only fit is provisional. It allows an input-to-output demonstration, but it is not a selected final artifact and the single synthetic prediction is not evaluation evidence. Candidate comparison still uses the shared development folds and aggregate metrics. Final-test evaluation and model serialization remain later approval gates.
+This development-only fit is provisional. It allows an input-to-output demonstration, but neither candidate is a selected final artifact and a synthetic comparison is not evaluation evidence. Formal candidate comparison still uses the shared development folds and aggregate metrics. Final-test evaluation and model serialization remain later approval gates.
 
 ## Questionnaire catalogue
 
@@ -61,7 +61,7 @@ python -m pip install -r requirements-demo.txt
 python -m streamlit run demo/development_prediction_demo.py
 ```
 
-The first complete prediction fits three models and may take a few seconds. Later predictions in the same Streamlit process reuse the in-memory fit.
+The first complete comparison fits six models and may take a few seconds. Later predictions in the same Streamlit process reuse the in-memory fits.
 
 ## Future microservice integration
 

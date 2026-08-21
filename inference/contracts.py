@@ -60,7 +60,7 @@ class PredictionResult:
     feature_schema_version: str
     questionnaire_schema_version: str
     threshold: float
-    threshold_version: str
+    threshold_version: str | None
 
     def __post_init__(self) -> None:
         if self.status is AssessmentStatus.COMPLETE:
