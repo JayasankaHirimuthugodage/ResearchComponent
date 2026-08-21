@@ -108,3 +108,21 @@ Date: 2026-08-21
 The repository assigns `domain-probability-threshold-v1` to the approved cutoff and scopes it to `logistic-l2-balanced-v1`. These are repository traceability identifiers, not fabricated clinical document identifiers. The consultant pediatrician's identity, approval date and authoritative document reference remain unrecorded.
 
 Implementation and local commands are documented in [development-experiment.md](development-experiment.md). Candidate expansion, tuning, calibration, threshold revalidation for a changed model configuration, final-test evaluation and model serialization remain separate approval gates.
+
+## Phase-1 local prediction demonstration decisions
+
+Date: 2026-08-22
+
+| Decision | Rationale / evidence |
+|---|---|
+| Commit `developmental-questionnaire-v3` as a versioned catalogue | The project owner supplied and authorized the wording; 180 unique question IDs map 12 checkpoints onto the frozen 15-item feature schema |
+| Record missing provenance as `not supplied` | The supplied reference did not include an underlying licence or authoritative external document identifier; neither may be fabricated |
+| Keep Streamlit as a thin local adapter | Questionnaire validation, encoding and prediction contracts remain reusable by a future HTTP/microservice adapter |
+| Accept manual entry and optional synthetic quick-fill | Manual entry shows the real question-and-answer workflow; synthetic fixtures make the demo repeatable without presenting participant records |
+| Store no entered answers and no fitted artifact | The demo is local research review; responses remain in the Streamlit session and the provisional logistic fits remain in process memory |
+| Fit from the 405-participant development partition only | The input-to-output flow can run while the 102-participant final-test partition stays locked |
+| Do not calculate age or route checkpoints in the demo | Age correction and deterministic routing are separate validated-rule concerns; the demo receives an already-determined baseline checkpoint |
+| Display probabilities only in the technical research-review view | Raw probabilities are useful for model review but remain unsuitable for the future parent-facing interface |
+| Keep `NOT_SURE` and `NOT_OBSERVED` unscorable | The inference boundary returns `INCOMPLETE` and invokes no model rather than silently converting either response to zero |
+
+The demo's in-memory full-development fit is provisional and is not additional performance evidence. Model comparison remains fold-based and aggregate; selection, final-test evaluation, serialization and production deployment remain separate approval gates.

@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "developmental-questionnaire-v3-catalog-schema-v1",
+  "title": "Versioned developmental questionnaire catalogue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalog_schema_version",
+    "questionnaire_name",
+    "questionnaire_schema_version",
+    "ml_export_schema_version",
+    "language",
+    "caregiver_instruction",
+    "repository_provenance",
+    "response_options",
+    "checkpoints",
+    "questions"
+  ],
+  "properties": {
+    "catalog_schema_version": {"const": "1.0"},
+    "questionnaire_name": {"type": "string", "minLength": 1},
+    "questionnaire_schema_version": {"const": "developmental-questionnaire-v3"},
+    "ml_export_schema_version": {"const": "developmental-questionnaire-v3-ml-classification-v1"},
+    "language": {"const": "en"},
+    "caregiver_instruction": {"type": "string", "minLength": 1},
+    "repository_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "repository_inclusion_authorized_on", "authoritative_document_reference", "underlying_license_status"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "repository_inclusion_authorized_on": {"type": "string", "format": "date"},
+        "authoritative_document_reference": {"type": "string", "minLength": 1},
+        "underlying_license_status": {"type": "string", "minLength": 1}
+      }
+    },
+    "response_options": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "code", "numeric_value", "scorable"],
+        "properties": {
+          "label": {"type": "string", "minLength": 1},
+          "code": {"enum": ["YES_USUALLY", "SOMETIMES", "NOT_YET", "NOT_SURE", "NOT_OBSERVED"]},
+          "numeric_value": {"type": ["integer", "null"], "minimum": 0, "maximum": 2},
+          "scorable": {"type": "boolean"}
+        }
+      }
+    },
+    "checkpoints": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["checkpoint_id", "display_age", "minimum_age_days", "maximum_age_days", "corrected_age_applies"],
+        "properties": {
+          "checkpoint_id": {"pattern": "^CP(2|4|6|9|12|15|18|24|30|36|48|60)M$"},
+          "display_age": {"type": "string", "minLength": 1},
+          "minimum_age_days": {"type": "integer", "minimum": 0},
+          "maximum_age_days": {"type": "integer", "minimum": 0},
+          "corrected_age_applies": {"type": "boolean"}
+        }
+      }
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 180,
+      "maxItems": 180,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question_id", "checkpoint_id", "domain", "order", "feature_column", "text"],
+        "properties": {
+          "question_id": {"pattern": "^CP(2|4|6|9|12|15|18|24|30|36|48|60)M_(COMM|COG|SOC)_Q[1-5]$"},
+          "checkpoint_id": {"pattern": "^CP(2|4|6|9|12|15|18|24|30|36|48|60)M$"},
+          "domain": {"enum": ["communication", "cognitive", "social_emotional"]},
+          "order": {"type": "integer", "minimum": 1, "maximum": 5},
+          "feature_column": {"pattern": "^(communication|cognitive|social_emotional)_q[1-5]$"},
+          "text": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

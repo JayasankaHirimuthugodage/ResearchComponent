@@ -1,0 +1,22 @@
+{
+  "fixture_type": "synthetic_demonstration_only",
+  "schema_version": "developmental-questionnaire-v3",
+  "checkpoint_id": "CP24M",
+  "responses": {
+    "CP24M_COMM_Q1": "YES_USUALLY",
+    "CP24M_COMM_Q2": "SOMETIMES",
+    "CP24M_COMM_Q3": "NOT_YET",
+    "CP24M_COMM_Q4": "YES_USUALLY",
+    "CP24M_COMM_Q5": "SOMETIMES",
+    "CP24M_COG_Q1": "SOMETIMES",
+    "CP24M_COG_Q2": "YES_USUALLY",
+    "CP24M_COG_Q3": "NOT_YET",
+    "CP24M_COG_Q4": "SOMETIMES",
+    "CP24M_COG_Q5": "YES_USUALLY",
+    "CP24M_SOC_Q1": "NOT_YET",
+    "CP24M_SOC_Q2": "SOMETIMES",
+    "CP24M_SOC_Q3": "YES_USUALLY",
+    "CP24M_SOC_Q4": "SOMETIMES",
+    "CP24M_SOC_Q5": "NOT_YET"
+  }
+}

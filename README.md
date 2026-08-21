@@ -14,11 +14,14 @@ Phase 0 data validation and splitting are complete. The first approved Phase 1 d
 - a development-only model-comparison framework uses the frozen 405-participant partition, shared repeated folds and fold-local preprocessing;
 - the first candidate fits three class-weighted, L2-regularized logistic classifiers, one per domain;
 - aggregate metrics, calibration bins and coefficient-stability evidence can be generated without row-level results;
+- a versioned questionnaire catalogue contains the supplied wording for 12 checkpoints and maps each checkpoint's 15 questions to the frozen model inputs;
+- framework-neutral inference contracts enforce required fields, unscorable-response handling, three domain decisions and the derived OR decision;
+- a local Streamlit research-review demo accepts manual answers or synthetic quick-fill examples and fits provisional logistic models in memory;
 - the 102-participant final-test partition remains locked and unavailable to the experiment CLI;
 - a future ports-and-adapters service architecture is documented;
 - no production database, application source, API, frontend, recommendation engine or LLM integration has been created.
 
-There is **no selected, serialized or production model artifact** in this repository. Cross-validation fits are temporary research objects only.
+There is **no selected, serialized or production model artifact** in this repository. Cross-validation fits and the local demo fit are temporary in-memory research objects only.
 
 ## Dataset
 
@@ -34,6 +37,7 @@ The CSV is privacy-sensitive and must not be committed, transmitted or published
 - [Research and ML specification](docs/research-ml-specification.md)
 - [Future ML training plan](docs/ml-training-plan.md)
 - [Development-only model comparison](docs/development-experiment.md)
+- [Local development prediction demo](docs/development-prediction-demo.md)
 - [Future service architecture](docs/service-architecture-plan.md)
 - [Decision log](docs/decision-log.md)
 
@@ -60,6 +64,15 @@ For human review, `notebooks/logistic-baseline-analysis.ipynb` presents the aggr
 python -m pip install -r requirements-notebook.txt
 python -m jupyter lab
 ```
+
+For a local question-and-answer prediction demonstration, install the separate UI dependency and run:
+
+```powershell
+python -m pip install -r requirements-demo.txt
+python -m streamlit run demo/development_prediction_demo.py
+```
+
+Use only the committed synthetic quick-fill examples during a shared demo unless handling real answers has separately been approved. The app writes no answers or fitted artifact. See [development-prediction-demo.md](docs/development-prediction-demo.md) for the exact boundary and limitations.
 
 ## Future phases
 

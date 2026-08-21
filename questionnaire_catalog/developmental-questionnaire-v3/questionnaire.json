@@ -1,0 +1,1574 @@
+{
+  "catalog_schema_version": "1.0",
+  "questionnaire_name": "Developmental Questionnaire (Toddler Mental Development Survey)",
+  "questionnaire_schema_version": "developmental-questionnaire-v3",
+  "ml_export_schema_version": "developmental-questionnaire-v3-ml-classification-v1",
+  "language": "en",
+  "caregiver_instruction": "Please answer according to what your child usually does now. Consider the behaviour in any language regularly used with your child. Do not select 'Yes, usually' for something your child has done only once. Select 'Not observed' when your child has not had a reasonable opportunity to demonstrate the behaviour.",
+  "repository_provenance": {
+    "source": "Project-owner-supplied questionnaire reference",
+    "repository_inclusion_authorized_on": "2026-08-22",
+    "authoritative_document_reference": "not supplied",
+    "underlying_license_status": "not supplied"
+  },
+  "response_options": [
+    {
+      "label": "Yes, usually",
+      "code": "YES_USUALLY",
+      "numeric_value": 2,
+      "scorable": true
+    },
+    {
+      "label": "Sometimes",
+      "code": "SOMETIMES",
+      "numeric_value": 1,
+      "scorable": true
+    },
+    {
+      "label": "Not yet",
+      "code": "NOT_YET",
+      "numeric_value": 0,
+      "scorable": true
+    },
+    {
+      "label": "Not sure",
+      "code": "NOT_SURE",
+      "numeric_value": null,
+      "scorable": false
+    },
+    {
+      "label": "I have not had an opportunity to observe this",
+      "code": "NOT_OBSERVED",
+      "numeric_value": null,
+      "scorable": false
+    }
+  ],
+  "checkpoints": [
+    {
+      "checkpoint_id": "CP2M",
+      "display_age": "2 months",
+      "minimum_age_days": 0,
+      "maximum_age_days": 91,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP4M",
+      "display_age": "4 months",
+      "minimum_age_days": 92,
+      "maximum_age_days": 152,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP6M",
+      "display_age": "6 months",
+      "minimum_age_days": 153,
+      "maximum_age_days": 213,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP9M",
+      "display_age": "9 months",
+      "minimum_age_days": 214,
+      "maximum_age_days": 304,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP12M",
+      "display_age": "12 months",
+      "minimum_age_days": 305,
+      "maximum_age_days": 395,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP15M",
+      "display_age": "15 months",
+      "minimum_age_days": 396,
+      "maximum_age_days": 486,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP18M",
+      "display_age": "18 months",
+      "minimum_age_days": 487,
+      "maximum_age_days": 639,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP24M",
+      "display_age": "24 months",
+      "minimum_age_days": 640,
+      "maximum_age_days": 821,
+      "corrected_age_applies": true
+    },
+    {
+      "checkpoint_id": "CP30M",
+      "display_age": "30 months",
+      "minimum_age_days": 822,
+      "maximum_age_days": 1004,
+      "corrected_age_applies": false
+    },
+    {
+      "checkpoint_id": "CP36M",
+      "display_age": "36 months",
+      "minimum_age_days": 1005,
+      "maximum_age_days": 1278,
+      "corrected_age_applies": false
+    },
+    {
+      "checkpoint_id": "CP48M",
+      "display_age": "48 months",
+      "minimum_age_days": 1279,
+      "maximum_age_days": 1643,
+      "corrected_age_applies": false
+    },
+    {
+      "checkpoint_id": "CP60M",
+      "display_age": "60 months",
+      "minimum_age_days": 1644,
+      "maximum_age_days": 1826,
+      "corrected_age_applies": false
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "CP2M_COMM_Q1",
+      "checkpoint_id": "CP2M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "When your child hears the voice of a familiar adult, does your child suddenly become quiet or change their facial expression or movements?"
+    },
+    {
+      "question_id": "CP2M_COMM_Q2",
+      "checkpoint_id": "CP2M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Does your child make soft sounds such as cooing, apart from crying?"
+    },
+    {
+      "question_id": "CP2M_COMM_Q3",
+      "checkpoint_id": "CP2M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "When you speak lovingly to your child, are there times when your child makes a sound in response?"
+    },
+    {
+      "question_id": "CP2M_COMM_Q4",
+      "checkpoint_id": "CP2M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "When awake and comfortable, does your child begin making sounds on their own before anyone speaks to them?"
+    },
+    {
+      "question_id": "CP2M_COMM_Q5",
+      "checkpoint_id": "CP2M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "After a familiar adult imitates a sound your child made, does your child make another sound?"
+    },
+    {
+      "question_id": "CP2M_COG_Q1",
+      "checkpoint_id": "CP2M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "When an adult is nearby, does your child look at the adult's face, even briefly?"
+    },
+    {
+      "question_id": "CP2M_COG_Q2",
+      "checkpoint_id": "CP2M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "When you slowly move your face or a toy from side to side, does your child follow it with their eyes until it moves out of sight?"
+    },
+    {
+      "question_id": "CP2M_COG_Q3",
+      "checkpoint_id": "CP2M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "When your child understands that feeding is about to begin—for example, when shown the feeding bottle or picked up—does your child show signs of getting ready to feed?"
+    },
+    {
+      "question_id": "CP2M_COG_Q4",
+      "checkpoint_id": "CP2M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "When two nearby faces or two toys are visible, does your child look at one and then shift their gaze to the other?"
+    },
+    {
+      "question_id": "CP2M_COG_Q5",
+      "checkpoint_id": "CP2M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "After seeing the same simple picture or age-appropriate toy several times, does your child show renewed interest when a different one appears?"
+    },
+    {
+      "question_id": "CP2M_SOC_Q1",
+      "checkpoint_id": "CP2M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "Does your child smile when an adult smiles or speaks lovingly to them?"
+    },
+    {
+      "question_id": "CP2M_SOC_Q2",
+      "checkpoint_id": "CP2M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Does your child calm down when held, touched, or comforted by a familiar adult?"
+    },
+    {
+      "question_id": "CP2M_SOC_Q3",
+      "checkpoint_id": "CP2M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "During quiet face-to-face moments, does your child look at a familiar adult?"
+    },
+    {
+      "question_id": "CP2M_SOC_Q4",
+      "checkpoint_id": "CP2M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "For example, while being changed or bathed, does your child remain calm and alert rather than becoming unsettled?"
+    },
+    {
+      "question_id": "CP2M_SOC_Q5",
+      "checkpoint_id": "CP2M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "When your child needs a break, do they show it by looking away, becoming quiet, or becoming unsettled?"
+    },
+    {
+      "question_id": "CP4M_COMM_Q1",
+      "checkpoint_id": "CP4M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "When someone speaks, does your child turn their eyes, head, or attention towards that person?"
+    },
+    {
+      "question_id": "CP4M_COMM_Q2",
+      "checkpoint_id": "CP4M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Does your child make different sounds to express happiness, interest, or discomfort?"
+    },
+    {
+      "question_id": "CP4M_COMM_Q3",
+      "checkpoint_id": "CP4M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "During face-to-face communication, does your child make a sound in response after an adult speaks and pauses?"
+    },
+    {
+      "question_id": "CP4M_COMM_Q4",
+      "checkpoint_id": "CP4M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "When making sounds, does your child repeatedly make clear vowel-like sounds such as \"oo,\" \"ah,\" or \"ee\"?"
+    },
+    {
+      "question_id": "CP4M_COMM_Q5",
+      "checkpoint_id": "CP4M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "While your child is making sounds, do they stop as if listening when an adult begins to speak?"
+    },
+    {
+      "question_id": "CP4M_COG_Q1",
+      "checkpoint_id": "CP4M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "Does your child look at an interesting person or object for several seconds?"
+    },
+    {
+      "question_id": "CP4M_COG_Q2",
+      "checkpoint_id": "CP4M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Does your child try to explore a safely placed toy within reach by looking at it, touching it, or pulling it closer?"
+    },
+    {
+      "question_id": "CP4M_COG_Q3",
+      "checkpoint_id": "CP4M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "When a toy unexpectedly moves or makes a sound, does your child try to repeat the action?"
+    },
+    {
+      "question_id": "CP4M_COG_Q4",
+      "checkpoint_id": "CP4M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "Does your child look at and study their own hands with interest?"
+    },
+    {
+      "question_id": "CP4M_COG_Q5",
+      "checkpoint_id": "CP4M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "After watching a toy move slowly out of sight, does your child look toward the place where it disappeared?"
+    },
+    {
+      "question_id": "CP4M_SOC_Q1",
+      "checkpoint_id": "CP4M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "Does your child smile or make sounds to gain the attention of a familiar adult?"
+    },
+    {
+      "question_id": "CP4M_SOC_Q2",
+      "checkpoint_id": "CP4M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "While playing, does your child show enjoyment by smiling, making sounds, or excitedly moving their arms and legs?"
+    },
+    {
+      "question_id": "CP4M_SOC_Q3",
+      "checkpoint_id": "CP4M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "Does your child respond differently to familiar adults than to unfamiliar people?"
+    },
+    {
+      "question_id": "CP4M_SOC_Q4",
+      "checkpoint_id": "CP4M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "When near another baby or young child, does your child watch them with interest for several seconds?"
+    },
+    {
+      "question_id": "CP4M_SOC_Q5",
+      "checkpoint_id": "CP4M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "Does your child respond to a change in a familiar adult's facial expression—for example, smiling at a happy expression or becoming quiet at a serious one?"
+    },
+    {
+      "question_id": "CP6M_COMM_Q1",
+      "checkpoint_id": "CP6M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Does your child respond when you say their name or a familiar word that is frequently used?"
+    },
+    {
+      "question_id": "CP6M_COMM_Q2",
+      "checkpoint_id": "CP6M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Does your child combine and make babbling sounds such as \"ba-ba,\" \"ma-ma,\" or \"ga-ga\"?"
+    },
+    {
+      "question_id": "CP6M_COMM_Q3",
+      "checkpoint_id": "CP6M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "When an adult makes a simple sound, does your child try to make a similar sound?"
+    },
+    {
+      "question_id": "CP6M_COMM_Q4",
+      "checkpoint_id": "CP6M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "Does your child make different sounds by gently blowing air through their lips or moving their lips and tongue?"
+    },
+    {
+      "question_id": "CP6M_COMM_Q5",
+      "checkpoint_id": "CP6M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "When making happy sounds, does your child make joyful, clearly high-pitched squealing sounds?"
+    },
+    {
+      "question_id": "CP6M_COG_Q1",
+      "checkpoint_id": "CP6M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "Does your child explore a safe toy in more than one way, such as by looking at it, touching it, or shaking it?"
+    },
+    {
+      "question_id": "CP6M_COG_Q2",
+      "checkpoint_id": "CP6M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "When a toy is partly covered but still visible, does your child look at it or try to uncover it?"
+    },
+    {
+      "question_id": "CP6M_COG_Q3",
+      "checkpoint_id": "CP6M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "Does your child repeatedly perform an action that produces an interesting result, such as shaking a toy to make a sound?"
+    },
+    {
+      "question_id": "CP6M_COG_Q4",
+      "checkpoint_id": "CP6M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "When an age-appropriate toy moving slowly is briefly hidden behind a larger object, does your child look toward where it may reappear?"
+    },
+    {
+      "question_id": "CP6M_COG_Q5",
+      "checkpoint_id": "CP6M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "When two different toys are placed nearby or handed to your child, do they look with interest at one and try to grasp or obtain it?"
+    },
+    {
+      "question_id": "CP6M_SOC_Q1",
+      "checkpoint_id": "CP6M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "Does your child clearly show that they recognise familiar adults or prefer them?"
+    },
+    {
+      "question_id": "CP6M_SOC_Q2",
+      "checkpoint_id": "CP6M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Does your child clearly express different feelings such as happiness, excitement, impatience, or discomfort?"
+    },
+    {
+      "question_id": "CP6M_SOC_Q3",
+      "checkpoint_id": "CP6M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "Does your child join in a simple game with others by smiling, looking, making sounds, or waiting expectantly for what happens next?"
+    },
+    {
+      "question_id": "CP6M_SOC_Q4",
+      "checkpoint_id": "CP6M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "When shown a child-safe, unbreakable mirror, does your child show enjoyment by smiling, looking curiously, or making sounds?"
+    },
+    {
+      "question_id": "CP6M_SOC_Q5",
+      "checkpoint_id": "CP6M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "When a familiar adult imitates your child's sound or movement, does your child respond by smiling, making another sound, or repeating the movement?"
+    },
+    {
+      "question_id": "CP9M_COMM_Q1",
+      "checkpoint_id": "CP9M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Even when looking elsewhere, does your child usually pay attention when their name is called?"
+    },
+    {
+      "question_id": "CP9M_COMM_Q2",
+      "checkpoint_id": "CP9M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Does your child make continuous sound patterns such as \"babababa\" or \"mamamama\"?"
+    },
+    {
+      "question_id": "CP9M_COMM_Q3",
+      "checkpoint_id": "CP9M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "Does your child use gestures, sounds, or facial expressions to request something or continue a game?"
+    },
+    {
+      "question_id": "CP9M_COMM_Q4",
+      "checkpoint_id": "CP9M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "When a familiar object is visible nearby and you ask for it by name, such as \"Where is the ball?\", without pointing, does your child look at it?"
+    },
+    {
+      "question_id": "CP9M_COMM_Q5",
+      "checkpoint_id": "CP9M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "Does your child respond differently when a familiar adult speaks in a cheerful tone and when they speak in a calm, serious tone?"
+    },
+    {
+      "question_id": "CP9M_COG_Q1",
+      "checkpoint_id": "CP9M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "If your child sees a toy being completely covered with a cloth or container, do they search for it?"
+    },
+    {
+      "question_id": "CP9M_COG_Q2",
+      "checkpoint_id": "CP9M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Does your child deliberately do something to obtain an object they want—for example, removing another toy that is blocking it?"
+    },
+    {
+      "question_id": "CP9M_COG_Q3",
+      "checkpoint_id": "CP9M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "Does your child explore safe household objects by dropping them, tapping them, or banging them together?"
+    },
+    {
+      "question_id": "CP9M_COG_Q4",
+      "checkpoint_id": "CP9M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "When holding one toy and offered a new toy, does your child release the first one to grasp the new one?"
+    },
+    {
+      "question_id": "CP9M_COG_Q5",
+      "checkpoint_id": "CP9M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "Does your child turn a toy in their hands to examine its different sides or parts?"
+    },
+    {
+      "question_id": "CP9M_SOC_Q1",
+      "checkpoint_id": "CP9M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "In an unfamiliar situation, does your child look at a familiar adult for reassurance?"
+    },
+    {
+      "question_id": "CP9M_SOC_Q2",
+      "checkpoint_id": "CP9M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Does your child participate in two-person games such as peekaboo or exchanging sounds?"
+    },
+    {
+      "question_id": "CP9M_SOC_Q3",
+      "checkpoint_id": "CP9M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "Does your child notice and respond when a familiar adult leaves or returns?"
+    },
+    {
+      "question_id": "CP9M_SOC_Q4",
+      "checkpoint_id": "CP9M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "When a familiar adult points toward a nearby object, does your child turn in that direction and look at the object?"
+    },
+    {
+      "question_id": "CP9M_SOC_Q5",
+      "checkpoint_id": "CP9M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "When near another baby or young child, or when the other child makes a sound, does your child look at them or make a sound in response?"
+    },
+    {
+      "question_id": "CP12M_COMM_Q1",
+      "checkpoint_id": "CP12M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Without being shown a hand gesture, does your child correctly respond to a familiar, simple request such as \"come here\" or \"give it to me\"?"
+    },
+    {
+      "question_id": "CP12M_COMM_Q2",
+      "checkpoint_id": "CP12M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Does your child consistently use a single word, sound, or gesture understood by family members to refer to a particular person or object?"
+    },
+    {
+      "question_id": "CP12M_COMM_Q3",
+      "checkpoint_id": "CP12M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "Does your child use a gesture, sound, or word to ask for help, obtain something, or say no?"
+    },
+    {
+      "question_id": "CP12M_COMM_Q4",
+      "checkpoint_id": "CP12M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "When something unusual or surprising happens during play, does your child show surprise with a special sound, word-like expression, or hand or facial gesture?"
+    },
+    {
+      "question_id": "CP12M_COMM_Q5",
+      "checkpoint_id": "CP12M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "Does your child independently use a familiar word, sound, or gesture correctly to greet or say goodbye, even without seeing someone else do it?"
+    },
+    {
+      "question_id": "CP12M_COG_Q1",
+      "checkpoint_id": "CP12M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "If your child sees a toy being hidden, do they independently look for it in the correct hiding place?"
+    },
+    {
+      "question_id": "CP12M_COG_Q2",
+      "checkpoint_id": "CP12M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Does your child use a familiar object correctly—for example, trying to drink from a cup or placing a comb against their hair?"
+    },
+    {
+      "question_id": "CP12M_COG_Q3",
+      "checkpoint_id": "CP12M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "After watching an adult demonstrate a simple action with an object, does your child try to perform the action independently?"
+    },
+    {
+      "question_id": "CP12M_COG_Q4",
+      "checkpoint_id": "CP12M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "When handed a toy upside down or in an unusual position, does your child try to turn it the usual way or use it normally?"
+    },
+    {
+      "question_id": "CP12M_COG_Q5",
+      "checkpoint_id": "CP12M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "Does your child play by combining two toys appropriately, such as tapping a container with a spoon or putting a small object into a box?"
+    },
+    {
+      "question_id": "CP12M_SOC_Q1",
+      "checkpoint_id": "CP12M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "Does your child try to direct an adult's attention towards something interesting or special by looking back and forth between the object and the adult?"
+    },
+    {
+      "question_id": "CP12M_SOC_Q2",
+      "checkpoint_id": "CP12M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Does your child imitate simple social actions such as waving, clapping, or making familiar gestures?"
+    },
+    {
+      "question_id": "CP12M_SOC_Q3",
+      "checkpoint_id": "CP12M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "When upset or frightened, does your child seek comfort from a familiar adult?"
+    },
+    {
+      "question_id": "CP12M_SOC_Q4",
+      "checkpoint_id": "CP12M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "When praised after successfully completing a small task or action, does your child smile happily or repeat the action?"
+    },
+    {
+      "question_id": "CP12M_SOC_Q5",
+      "checkpoint_id": "CP12M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "During a quiet, calm face-to-face moment, when another person smiles, does your child join in by smiling or showing happiness?"
+    },
+    {
+      "question_id": "CP15M_COMM_Q1",
+      "checkpoint_id": "CP15M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "When asked without pointing, can your child identify a familiar person, object, or body part?"
+    },
+    {
+      "question_id": "CP15M_COMM_Q2",
+      "checkpoint_id": "CP15M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Apart from names for familiar adults such as \"Mum\" and \"Dad,\" does your child consistently use several other meaningful words or sounds?"
+    },
+    {
+      "question_id": "CP15M_COMM_Q3",
+      "checkpoint_id": "CP15M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "If an adult does not initially understand what your child is communicating, does your child try to clarify it using a sound, word, gesture, or look?"
+    },
+    {
+      "question_id": "CP15M_COMM_Q4",
+      "checkpoint_id": "CP15M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "After hearing a new, simple word or word-like sound several times, does your child try to repeat it?"
+    },
+    {
+      "question_id": "CP15M_COMM_Q5",
+      "checkpoint_id": "CP15M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "When asked a familiar yes-or-no question, does your child communicate an answer using a consistent word, sound, or gesture?"
+    },
+    {
+      "question_id": "CP15M_COG_Q1",
+      "checkpoint_id": "CP15M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "If your child's first attempt to obtain a toy at home is unsuccessful, do they try another way to get it?"
+    },
+    {
+      "question_id": "CP15M_COG_Q2",
+      "checkpoint_id": "CP15M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Does your child deliberately place a toy inside a container and then try to take it out again?"
+    },
+    {
+      "question_id": "CP15M_COG_Q3",
+      "checkpoint_id": "CP15M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "Does your child anticipate and prepare for the next step in a daily routine, such as getting ready for a meal or bedtime?"
+    },
+    {
+      "question_id": "CP15M_COG_Q4",
+      "checkpoint_id": "CP15M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "Can your child stack two toy blocks to make a taller structure?"
+    },
+    {
+      "question_id": "CP15M_COG_Q5",
+      "checkpoint_id": "CP15M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "Can your child put the correct shape, such as a circle, into its matching hole in a shape-sorter toy?"
+    },
+    {
+      "question_id": "CP15M_SOC_Q1",
+      "checkpoint_id": "CP15M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "Does your child show affection towards familiar people through actions such as smiling, approaching, or hugging them?"
+    },
+    {
+      "question_id": "CP15M_SOC_Q2",
+      "checkpoint_id": "CP15M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Does your child bring and show you a toy simply to share their enjoyment, rather than only to ask for help?"
+    },
+    {
+      "question_id": "CP15M_SOC_Q3",
+      "checkpoint_id": "CP15M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "While moving around and exploring the surroundings, does your child occasionally check whether a familiar adult is nearby?"
+    },
+    {
+      "question_id": "CP15M_SOC_Q4",
+      "checkpoint_id": "CP15M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "While watching another child perform a simple play action, does your child try to imitate that action?"
+    },
+    {
+      "question_id": "CP15M_SOC_Q5",
+      "checkpoint_id": "CP15M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "Does your child show affection toward a favourite soft toy by hugging, stroking, or holding it lovingly?"
+    },
+    {
+      "question_id": "CP18M_COMM_Q1",
+      "checkpoint_id": "CP18M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Does your child listen to and follow a simple one-step instruction without being shown a hand gesture?"
+    },
+    {
+      "question_id": "CP18M_COMM_Q2",
+      "checkpoint_id": "CP18M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Does your child use several meaningful words or expressions understood by family members to communicate different needs?"
+    },
+    {
+      "question_id": "CP18M_COMM_Q3",
+      "checkpoint_id": "CP18M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "When your child sees a familiar person, object, or picture, do they try to name it independently without being asked?"
+    },
+    {
+      "question_id": "CP18M_COMM_Q4",
+      "checkpoint_id": "CP18M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "When offered two familiar choices and asked which one they want, does your child indicate a choice with a word, sound, look, or gesture?"
+    },
+    {
+      "question_id": "CP18M_COMM_Q5",
+      "checkpoint_id": "CP18M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "During play or while looking at picture books, does your child imitate a familiar animal, vehicle, or everyday sound, such as a dog barking or a car horn?"
+    },
+    {
+      "question_id": "CP18M_COG_Q1",
+      "checkpoint_id": "CP18M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "Does your child engage in simple pretend play, such as pretending to feed a doll or drink from a toy cup?"
+    },
+    {
+      "question_id": "CP18M_COG_Q2",
+      "checkpoint_id": "CP18M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "When it is difficult to obtain or use a desired toy, does your child make several reasonable attempts rather than trying only once?"
+    },
+    {
+      "question_id": "CP18M_COG_Q3",
+      "checkpoint_id": "CP18M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "When shown a simple example, can your child recognise that two similar objects or pictures are alike?"
+    },
+    {
+      "question_id": "CP18M_COG_Q4",
+      "checkpoint_id": "CP18M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "Does your child recognise that a picture represents a familiar real object—for example, looking at or pointing to a picture of a cup after seeing a real cup?"
+    },
+    {
+      "question_id": "CP18M_COG_Q5",
+      "checkpoint_id": "CP18M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "When one item from a matching pair, such as a spoon for a cup, is missing, does your child notice and search for it?"
+    },
+    {
+      "question_id": "CP18M_SOC_Q1",
+      "checkpoint_id": "CP18M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "In a new or unfamiliar situation, does your child look at a familiar adult's face or reaction before doing something?"
+    },
+    {
+      "question_id": "CP18M_SOC_Q2",
+      "checkpoint_id": "CP18M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "When an adult performs a familiar household task, does your child imitate it—for example, putting toys away or pretending to sweep with a broom?"
+    },
+    {
+      "question_id": "CP18M_SOC_Q3",
+      "checkpoint_id": "CP18M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "Does your child show interest in other children by looking at them, approaching them, smiling, talking, or playing nearby?"
+    },
+    {
+      "question_id": "CP18M_SOC_Q4",
+      "checkpoint_id": "CP18M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "When looking at a book with a familiar adult, does your child remain interested for two or three consecutive pages by looking at the pictures or staying engaged?"
+    },
+    {
+      "question_id": "CP18M_SOC_Q5",
+      "checkpoint_id": "CP18M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "When being dressed, does your child cooperate by extending an arm or leg or otherwise helping?"
+    },
+    {
+      "question_id": "CP24M_COMM_Q1",
+      "checkpoint_id": "CP24M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Does your child independently combine two or more words when speaking—for example, \"want milk\" or \"Daddy went\"?"
+    },
+    {
+      "question_id": "CP24M_COMM_Q2",
+      "checkpoint_id": "CP24M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Can your child follow a simple instruction involving a toy and a location—for example, \"Put the ball on the chair\"?"
+    },
+    {
+      "question_id": "CP24M_COMM_Q3",
+      "checkpoint_id": "CP24M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "Does your child use words to answer questions, express ideas, or ask for help?"
+    },
+    {
+      "question_id": "CP24M_COMM_Q4",
+      "checkpoint_id": "CP24M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "Without you pointing, can your child correctly point to at least two body parts when asked, such as \"Show me your nose\" or \"Show me your hand\"?"
+    },
+    {
+      "question_id": "CP24M_COMM_Q5",
+      "checkpoint_id": "CP24M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "Does your child communicate that something is absent or unwanted using a word or short phrase such as \"no milk,\" \"don't want,\" or \"no\"?"
+    },
+    {
+      "question_id": "CP24M_COG_Q1",
+      "checkpoint_id": "CP24M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "Does your child use a strategy, such as using a nearby object, to obtain a toy that cannot be reached directly?"
+    },
+    {
+      "question_id": "CP24M_COG_Q2",
+      "checkpoint_id": "CP24M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Does your child separate and group objects according to similar characteristics, such as their type, colour, or use?"
+    },
+    {
+      "question_id": "CP24M_COG_Q3",
+      "checkpoint_id": "CP24M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "During play, does your child perform two related actions in sequence, such as pretending to prepare food and then serving it to a doll?"
+    },
+    {
+      "question_id": "CP24M_COG_Q4",
+      "checkpoint_id": "CP24M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "After learning how to operate a toy, does your child use that experience to operate a different, similar new toy?"
+    },
+    {
+      "question_id": "CP24M_COG_Q5",
+      "checkpoint_id": "CP24M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "If your child sees a familiar toy placed in a new location, do they search the new location rather than only its usual place?"
+    },
+    {
+      "question_id": "CP24M_SOC_Q1",
+      "checkpoint_id": "CP24M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "When another person is sad, does your child notice it and respond by showing a sad expression, approaching them, or trying to comfort them?"
+    },
+    {
+      "question_id": "CP24M_SOC_Q2",
+      "checkpoint_id": "CP24M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "When other children are present, does your child notice what they are doing and play near them?"
+    },
+    {
+      "question_id": "CP24M_SOC_Q3",
+      "checkpoint_id": "CP24M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "Does your child try to perform familiar tasks independently while asking for help when needed?"
+    },
+    {
+      "question_id": "CP24M_SOC_Q4",
+      "checkpoint_id": "CP24M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "Does your child recognise themselves in a mirror or recent photograph, for example by using their name or pointing to themselves?"
+    },
+    {
+      "question_id": "CP24M_SOC_Q5",
+      "checkpoint_id": "CP24M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "When another person becomes excited or celebrates something, does your child sometimes join in by smiling, clapping, or making an excited sound?"
+    },
+    {
+      "question_id": "CP30M_COMM_Q1",
+      "checkpoint_id": "CP30M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Does your child regularly combine words into short sentences to communicate ideas, needs, or experiences?"
+    },
+    {
+      "question_id": "CP30M_COMM_Q2",
+      "checkpoint_id": "CP30M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Does your child answer simple \"what?\" and \"where?\" questions about familiar people, objects, or activities?"
+    },
+    {
+      "question_id": "CP30M_COMM_Q3",
+      "checkpoint_id": "CP30M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "Can your child make a simple sentence using two or more words, including an action word—for example, \"Daddy is going,\" \"Baby is eating,\" or \"The dog is running\"?"
+    },
+    {
+      "question_id": "CP30M_COMM_Q4",
+      "checkpoint_id": "CP30M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "Does your child now use about 50 words meaningfully, including words they use consistently?"
+    },
+    {
+      "question_id": "CP30M_COMM_Q5",
+      "checkpoint_id": "CP30M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "Does your child use words such as \"I\" or \"me,\" or their own name instead, to refer to themselves and appropriate words when referring to others?"
+    },
+    {
+      "question_id": "CP30M_COG_Q1",
+      "checkpoint_id": "CP30M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "During pretend play, does your child use one object as though it were something else—for example, pretending that a wooden block is a telephone?"
+    },
+    {
+      "question_id": "CP30M_COG_Q2",
+      "checkpoint_id": "CP30M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "With an adult's help, can your child demonstrate two or three steps of a familiar activity in the correct order—for example, showing the correct sequence for washing and drying their hands?"
+    },
+    {
+      "question_id": "CP30M_COG_Q3",
+      "checkpoint_id": "CP30M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "Can your child separate objects according to one clear characteristic, such as colour, and then group the remaining objects according to the same characteristic?"
+    },
+    {
+      "question_id": "CP30M_COG_Q4",
+      "checkpoint_id": "CP30M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "When shown two objects of the same type but different sizes, can your child identify or point to the \"big\" one?"
+    },
+    {
+      "question_id": "CP30M_COG_Q5",
+      "checkpoint_id": "CP30M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "When asked for \"one\" from a group of objects, does your child select and give exactly one?"
+    },
+    {
+      "question_id": "CP30M_SOC_Q1",
+      "checkpoint_id": "CP30M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "When other children are playing, does your child sometimes join them instead of only watching?"
+    },
+    {
+      "question_id": "CP30M_SOC_Q2",
+      "checkpoint_id": "CP30M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "In familiar situations, does your child recognise basic emotions such as happiness, sadness, or anger?"
+    },
+    {
+      "question_id": "CP30M_SOC_Q3",
+      "checkpoint_id": "CP30M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "When asked to stop playing and move to another activity, such as eating, does your child make the transition without becoming very upset?"
+    },
+    {
+      "question_id": "CP30M_SOC_Q4",
+      "checkpoint_id": "CP30M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "When someone else is using a toy or object your child wants, does your child usually request it with a word or pointing gesture?"
+    },
+    {
+      "question_id": "CP30M_SOC_Q5",
+      "checkpoint_id": "CP30M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "Can your child distinguish their own bottle, cup, or toy from similar belongings of another person?"
+    },
+    {
+      "question_id": "CP36M_COMM_Q1",
+      "checkpoint_id": "CP36M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "During everyday conversations, can familiar people understand what your child says?"
+    },
+    {
+      "question_id": "CP36M_COMM_Q2",
+      "checkpoint_id": "CP36M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Can your child describe a recent event by connecting two or more details—for example, \"We went to the park. I played there with a friend\"?"
+    },
+    {
+      "question_id": "CP36M_COMM_Q3",
+      "checkpoint_id": "CP36M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "When given an instruction containing two actions, can your child perform them in the order stated—for example, when told, \"Take the book and put it on the table,\" first taking the book and then placing it on the table?"
+    },
+    {
+      "question_id": "CP36M_COMM_Q4",
+      "checkpoint_id": "CP36M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "When asked their name, does your child clearly say their first name or the name used for them at home?"
+    },
+    {
+      "question_id": "CP36M_COMM_Q5",
+      "checkpoint_id": "CP36M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "Does your child commonly ask questions such as \"who?\", \"what?\", \"where?\", or \"why?\" to find out about things?"
+    },
+    {
+      "question_id": "CP36M_COG_Q1",
+      "checkpoint_id": "CP36M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "Before beginning a familiar activity, can your child say what they are going to do or what materials they need—for example, saying, \"I need paper and coloured pencils\" before drawing a picture?"
+    },
+    {
+      "question_id": "CP36M_COG_Q2",
+      "checkpoint_id": "CP36M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Can your child recognise a simple demonstrated pattern and continue it in the same way—for example, continuing a red, blue, red, blue pattern with red and blue?"
+    },
+    {
+      "question_id": "CP36M_COG_Q3",
+      "checkpoint_id": "CP36M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "During play, if the first method your child tries does not work, do they try another way—for example, if a toy does not fit inside a container, turning it another way and trying again?"
+    },
+    {
+      "question_id": "CP36M_COG_Q4",
+      "checkpoint_id": "CP36M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "When shown a picture of a familiar object with a major part missing, such as a vehicle without a wheel or a cup without a handle, can your child identify or point to the missing part?"
+    },
+    {
+      "question_id": "CP36M_COG_Q5",
+      "checkpoint_id": "CP36M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "After seeing three familiar objects and then seeing only two after one is hidden, can your child identify or indicate the missing object?"
+    },
+    {
+      "question_id": "CP36M_SOC_Q1",
+      "checkpoint_id": "CP36M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "Does your child cooperatively join other children in play that has a shared goal—for example, building a house together with blocks or playing with a ball as a group?"
+    },
+    {
+      "question_id": "CP36M_SOC_Q2",
+      "checkpoint_id": "CP36M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Does your child express their feelings using words, gestures, or another clear method?"
+    },
+    {
+      "question_id": "CP36M_SOC_Q3",
+      "checkpoint_id": "CP36M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "When reminded by an adult, can your child wait for their turn during a game or another activity—for example, waiting until another child has finished using a toy?"
+    },
+    {
+      "question_id": "CP36M_SOC_Q4",
+      "checkpoint_id": "CP36M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "When left with another familiar person in a familiar setting, does your child stop crying and become calm within about 10 minutes after you leave?"
+    },
+    {
+      "question_id": "CP36M_SOC_Q5",
+      "checkpoint_id": "CP36M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "When told that an accidental action has inconvenienced or upset someone, does your child try to correct it, say sorry, or acknowledge the mistake?"
+    },
+    {
+      "question_id": "CP48M_COMM_Q1",
+      "checkpoint_id": "CP48M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Can your child describe an experience in a way that clearly explains what happened first and what happened afterwards?"
+    },
+    {
+      "question_id": "CP48M_COMM_Q2",
+      "checkpoint_id": "CP48M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "When asked a simple \"why?\" or \"how?\" question about something familiar, can your child provide a relevant answer—for example, answering \"So I don't get wet\" when asked, \"Why do we use an umbrella when it rains?\""
+    },
+    {
+      "question_id": "CP48M_COMM_Q3",
+      "checkpoint_id": "CP48M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "When another person does not understand something your child has said, can your child explain it differently or add more information—for example, describing the colour or location of an object to clarify which object they want?"
+    },
+    {
+      "question_id": "CP48M_COMM_Q4",
+      "checkpoint_id": "CP48M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "When talking about something that happened yesterday or earlier, does your child describe it using appropriate past-tense words such as \"ate,\" \"went,\" or \"did\"?"
+    },
+    {
+      "question_id": "CP48M_COMM_Q5",
+      "checkpoint_id": "CP48M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "Can your child remember and independently recite a few familiar words or a short line from a frequently heard rhyme, song, or story?"
+    },
+    {
+      "question_id": "CP48M_COG_Q1",
+      "checkpoint_id": "CP48M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "When discussing a familiar situation, can your child predict what might happen next—for example, saying, \"It might rain next,\" after noticing that the sky has become dark?"
+    },
+    {
+      "question_id": "CP48M_COG_Q2",
+      "checkpoint_id": "CP48M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Can your child group familiar objects according to their type and briefly explain why they belong to the same group—for example, placing apples and bananas together and saying, \"These are fruits\"?"
+    },
+    {
+      "question_id": "CP48M_COG_Q3",
+      "checkpoint_id": "CP48M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "Can your child think through and complete a simple activity involving several steps—for example, taking a sheet of paper, drawing a picture, and then colouring it?"
+    },
+    {
+      "question_id": "CP48M_COG_Q4",
+      "checkpoint_id": "CP48M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "After learning a simple sorting rule, can your child switch to a different rule when clearly instructed—for example, sorting large cards first by colour and then by shape?"
+    },
+    {
+      "question_id": "CP48M_COG_Q5",
+      "checkpoint_id": "CP48M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "When hearing a simple story or seeing a picture, can your child understand whether it could really happen or is imaginary and exists only in a story?"
+    },
+    {
+      "question_id": "CP48M_SOC_Q1",
+      "checkpoint_id": "CP48M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "When engaging in pretend play with another child or adult, can your child act according to their assigned role—for example, pretending to be a doctor and examining a patient?"
+    },
+    {
+      "question_id": "CP48M_SOC_Q2",
+      "checkpoint_id": "CP48M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Can your child behave according to the rules of different places, such as home, preschool, or the classroom—for example, following preschool rules after moving from the home environment to preschool?"
+    },
+    {
+      "question_id": "CP48M_SOC_Q3",
+      "checkpoint_id": "CP48M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "When a minor disagreement occurs with another child, does your child try to discuss and resolve it with a little help from an adult—for example, agreeing to take turns when both children want the same toy?"
+    },
+    {
+      "question_id": "CP48M_SOC_Q4",
+      "checkpoint_id": "CP48M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "Does your child choose a particular friend they especially like to play with and often try to play with that child?"
+    },
+    {
+      "question_id": "CP48M_SOC_Q5",
+      "checkpoint_id": "CP48M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "Does your child independently offer to help others with a simple task such as putting toys away?"
+    },
+    {
+      "question_id": "CP60M_COMM_Q1",
+      "checkpoint_id": "CP60M",
+      "domain": "communication",
+      "order": 1,
+      "feature_column": "communication_q1",
+      "text": "Can your child connect several events in the correct order and provide a short description that another person can understand—for example, \"We went to the park. We played there. Then we came home\"?"
+    },
+    {
+      "question_id": "CP60M_COMM_Q2",
+      "checkpoint_id": "CP60M",
+      "domain": "communication",
+      "order": 2,
+      "feature_column": "communication_q2",
+      "text": "Without needing to be reminded again, can your child follow an instruction containing two or three steps in the order stated—for example, when told, \"Take the book, put it on the table, and sit on the chair,\" completing all the actions in the correct order?"
+    },
+    {
+      "question_id": "CP60M_COMM_Q3",
+      "checkpoint_id": "CP60M",
+      "domain": "communication",
+      "order": 3,
+      "feature_column": "communication_q3",
+      "text": "When speaking with another person, can your child continue the conversation for several turns by responding appropriately to what the other person says—for example, answering questions and adding relevant comments?"
+    },
+    {
+      "question_id": "CP60M_COMM_Q4",
+      "checkpoint_id": "CP60M",
+      "domain": "communication",
+      "order": 4,
+      "feature_column": "communication_q4",
+      "text": "After hearing a short, simple story, can your child correctly answer questions about its important people, actions, or events?"
+    },
+    {
+      "question_id": "CP60M_COMM_Q5",
+      "checkpoint_id": "CP60M",
+      "domain": "communication",
+      "order": 5,
+      "feature_column": "communication_q5",
+      "text": "Can your child identify words that rhyme or end with the same sound, or independently give an example of a rhyming word?"
+    },
+    {
+      "question_id": "CP60M_COG_Q1",
+      "checkpoint_id": "CP60M",
+      "domain": "cognitive",
+      "order": 1,
+      "feature_column": "cognitive_q1",
+      "text": "When faced with a simple problem, can your child select and try an appropriate way to solve it—for example, when a jigsaw puzzle piece does not fit, examining its shape and selecting another piece that may fit?"
+    },
+    {
+      "question_id": "CP60M_COG_Q2",
+      "checkpoint_id": "CP60M",
+      "domain": "cognitive",
+      "order": 2,
+      "feature_column": "cognitive_q2",
+      "text": "Can your child state one clear similarity or difference between two familiar objects—for example, \"An apple and an orange are both fruits, but they are different colours\"?"
+    },
+    {
+      "question_id": "CP60M_COG_Q3",
+      "checkpoint_id": "CP60M",
+      "domain": "cognitive",
+      "order": 3,
+      "feature_column": "cognitive_q3",
+      "text": "Can your child arrange the steps of a familiar activity in the correct order and identify and correct a step that is out of order—for example, recognising that \"drying the hands before applying soap\" is incorrect and rearranging the steps as \"apply soap, rinse with water, and then dry the hands\"?"
+    },
+    {
+      "question_id": "CP60M_COG_Q4",
+      "checkpoint_id": "CP60M",
+      "domain": "cognitive",
+      "order": 4,
+      "feature_column": "cognitive_q4",
+      "text": "Can your child correctly count 10 objects by pointing to each one and saying the numbers in order, \"1, 2, 3, 4...\" ?"
+    },
+    {
+      "question_id": "CP60M_COG_Q5",
+      "checkpoint_id": "CP60M",
+      "domain": "cognitive",
+      "order": 5,
+      "feature_column": "cognitive_q5",
+      "text": "Can your child remain engaged for five to ten minutes in a screen-free activity such as listening to a story, drawing, or completing a puzzle?"
+    },
+    {
+      "question_id": "CP60M_SOC_Q1",
+      "checkpoint_id": "CP60M",
+      "domain": "social_emotional",
+      "order": 1,
+      "feature_column": "social_emotional_q1",
+      "text": "Does your child understand that other people's thoughts or feelings may be different from their own?"
+    },
+    {
+      "question_id": "CP60M_SOC_Q2",
+      "checkpoint_id": "CP60M",
+      "domain": "social_emotional",
+      "order": 2,
+      "feature_column": "social_emotional_q2",
+      "text": "Can your child cooperatively participate in a group activity by following rules, waiting for their turn, and working with other children—for example, joining a group game while following its rules and waiting for their turn?"
+    },
+    {
+      "question_id": "CP60M_SOC_Q3",
+      "checkpoint_id": "CP60M",
+      "domain": "social_emotional",
+      "order": 3,
+      "feature_column": "social_emotional_q3",
+      "text": "When your child does not get something they want or when an attempt is unsuccessful, can they calm down after a short time and continue the activity—for example, calming down after losing a game and joining the game again?"
+    },
+    {
+      "question_id": "CP60M_SOC_Q4",
+      "checkpoint_id": "CP60M",
+      "domain": "social_emotional",
+      "order": 4,
+      "feature_column": "social_emotional_q4",
+      "text": "Before taking a toy or object belonging to someone else, does your child ask permission or wait patiently until it is offered?"
+    },
+    {
+      "question_id": "CP60M_SOC_Q5",
+      "checkpoint_id": "CP60M",
+      "domain": "social_emotional",
+      "order": 5,
+      "feature_column": "social_emotional_q5",
+      "text": "When invited to sing, dance, or act out a character in front of family or familiar people, does your child participate willingly and happily?"
+    }
+  ]
+}

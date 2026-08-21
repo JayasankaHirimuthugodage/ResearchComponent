@@ -17,3 +17,6 @@ notebook = [
     "nbformat>=5.10,<6",
     "pandas>=2.2,<3",
 ]
+demo = [
+    "streamlit>=1.61,<1.62",
+]
