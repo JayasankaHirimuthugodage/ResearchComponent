@@ -56,6 +56,16 @@ class DevelopmentDataset:
     manifest_sha256: str
 
 
+@dataclass(frozen=True)
+class FinalTestDataset:
+    """Locked final-test records plus non-identifying provenance metadata."""
+
+    records: tuple[ModelingRecord, ...]
+    dataset_sha256: str
+    split_fingerprint_sha256: str
+    manifest_sha256: str
+
+
 def default_manifest_path() -> Path:
     return repository_root() / "artifacts" / "splits" / "split_manifest.csv"
 
@@ -152,6 +162,31 @@ def select_development_records(
     return selected
 
 
+def select_final_test_records(
+    source_records: Sequence[Mapping[str, str]],
+    manifest: Sequence[Mapping[str, str]],
+) -> tuple[ModelingRecord, ...]:
+    """Return only locked final-test rows after verifying exact manifest coverage."""
+
+    source_participants = [record.get(PARTICIPANT_COLUMN, "").strip() for record in source_records]
+    if len(source_participants) != len(set(source_participants)):
+        raise ValueError("The modelling snapshot must have one row per participant.")
+    partition_by_participant = {
+        row[PARTICIPANT_COLUMN]: row["partition"] for row in manifest
+    }
+    if set(source_participants) != set(partition_by_participant):
+        raise ValueError("Dataset and split manifest participant sets do not match.")
+    selected = tuple(
+        to_modeling_record(record)
+        for record in source_records
+        if partition_by_participant[record[PARTICIPANT_COLUMN].strip()]
+        == FINAL_TEST_PARTITION
+    )
+    if not selected:
+        raise ValueError("The final-test partition is empty.")
+    return selected
+
+
 def load_development_dataset(
     dataset_path: Path | None = None,
     manifest_path: Path | None = None,
@@ -196,6 +231,56 @@ def load_development_dataset(
         raise ValueError("Frozen partition counts do not match the aggregate split summary.")
 
     return DevelopmentDataset(
+        records=records,
+        dataset_sha256=dataset_sha256,
+        split_fingerprint_sha256=split_fingerprint,
+        manifest_sha256=manifest_sha256,
+    )
+
+
+def load_final_test_dataset(
+    dataset_path: Path | None = None,
+    manifest_path: Path | None = None,
+    summary_path: Path | None = None,
+) -> FinalTestDataset:
+    """Load the locked final-test partition for the authorized final evaluation."""
+
+    dataset_path = (dataset_path or default_dataset_path()).resolve()
+    manifest_path = (manifest_path or default_manifest_path()).resolve()
+    summary_path = (summary_path or default_split_summary_path()).resolve()
+
+    validation_report = validate_dataset(dataset_path)
+    require_valid(validation_report)
+    dataset_sha256 = str(validation_report["dataset"]["sha256"])
+    with summary_path.open("r", encoding="utf-8") as source:
+        summary = json.load(source)
+    if not isinstance(summary, dict):
+        raise ValueError("Split summary must be a JSON object.")
+
+    manifest = read_split_manifest(manifest_path)
+    manifest_sha256 = sha256_file(manifest_path)
+    split_fingerprint = _split_fingerprint(manifest)
+    if summary.get("dataset_sha256") != dataset_sha256:
+        raise ValueError("Split summary does not reference the audited dataset checksum.")
+    if summary.get("manifest_sha256") != manifest_sha256:
+        raise ValueError("Private split manifest checksum does not match the split summary.")
+    if summary.get("split_fingerprint_sha256") != split_fingerprint:
+        raise ValueError("Split allocation fingerprint does not match the split summary.")
+    if split_fingerprint != EXPECTED_SPLIT_FINGERPRINT_SHA256:
+        raise ValueError("Split allocation differs from the frozen development/test boundary.")
+
+    _, source_records, _ = read_csv_records(dataset_path)
+    records = select_final_test_records(source_records, manifest)
+    if (
+        summary.get("development", {}).get("participants")
+        != EXPECTED_DEVELOPMENT_PARTICIPANT_COUNT
+        or summary.get("final_test", {}).get("participants")
+        != EXPECTED_FINAL_TEST_PARTICIPANT_COUNT
+        or len(records) != EXPECTED_FINAL_TEST_PARTICIPANT_COUNT
+    ):
+        raise ValueError("Frozen partition counts do not match the aggregate split summary.")
+
+    return FinalTestDataset(
         records=records,
         dataset_sha256=dataset_sha256,
         split_fingerprint_sha256=split_fingerprint,

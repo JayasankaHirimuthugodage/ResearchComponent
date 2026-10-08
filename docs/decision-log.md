@@ -107,7 +107,7 @@ Date: 2026-08-21
 
 The repository assigns `domain-probability-threshold-v1` to the approved cutoff and scopes it to `logistic-l2-balanced-v1`. These are repository traceability identifiers, not fabricated clinical document identifiers. The consultant pediatrician's identity, approval date and authoritative document reference remain unrecorded.
 
-Implementation and local commands are documented in [development-experiment.md](development-experiment.md). Candidate expansion, tuning, calibration, threshold revalidation for a changed model configuration, final-test evaluation and model serialization remain separate approval gates.
+Implementation and local commands are documented in [development-experiment.md](development-experiment.md). This entry records the earlier logistic-only approval context; it is not the final three-domain operating-threshold policy.
 
 ## Phase-1 local prediction demonstration decisions
 
@@ -125,7 +125,7 @@ Date: 2026-08-22
 | Display probabilities only in the technical research-review view | Raw probabilities are useful for model review but remain unsuitable for the future parent-facing interface |
 | Keep `NOT_SURE` and `NOT_OBSERVED` unscorable | The inference boundary returns `INCOMPLETE` and invokes no model rather than silently converting either response to zero |
 
-The demo's in-memory full-development fit is provisional and is not additional performance evidence. Model comparison remains fold-based and aggregate; selection, final-test evaluation, serialization and production deployment remain separate approval gates.
+The demo's in-memory full-development fit is provisional and is not additional performance evidence. It remains separate from the subsequently frozen research artifacts and does not represent the final three-domain selection.
 
 ## Phase-1 Extra Trees comparison decisions
 
@@ -142,3 +142,20 @@ Date: 2026-08-22
 | Expose both candidates in a separately labelled Streamlit research comparison | The same answers can demonstrate both outputs without implying model selection; Logistic retains its approved threshold metadata and the Extra Trees cutoff remains experimental |
 
 The Extra Trees configuration is versioned as `extra-trees-balanced-leaf5-v1`. It remains a development candidate: no final-test evaluation, calibration selection, model serialization or production routing change is authorized by this comparison.
+
+## Final development selection and locked-test decisions
+
+The following later decisions supersede the earlier two-candidate comparison for the frozen research artifacts while preserving it as historical evidence:
+
+| Decision | Rationale |
+|---|---|
+| Compare five predefined configurations | Logistic Regression, RBF SVM, Random Forest, Extra Trees and XGBoost receive the same development folds and feature contract |
+| Select separately by domain | Mean repeated-cross-validation Average Precision determines the selected candidate for each target |
+| Use nested sigmoid calibration | Calibration is learned only from development out-of-fold predictions |
+| Select thresholds by balanced accuracy/Youden's J | Domain thresholds use averaged calibrated out-of-fold development predictions; ties prefer sensitivity, then specificity, then the lower threshold |
+| Freeze XGBoost at `0.130882` for communication | Highest development mean Average Precision for that domain |
+| Freeze Logistic Regression at `0.109680` for cognitive | Highest development mean Average Precision for that domain; estimator age is not a rejection criterion |
+| Freeze XGBoost at `0.126137` for social-emotional | Highest development mean Average Precision for that domain |
+| Evaluate the locked partition once | The 125-participant test evaluation occurred after freezing; models and thresholds were not changed on test data |
+
+The questionnaire outcome cutoff of `<= 50%` remains distinct from these calibrated ML probability thresholds. The historical `0.50` comparison cutoff is not the final operating threshold for any of the three frozen domain artifacts.

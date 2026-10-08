@@ -4,10 +4,13 @@ This repository contains a portable offline experiment boundary for comparing sm
 
 ## Current candidates
 
-The shared registry contains two predeclared configurations:
+The shared registry contains five predefined, regularized configurations:
 
 - `logistic_l2_balanced`, version `logistic-l2-balanced-v1`: class-weighted, L2-regularized logistic regression with standardized questionnaire values;
+- `svm_rbf_balanced`, version `svm-rbf-balanced-v1`: class-weighted RBF support-vector classification;
+- `random_forest_balanced_leaf5`, version `random-forest-balanced-leaf5-v1`: class-weighted random forest with minimum leaf size 5;
 - `extra_trees_balanced_leaf5`, version `extra-trees-balanced-leaf5-v1`: 300 extremely randomized trees with balanced class weights, minimum leaf size 5 and unscaled questionnaire values.
+- `xgboost_regularized_balanced`, version `xgboost-regularized-balanced-v1`: regularized gradient-boosted trees with training-fold-derived class weights.
 
 For every shared cross-validation fold, each candidate fits three binary classifiers:
 
@@ -15,14 +18,14 @@ For every shared cross-validation fold, each candidate fits three binary classif
 2. cognitive concern; and
 3. social-emotional concern.
 
-This is three domain models per candidate configuration, not three datasets and not a fourth overall-concern model. With two candidates, each fold fits six classifiers. The derived overall decision is the logical OR of each candidate's three domain decisions.
+This is three domain models per candidate configuration, not three datasets and not a fourth overall-concern model. With five candidates, each fold fits 15 classifiers. The derived overall decision is the logical OR of the three selected domain decisions.
 
 Every domain model receives the same 16 conceptual inputs:
 
 - `baseline_checkpoint_id`, encoded inside the fitted pipeline; and
 - the 15 scoreable baseline questionnaire answers.
 
-Both pipelines encode checkpoint categories inside each training fold. The logistic pipeline uses `CP2M` as the explicit reference checkpoint and emits coefficients for the other checkpoint categories. Extra Trees uses the same encoded input boundary but does not scale questionnaire values.
+All pipelines encode checkpoint categories inside each training fold. Logistic Regression uses standardized values and signed coefficient evidence. The other candidates use held-out permutation importance; tree pipelines do not scale questionnaire values.
 
 No identifier, profile context, supplied one-hot checkpoint column, follow-up field, score or target can enter the feature matrix. The data loader projects each selected row onto the allowlist before it reaches scikit-learn.
 
@@ -30,7 +33,7 @@ No identifier, profile context, supplied one-hot checkpoint column, follow-up fi
 
 Model comparison uses only the frozen 500-participant `development` partition. The loader validates the dataset checksum, private manifest checksum and split fingerprint, then returns development rows only. The experiment CLI has no final-test option and records `final_test_evaluated: false`.
 
-The 125-participant final-test partition remains locked until the candidate, preprocessing configuration and calibration approach have been selected and frozen using development evidence only. The approved `0.50` threshold is versioned only for the logistic configuration and does not authorize final-test access by itself. Extra Trees uses the same numeric cutoff for development comparison, but its candidate metadata marks that cutoff `experimental_not_approved_for_model`.
+The 125-participant final-test partition remained locked while candidates, preprocessing, sigmoid calibration and operating thresholds were selected using the 500-participant development partition. After these configurations were frozen, the final partition was evaluated once. The evaluator records that models were not refitted and thresholds were not adjusted on final-test data, and it refuses to overwrite the existing result.
 
 ## Shared evaluation
 
@@ -54,18 +57,22 @@ Extra Trees uses permutation importance calculated only on each held-out validat
 
 Permutation importance is evaluation-only. It is not used to tune the candidate or select features.
 
-## Two different `50` thresholds
+## Questionnaire cutoff and ML operating thresholds
 
 The observed-outcome definition and model decision cutoff are separate:
 
 - follow-up domain score `<= 50` creates the stored observed target (`0` or `1`);
-- predicted probability `>= 0.50` creates the predicted class for each candidate in this development comparison.
+- the final calibrated ML thresholds convert predicted probabilities into domain decisions.
 
-The project owner supplied the following authoritative approval wording:
+The final thresholds were selected separately from averaged nested out-of-fold development predictions by maximizing balanced accuracy, equivalently Youden's J. Ties prefer higher sensitivity, then higher specificity, then the lower threshold. The frozen values are:
 
-> The operational predicted-probability threshold of 0.50 was reviewed and approved by the consultant pediatrician for this model version.
+| Domain | Selected configuration | Threshold |
+|---|---|---:|
+| Communication | `xgboost-regularized-balanced-v1` | 0.130882 |
+| Cognitive | `logistic-l2-balanced-v1` | 0.109680 |
+| Social-emotional | `xgboost-regularized-balanced-v1` | 0.126137 |
 
-The repository records this as `domain-probability-threshold-v1`, scoped to `logistic-l2-balanced-v1`. The consultant pediatrician's identity, approval date and authoritative document reference have not been supplied and are not fabricated here. Extra Trees does not inherit this approval: its `0.50` cutoff is experimental until that exact model version is reviewed and recorded.
+These thresholds were frozen before the one-time locked-test evaluation and were not revised afterward. The earlier numeric `0.50` cutoff remains only an intermediate comparison value; it is not the final operating policy. A questionnaire score of 50% is not a model probability of 0.50.
 
 ## Local commands
 
@@ -84,7 +91,7 @@ python -B -m training.experiments.run_development_experiment
 
 The generated report is written to `reports/generated/development-model-comparison-report.json`, which is excluded from Git. The command refuses to overwrite an existing report unless `--force` is supplied intentionally.
 
-For a human-readable view, open `notebooks/development-model-comparison.ipynb`. It reads only the aggregate comparison report by default and presents paired performance, calibration, fold variation and candidate-appropriate explanation plots without exposing participant rows.
+For a human-readable view, open `notebooks/development-model-comparison.ipynb`. It reads the aggregate development, calibration, decision and locked-test reports. It presents five-candidate rankings, frozen thresholds, final metrics, confidence intervals and confusion matrices without exposing participant rows or rerunning the locked evaluation.
 
 Install the optional presentation environment with `python -m pip install -r requirements-notebook.txt`, then launch `python -m jupyter lab`. Notebook checkpoint directories are excluded from Git.
 
@@ -94,4 +101,4 @@ The synthetic unit fixtures validate code contracts only. They are not added to 
 
 Any later justified estimator must be represented as another `CandidateSpec` and passed to the same development evaluation function. It must use the same frozen feature projection and shared fold objects. This makes comparisons paired and prevents a candidate from receiving an easier split.
 
-The current Extra Trees settings are a single predeclared, regularized comparison configuration, not the result of a hyperparameter search. Candidate expansion, tuning, calibration, threshold validation for changed model configurations, final-test evaluation and model serialization are separate approval gates. No model produced inside a cross-validation fold is a production artifact.
+All five configurations were predefined and regularized rather than selected through a hyperparameter search. They are not claimed to be optimal. Any future change to data, features, configuration, calibration or thresholds begins a new model-development cycle and cannot reuse the existing locked result as a fresh unbiased test. A model fitted inside a cross-validation fold is not a deployable artifact.

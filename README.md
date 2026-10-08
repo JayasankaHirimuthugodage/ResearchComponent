@@ -6,23 +6,25 @@ The component is for developmental monitoring and research for children approxim
 
 ## Current status
 
-Phase 0 data validation and splitting are complete. The approved Phase 1 development comparison is now implemented:
+Data validation, development-only model selection, frozen artifact creation and the one-time locked-test evaluation are complete:
 
 - the locally supplied modelling CSV is stored under `data/processed/` and excluded from Git by a narrow ignore rule;
 - the dataset has been audited without transforming participant records;
 - the research objective, target and leakage boundaries are specified;
 - a development-only model-comparison framework uses the frozen 500-participant partition, shared repeated folds and fold-local preprocessing;
-- the candidate registry compares class-weighted, L2-regularized logistic regression with a regularized Extra Trees configuration, fitting one binary classifier per domain for each candidate;
-- aggregate metrics and calibration bins are paired on shared folds; logistic uses coefficient stability and Extra Trees uses held-out permutation importance;
-- the approved `0.50` threshold metadata remains scoped to logistic, while the same numeric Extra Trees comparison cutoff is explicitly experimental;
+- five predefined model families are compared on shared development folds: Logistic Regression, RBF SVM, Random Forest, Extra Trees and XGBoost;
+- Average Precision selects a candidate separately for each domain; sigmoid calibration and threshold selection use nested development-only out-of-fold predictions;
+- each final threshold maximizes balanced accuracy (equivalently Youden's J), with deterministic tie-breaking by sensitivity, specificity and then the lower threshold;
+- the frozen selections are XGBoost for communication, Logistic Regression for cognitive and XGBoost for social-emotional;
+- the frozen ML probability thresholds are `0.130882`, `0.109680` and `0.126137`, respectively;
 - a versioned questionnaire catalogue contains the supplied wording for 12 checkpoints and maps each checkpoint's 15 questions to the frozen model inputs;
 - framework-neutral inference contracts enforce required fields, unscorable-response handling, three domain decisions and the derived OR decision;
 - a local Streamlit research-review demo accepts manual answers or synthetic quick-fill examples and shows Logistic Regression and Extra Trees outputs side by side from the same answers;
-- the 125-participant final-test partition remains locked and unavailable to the experiment CLI;
+- the 125-participant locked-test partition was evaluated once after the complete configurations were frozen; no model was refitted and no threshold was adjusted on final-test data;
 - a future ports-and-adapters service architecture is documented;
 - no production database, application source, API, frontend, recommendation engine or LLM integration has been created.
 
-There is **no selected, serialized or production model artifact** in this repository. Cross-validation fits and the local demo fit are temporary in-memory research objects only.
+Versioned, serialized research model bundles are stored locally under the ignored `models/slc-development-models-v1/` directory. They include preprocessing, the fitted classifier, sigmoid calibrator and frozen threshold. They are inference artifacts, not evidence of clinical or production readiness.
 
 ## Dataset
 
@@ -52,7 +54,7 @@ python -m pip install -r requirements.lock
 python -B -m unittest discover -v
 ```
 
-Both registered candidates can be evaluated on the development partition only:
+All five registered candidates can be evaluated on the development partition only:
 
 ```powershell
 python -B -m training.experiments.run_development_experiment
@@ -60,7 +62,7 @@ python -B -m training.experiments.run_development_experiment
 
 The generated aggregate comparison report is ignored by Git. See [development-experiment.md](docs/development-experiment.md) for the feature boundary, three-model-per-candidate interpretation, metrics and explainability methods.
 
-For human review, `notebooks/development-model-comparison.ipynb` presents both candidates side by side as aggregate tables and plots. It does not duplicate the training implementation or display participant-level records. Install the optional notebook environment and launch it locally with:
+For human review, `notebooks/development-model-comparison.ipynb` presents the five-candidate development comparison, frozen domain decisions and saved one-time locked-test results as aggregate tables and plots. It does not duplicate training logic, rerun the locked evaluation or display participant-level records. Install the optional notebook environment and launch it locally with:
 
 ```powershell
 python -m pip install -r requirements-notebook.txt
@@ -76,14 +78,12 @@ python -m streamlit run demo/development_prediction_demo.py
 
 Use only the committed synthetic quick-fill examples during a shared demo unless handling real answers has separately been approved. The app writes no answers or fitted artifact. See [development-prediction-demo.md](docs/development-prediction-demo.md) for the exact boundary and limitations.
 
-## Future phases
+## Remaining engineering phases
 
 1. Record authoritative versions of the reviewed scoring, safety and age-correction rules without inferring missing clinical wording.
-2. Review the compact, predeclared candidate comparison on the shared development folds.
-3. Review development evidence, freeze the feature schema/model/calibration, and confirm threshold approval still applies to the selected model version.
-4. Implement production inference, deterministic safety rules and service contracts.
-5. Add the approved activity catalogue and deterministic recommendation selection.
-6. Add constrained LLM personalization only after privacy and safety review.
-7. Integrate the bounded service into the external monorepo and its approved platform standards.
+2. Complete production inference, deterministic safety rules and service contracts around the frozen research artifacts.
+3. Add the approved activity catalogue and deterministic recommendation selection.
+4. Add constrained LLM personalization only after privacy and safety review.
+5. Integrate the bounded service into the external monorepo and its approved platform standards.
 
 No later phase should begin merely because it appears in this list; each requires explicit approval and the relevant validation evidence.

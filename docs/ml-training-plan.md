@@ -103,6 +103,10 @@ The project owner reports that the operational predicted-probability threshold o
 
 Any alternative threshold must be selected using development data only and treated as unapproved until it receives the required research/clinical governance. Never select or revise a threshold from final-test performance.
 
+### Implemented research threshold policy
+
+The completed research cycle selected a separate calibrated threshold for each domain using averaged nested out-of-fold predictions from the development partition. The objective maximized balanced accuracy, equivalently Youden's J; deterministic ties preferred higher sensitivity, then higher specificity, then the lower threshold. The frozen values are communication `0.130882`, cognitive `0.109680`, and social-emotional `0.126137`. They were fixed before the one-time locked-test evaluation and were not revised afterward. These ML thresholds are separate from the questionnaire score cutoff of `<= 50%`.
+
 ## Evaluation
 
 Report each domain separately for every candidate and the final locked model:
@@ -153,7 +157,7 @@ Before running experiments, document:
 - calibration and complexity considerations;
 - how ties/overlapping uncertainty will favor the simpler, more interpretable model.
 
-Select using development results only. Freeze preprocessing, estimator configuration and calibration, and confirm that the approved threshold version applies to that exact frozen configuration. Then evaluate the untouched final test set once. Any subsequent change creates a new model-selection cycle and requires threshold revalidation plus a new untouched test strategy or explicit acknowledgement that the prior test has become development data.
+Select using development results only. Freeze preprocessing, estimator configuration, calibration and thresholds, then evaluate the untouched final test set once. This cycle has now been completed for the recorded frozen artifacts. Any subsequent change creates a new model-selection cycle and requires threshold revalidation plus a new untouched test strategy or explicit acknowledgement that the prior test has become development data.
 
 ## Required outputs of a future approved training phase
 

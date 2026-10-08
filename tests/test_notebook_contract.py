@@ -3,10 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 
-from training.contracts import (
-    DECISION_THRESHOLD_APPROVAL_STATEMENT,
-    repository_root,
-)
+from training.contracts import repository_root
 
 
 class NotebookContractTests(unittest.TestCase):
@@ -22,27 +19,39 @@ class NotebookContractTests(unittest.TestCase):
             all(cell["cell_type"] in {"markdown", "code"} for cell in self.notebook["cells"])
         )
 
-    def test_committed_notebook_has_no_execution_outputs(self) -> None:
+    def test_committed_notebook_contains_successful_saved_outputs(self) -> None:
         code_cells = [
             cell for cell in self.notebook["cells"] if cell["cell_type"] == "code"
         ]
 
         self.assertTrue(code_cells)
-        self.assertTrue(all(cell["execution_count"] is None for cell in code_cells))
-        self.assertTrue(all(cell["outputs"] == [] for cell in code_cells))
+        self.assertTrue(all(cell["execution_count"] is not None for cell in code_cells))
+        self.assertTrue(any(cell["outputs"] for cell in code_cells))
+        self.assertFalse(
+            any(
+                output.get("output_type") == "error"
+                for cell in code_cells
+                for output in cell["outputs"]
+            )
+        )
 
-    def test_notebook_records_approval_and_final_test_guard(self) -> None:
+    def test_notebook_records_frozen_evidence_and_privacy_boundary(self) -> None:
         source = "\n".join(
             line
             for cell in self.notebook["cells"]
             for line in cell.get("source", [])
         )
 
-        self.assertIn(DECISION_THRESHOLD_APPROVAL_STATEMENT, source)
-        self.assertIn("report['final_test_evaluated'] is False", source)
+        self.assertIn("comparison['final_test_evaluated'] is False", source)
+        self.assertIn("final['final_test_evaluated'] is True", source)
+        self.assertIn("models_refit_or_adjusted_on_final_test", source)
+        self.assertIn("thresholds_adjusted_on_final_test", source)
         self.assertIn("development-model-comparison-report.json", source)
-        self.assertIn("extra_trees_balanced_leaf5", source)
-        self.assertIn("experimental_not_approved_for_model", source)
+        self.assertIn("development-calibration-report.json", source)
+        self.assertIn("development-decision-report.json", source)
+        self.assertIn("final-locked-test-report.json", source)
+        self.assertIn("Youden's J", source)
+        self.assertIn("Five predefined model types", source)
         self.assertNotIn("data/processed", source)
 
 

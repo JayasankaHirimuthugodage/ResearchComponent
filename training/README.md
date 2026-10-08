@@ -14,28 +14,35 @@ training/
 |   |-- common.py
 |   |-- extra_trees.py
 |   |-- logistic.py
+|   |-- random_forest.py
+|   |-- svm.py
+|   |-- xgboost.py
 |   |-- registry.py
 |   `-- demo_fitting.py
 `-- experiments/
+    |-- calibration.py
     |-- cross_validation.py
+    |-- development_decision_report.py
     |-- evaluation.py
-    `-- run_development_experiment.py
+    |-- run_development_experiment.py
+    `-- run_locked_test_evaluation.py
 ```
 
 ## Responsibility flow
 
-1. `contracts.py` freezes features, targets, versions, checksums and the approved probability threshold.
+1. `contracts.py` freezes features, targets, versions and dataset checksums.
 2. `data/dataset_validation.py` checks the private processed snapshot without exposing participant rows.
 3. `data/splitting.py` creates the participant-level development/final-test boundary.
 4. `data/development_data.py` loads only the frozen development partition for modelling.
 5. `models/common.py` owns the shared 16-input projection, checkpoint encoding, questionnaire preprocessing and fresh pipeline construction.
-6. `models/logistic.py` declares only the regularized-logistic candidate and its parameters.
-7. `models/extra_trees.py` declares the regularized Extra Trees candidate and its parameters.
-8. `models/registry.py` explicitly lists the two candidates included in the default comparison.
-9. `experiments/cross_validation.py` creates the shared participant folds used by every candidate and domain.
-10. `experiments/evaluation.py` fits and evaluates each candidate on those same folds using aggregate metrics and candidate-appropriate explanations.
-11. `experiments/run_development_experiment.py` is the development-only command-line entry point.
-12. `models/demo_fitting.py` fits both provisional candidates in memory for the local Streamlit research-comparison adapter; it cannot evaluate the locked final-test partition or persist an artifact.
+6. The model modules declare the five predefined Logistic Regression, RBF SVM, Random Forest, Extra Trees and XGBoost configurations.
+7. `models/registry.py` explicitly lists the five candidates included in the comparison.
+8. `experiments/cross_validation.py` creates the shared participant folds used by every candidate and domain.
+9. `experiments/evaluation.py` fits and evaluates candidates on identical folds using aggregate metrics and candidate-appropriate explanations.
+10. `experiments/calibration.py` performs nested development-only sigmoid calibration and deterministic domain threshold selection.
+11. `experiments/development_decision_report.py` links model rankings, calibration and thresholds into the frozen development decision.
+12. `experiments/run_locked_test_evaluation.py` verifies frozen artifacts and performs the guarded one-time aggregate final evaluation without fitting.
+13. `models/demo_fitting.py` supports the older local two-candidate research-comparison adapter; it cannot evaluate the locked partition or persist an artifact.
 
 The three targets still produce three separately fitted binary classifiers. The overall concern remains a deterministic OR of their decisions, not a fourth model.
 
@@ -44,3 +51,5 @@ Run the current development experiment from the repository root:
 ```powershell
 python -B -m training.experiments.run_development_experiment
 ```
+
+The locked-test evaluator has already completed and is intentionally not a routine rerun command. Its saved aggregate result is `reports/generated/final-locked-test-report.json`.
