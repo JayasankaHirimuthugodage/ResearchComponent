@@ -36,7 +36,7 @@ A positive decision means the model probability is at or above that candidate's 
 
 ## Model status
 
-When a complete answer set is submitted, the demo fits six classifiers in memory using all 405 records in the frozen development partition: three L2-regularized, class-weighted logistic classifiers and three regularized Extra Trees classifiers. Each candidate has one classifier per domain. The 102-record final-test partition remains inaccessible to this path. The fits are cached for the local Streamlit process and are not serialized.
+When a complete answer set is submitted, the demo fits six classifiers in memory using all 500 records in the frozen development partition: three L2-regularized, class-weighted logistic classifiers and three regularized Extra Trees classifiers. Each candidate has one classifier per domain. The 125-record final-test partition remains inaccessible to this path. The fits are cached for the local Streamlit process and are not serialized.
 
 This development-only fit is provisional. It allows an input-to-output demonstration, but neither candidate is a selected final artifact and a synthetic comparison is not evaluation evidence. Formal candidate comparison still uses the shared development folds and aggregate metrics. Final-test evaluation and model serialization remain later approval gates.
 

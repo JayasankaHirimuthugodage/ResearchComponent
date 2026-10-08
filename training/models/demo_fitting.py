@@ -21,6 +21,7 @@ from training.models.common import (
     DEFAULT_MODEL_SEED,
     CandidateSpec,
     build_candidate_pipeline,
+    fit_candidate_pipeline,
     modeling_arrays,
 )
 from training.models.extra_trees import REGULARIZED_EXTRA_TREES
@@ -99,7 +100,7 @@ def fit_candidate_prediction_service(
             candidate,
             seed=DEFAULT_MODEL_SEED + index,
         )
-        pipeline.fit(features, domain_targets)
+        fit_candidate_pipeline(pipeline, candidate, features, domain_targets)
         adapters[domain] = SklearnPositiveProbabilityAdapter(pipeline)
 
     threshold_metadata = decision_threshold_metadata(

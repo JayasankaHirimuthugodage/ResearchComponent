@@ -49,9 +49,9 @@ class DatasetValidationTests(unittest.TestCase):
 
         self.assertTrue(report["valid"])
         self.assertEqual(EXPECTED_DATASET_SHA256, report["dataset"]["sha256"])
-        self.assertEqual(507, report["dataset"]["row_count"])
+        self.assertEqual(625, report["dataset"]["row_count"])
         self.assertEqual(66, report["dataset"]["column_count"])
-        self.assertEqual(7_605, report["questionnaire"]["scoreable_cells"])
+        self.assertEqual(9_375, report["questionnaire"]["scoreable_cells"])
         self.assertEqual(0, report["questionnaire"]["invalid_or_unscorable_cells"])
         self.assertEqual(4, report["missingness"]["reporting_method"])
         self.assertEqual(0, report["integrity"]["exact_duplicate_records"])

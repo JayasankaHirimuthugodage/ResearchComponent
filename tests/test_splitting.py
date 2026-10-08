@@ -24,12 +24,12 @@ class ParticipantSplitTests(unittest.TestCase):
         for row in self.manifest:
             partition_counts[row["partition"]] = partition_counts.get(row["partition"], 0) + 1
 
-        self.assertEqual(405, partition_counts["development"])
-        self.assertEqual(102, partition_counts["final_test"])
+        self.assertEqual(500, partition_counts["development"])
+        self.assertEqual(125, partition_counts["final_test"])
         self.assertEqual(0, self.summary["constraints"]["participant_overlap"])
         self.assertTrue(self.summary["constraints"]["all_participants_assigned_once"])
         self.assertEqual(
-            507, len({row[PARTICIPANT_COLUMN] for row in self.manifest})
+            625, len({row[PARTICIPANT_COLUMN] for row in self.manifest})
         )
 
     def test_split_preserves_required_categories_in_both_partitions(self) -> None:

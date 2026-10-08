@@ -4,7 +4,7 @@ This is a design document only. No model was trained, tuned, calibrated or seria
 
 ## Feasibility and constraints
 
-The current dataset has 507 records, one record per participant, and 16 conceptual primary features (15 ordinal questionnaire responses plus one categorical checkpoint). Classical tabular experiments are readily feasible on an Intel i5 CPU with 20 GB RAM. Expected memory use is small, and disciplined cross-validation across a compact candidate set should complete locally without GPUs.
+The current dataset has 625 records, one record per participant, and 16 conceptual primary features (15 ordinal questionnaire responses plus one categorical checkpoint). Classical tabular experiments are readily feasible on an Intel i5 CPU with 20 GB RAM. Expected memory use is small, and disciplined cross-validation across a compact candidate set should complete locally without GPUs.
 
 The limiting resource is statistical information, not hardware: domain-positive counts are only 61, 53 and 58. Deep learning and large hyperparameter searches are not justified by the current sample.
 
@@ -66,7 +66,7 @@ All learned preprocessing must be fit inside each training fold.
 
 Logistic regression should scale continuous/ordinal inputs when appropriate; tree models generally do not require scaling. Use pipeline objects so transformations cannot be applied globally by accident.
 
-The present modelling CSV requires no missing-response transformation: all 7,605 baseline questionnaire cells are already in `{0,1,2}`. Future research on partial or missing-response modelling would be a separate, explicitly approved experiment and must not alter the primary complete-response contract.
+The present modelling CSV requires no missing-response transformation: all 9,375 baseline questionnaire cells are already in `{0,1,2}`. Future research on partial or missing-response modelling would be a separate, explicitly approved experiment and must not alter the primary complete-response contract.
 
 ## Candidate model set
 

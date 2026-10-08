@@ -28,9 +28,9 @@ No identifier, profile context, supplied one-hot checkpoint column, follow-up fi
 
 ## Locked-test boundary
 
-Model comparison uses only the frozen 405-participant `development` partition. The loader validates the dataset checksum, private manifest checksum and split fingerprint, then returns development rows only. The experiment CLI has no final-test option and records `final_test_evaluated: false`.
+Model comparison uses only the frozen 500-participant `development` partition. The loader validates the dataset checksum, private manifest checksum and split fingerprint, then returns development rows only. The experiment CLI has no final-test option and records `final_test_evaluated: false`.
 
-The 102-participant final-test partition remains locked until the candidate, preprocessing configuration and calibration approach have been selected and frozen using development evidence only. The approved `0.50` threshold is versioned only for the logistic configuration and does not authorize final-test access by itself. Extra Trees uses the same numeric cutoff for development comparison, but its candidate metadata marks that cutoff `experimental_not_approved_for_model`.
+The 125-participant final-test partition remains locked until the candidate, preprocessing configuration and calibration approach have been selected and frozen using development evidence only. The approved `0.50` threshold is versioned only for the logistic configuration and does not authorize final-test access by itself. Extra Trees uses the same numeric cutoff for development comparison, but its candidate metadata marks that cutoff `experimental_not_approved_for_model`.
 
 ## Shared evaluation
 
@@ -38,7 +38,7 @@ The default comparison uses five folds repeated five times. It stratifies on the
 
 The report contains, separately for each candidate and domain:
 
-- confusion counts, sensitivity, specificity, precision, F1, balanced accuracy and accuracy;
+- confusion counts, sensitivity, specificity, precision/PPV, NPV, F1, balanced accuracy and accuracy;
 - average precision (the reported PR-AUC summary), ROC-AUC and Brier score;
 - aggregate calibration bins;
 - per-fold aggregate counts and metrics; and

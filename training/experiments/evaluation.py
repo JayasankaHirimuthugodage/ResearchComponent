@@ -43,6 +43,7 @@ from training.models.common import (
     DEFAULT_MODEL_SEED,
     CandidateSpec,
     build_candidate_pipeline,
+    fit_candidate_pipeline,
     modeling_arrays,
     transformed_feature_names,
 )
@@ -76,6 +77,7 @@ def decision_metrics(y_true: np.ndarray, decisions: np.ndarray) -> dict[str, obj
         "sensitivity": float(recall_score(y_true, decisions, zero_division=0)),
         "specificity": _safe_ratio(int(tn), int(tn + fp)),
         "precision": float(precision_score(y_true, decisions, zero_division=0)),
+        "negative_predictive_value": _safe_ratio(int(tn), int(tn + fn)),
         "f1": float(f1_score(y_true, decisions, zero_division=0)),
         "balanced_accuracy": float(balanced_accuracy_score(y_true, decisions)),
         "accuracy": float(accuracy_score(y_true, decisions)),
@@ -182,6 +184,7 @@ def _numeric_metric_summary(repeat_metrics: Sequence[dict[str, object]]) -> dict
         "sensitivity",
         "specificity",
         "precision",
+        "negative_predictive_value",
         "f1",
         "balanced_accuracy",
         "accuracy",
@@ -353,7 +356,12 @@ def run_development_cross_validation(
                 pipeline = build_candidate_pipeline(candidate, seed=seed)
                 train_y = targets[fold.train_indices, target_position]
                 validation_y = targets[fold.validation_indices, target_position]
-                pipeline.fit(features[fold.train_indices], train_y)
+                fit_candidate_pipeline(
+                    pipeline,
+                    candidate,
+                    features[fold.train_indices],
+                    train_y,
+                )
                 probabilities = pipeline.predict_proba(
                     features[fold.validation_indices]
                 )[:, 1]

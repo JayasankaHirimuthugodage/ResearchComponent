@@ -6,6 +6,7 @@ requires-python = ">=3.10"
 dependencies = [
     "numpy>=2.2,<3",
     "scikit-learn>=1.6,<2",
+    "xgboost>=3.2,<3.3",
 ]
 
 [project.optional-dependencies]

@@ -10,6 +10,7 @@ from sklearn.base import BaseEstimator
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.utils.class_weight import compute_sample_weight
 
 from training.contracts import (
     BINARY_VALUES,
@@ -33,6 +34,7 @@ class CandidateSpec:
     estimator_factory: Callable[[int], BaseEstimator] = field(repr=False, compare=False)
     explanation_method: str
     scale_questionnaire: bool = True
+    use_balanced_sample_weight: bool = False
     public_parameters: Mapping[str, object] = field(default_factory=dict)
 
 
@@ -117,6 +119,24 @@ def build_candidate_pipeline(candidate: CandidateSpec, *, seed: int) -> Pipeline
             ("estimator", candidate.estimator_factory(seed)),
         )
     )
+
+
+def fit_candidate_pipeline(
+    pipeline: Pipeline,
+    candidate: CandidateSpec,
+    features: np.ndarray,
+    targets: np.ndarray,
+) -> Pipeline:
+    """Fit one pipeline, deriving optional class weights from its training fold only."""
+
+    fit_parameters: dict[str, object] = {}
+    if candidate.use_balanced_sample_weight:
+        fit_parameters["estimator__sample_weight"] = compute_sample_weight(
+            class_weight="balanced",
+            y=targets,
+        )
+    pipeline.fit(features, targets, **fit_parameters)
+    return pipeline
 
 
 def transformed_feature_names(fitted_pipeline: Pipeline) -> tuple[str, ...]:

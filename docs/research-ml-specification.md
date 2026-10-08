@@ -12,7 +12,7 @@ Primary question: using only information available when a baseline developmental
 
 - **T0:** baseline assessment and context available at prediction time.
 - **T1:** subsequent assessment approximately three months later.
-- **Unit represented by the supplied file:** one baseline/follow-up modelling record per participant; 507 participants and 507 records were observed.
+- **Unit represented by the supplied file:** one baseline/follow-up modelling record per participant; 625 participants and 625 records were observed.
 - **Primary task:** three related but separately evaluated binary classification targets.
 
 ## Questionnaire and scoring definition
@@ -65,7 +65,7 @@ Suggested non-diagnostic message for an incomplete assessment:
 
 > Some items are marked “Not sure” or “Not observed.” We need a response based on observation before providing the developmental result. Please observe the relevant activities and update these responses when possible.
 
-This policy does not change the supplied CSV: all 7,605 baseline questionnaire cells are already scoreable.
+This policy does not change the supplied CSV: all 9,375 baseline questionnaire cells are already scoreable.
 
 ## Primary feature contract
 
@@ -124,7 +124,7 @@ predicted_any_concern =
     OR predicted_social_emotional_concern
 ```
 
-Do not train a fourth primary model for `target_any_developmental_concern`. The supplied field agrees with the OR rule in all 507 rows and may be retained for traceability and consistency testing.
+Do not train a fourth primary model for `target_any_developmental_concern`. The supplied field agrees with the OR rule in all 625 rows and may be retained for traceability and consistency testing.
 
 ## Explicit feature denylist
 

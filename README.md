@@ -11,14 +11,14 @@ Phase 0 data validation and splitting are complete. The approved Phase 1 develop
 - the locally supplied modelling CSV is stored under `data/processed/` and excluded from Git by a narrow ignore rule;
 - the dataset has been audited without transforming participant records;
 - the research objective, target and leakage boundaries are specified;
-- a development-only model-comparison framework uses the frozen 405-participant partition, shared repeated folds and fold-local preprocessing;
+- a development-only model-comparison framework uses the frozen 500-participant partition, shared repeated folds and fold-local preprocessing;
 - the candidate registry compares class-weighted, L2-regularized logistic regression with a regularized Extra Trees configuration, fitting one binary classifier per domain for each candidate;
 - aggregate metrics and calibration bins are paired on shared folds; logistic uses coefficient stability and Extra Trees uses held-out permutation importance;
 - the approved `0.50` threshold metadata remains scoped to logistic, while the same numeric Extra Trees comparison cutoff is explicitly experimental;
 - a versioned questionnaire catalogue contains the supplied wording for 12 checkpoints and maps each checkpoint's 15 questions to the frozen model inputs;
 - framework-neutral inference contracts enforce required fields, unscorable-response handling, three domain decisions and the derived OR decision;
 - a local Streamlit research-review demo accepts manual answers or synthetic quick-fill examples and shows Logistic Regression and Extra Trees outputs side by side from the same answers;
-- the 102-participant final-test partition remains locked and unavailable to the experiment CLI;
+- the 125-participant final-test partition remains locked and unavailable to the experiment CLI;
 - a future ports-and-adapters service architecture is documented;
 - no production database, application source, API, frontend, recommendation engine or LLM integration has been created.
 
@@ -28,7 +28,7 @@ There is **no selected, serialized or production model artifact** in this reposi
 
 Local path:
 
-`data/processed/survey-ml-cross-checkpoint-classification (2).csv`
+`data/processed/survey-ml-cross-checkpoint-classification.csv`
 
 The CSV is privacy-sensitive and must not be committed, transmitted or published. The original raw survey export and a raw-to-processed feature-generation pipeline are not present. See [data/processed/README.md](data/processed/README.md) and [docs/data-audit.md](docs/data-audit.md).
 

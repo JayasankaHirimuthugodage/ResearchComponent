@@ -11,7 +11,7 @@ Date: 2026-08-20
 | Processed CSV belongs in `data/processed/` | It is a supplied modelling export rather than a verified untouched source-system export |
 | Preserve the CSV byte-for-byte and exclude it narrowly from Git | Privacy and research reproducibility; pre/post SHA-256 is identical |
 | Primary ML task has three domain-specific binary targets | Communication, cognitive and socio-emotional outcomes require separate evaluation/explanation |
-| `target_any_developmental_concern` is derived by OR | It agrees with the three-domain OR for all 507 records and should not become a fourth primary model |
+| `target_any_developmental_concern` is derived by OR | It agrees with the three-domain OR for all 625 records and should not become a fourth primary model |
 | Primary features are 15 T0 item responses plus `baseline_checkpoint_id` | Checkpoint supplies age/item meaning; intentionally restrictive confirmatory design |
 | Use exactly one baseline checkpoint representation | Supplied ID and one-hot group agree for all records; dual use is redundant |
 | All T1 fields are prohibited inputs | Follow-up scores deterministically yield targets; actual follow-up checkpoint is future timing |
@@ -21,7 +21,7 @@ Date: 2026-08-20
 | Validated safety/referral rules run for incomplete assessments | Completeness must not suppress serious caregiver concern, skill loss/regression or another safety condition |
 | Participant-level splitting is mandatory | Prevents future longitudinal records for a child crossing partitions; current file has one record per participant |
 | Training-only preprocessing, resampling, calibration and threshold selection | Prevents optimistic leakage |
-| No deep-learning default | 507 records and 53–61 domain positives favour classical, interpretable tabular models |
+| No deep-learning default | 625 records and 67–76 domain positives favour classical, interpretable tabular models |
 | ML, deterministic rules, approved activity selection and LLM personalization are separate boundaries | Prevents probabilistic inference or free-form generation from overriding safety logic |
 | Ports-and-adapters architecture for one bounded service | Preserves domain/application logic across transport, model, provider and database changes |
 | No production database decision in Phase 0 | External monorepo standards and operational requirements are unknown |
@@ -30,7 +30,7 @@ Date: 2026-08-20
 
 ## Evidence-based observations, not policy decisions
 
-- The dataset contains 507 rows and 66 columns with no duplicate participant or assessment identifier.
+- The dataset contains 625 rows and 66 columns with no duplicate participant or assessment identifier.
 - All 15 baseline item fields contain only `0`, `1`, `2` and no blanks.
 - The export contains no T1 item responses, dates of birth, chronological baseline ages or corrected ages.
 - Four `reporting_method` values are blank.
@@ -95,12 +95,12 @@ Date: 2026-08-21
 | Decision | Rationale / evidence |
 |---|---|
 | Fit one binary classifier per domain for each candidate | Preserves domain-specific evaluation and explanation; three targets do not require three datasets |
-| Start with class-weighted, L2-regularized logistic regression | Appropriate interpretable baseline for 405 development records and 42–48 positives per domain |
+| Start with class-weighted, L2-regularized logistic regression | Appropriate interpretable baseline for 500 development records and 53–61 positives per domain |
 | Use one shared five-fold, five-repeat allocation | Enables paired candidate/domain comparison and prevents selectively easier validation partitions |
 | Stratify on the three-label combination, then search for checkpoint balance | Every observed combination has at least five development records; deterministic secondary balancing reduces checkpoint skew without changing the label-first design |
 | Fit checkpoint encoding and questionnaire scaling inside each training fold | Prevents preprocessing leakage and keeps the complete inference transformation together |
 | Version probability `0.50` as approved for the current logistic configuration | The project owner supplied the exact statement: “The operational predicted-probability threshold of 0.50 was reviewed and approved by the consultant pediatrician for this model version.” This remains distinct from the observed score `<= 50` target rule |
-| Keep final-test evaluation unavailable from the development CLI | Prevents iterative model comparison from consuming the locked 102-participant evaluation set |
+| Keep final-test evaluation unavailable from the development CLI | Prevents iterative model comparison from consuming the locked 125-participant evaluation set |
 | Emit only aggregate evaluation and coefficient-stability evidence | Supports explainability research without writing participant predictions or identifiers |
 | Use synthetic fixtures for local contract tests but not training | Tests leakage/fold/report behavior without augmenting the small research dataset |
 | Keep the experiment framework-neutral | Later candidates and a future service/monorepo adapter can reuse contracts without importing HTTP or database concerns |
@@ -120,7 +120,7 @@ Date: 2026-08-22
 | Keep Streamlit as a thin local adapter | Questionnaire validation, encoding and prediction contracts remain reusable by a future HTTP/microservice adapter |
 | Accept manual entry and optional synthetic quick-fill | Manual entry shows the real question-and-answer workflow; synthetic fixtures make the demo repeatable without presenting participant records |
 | Store no entered answers and no fitted artifact | The demo is local research review; responses remain in the Streamlit session and the provisional logistic fits remain in process memory |
-| Fit from the 405-participant development partition only | The input-to-output flow can run while the 102-participant final-test partition stays locked |
+| Fit from the 500-participant development partition only | The input-to-output flow can run while the 125-participant final-test partition stays locked |
 | Do not calculate age or route checkpoints in the demo | Age correction and deterministic routing are separate validated-rule concerns; the demo receives an already-determined baseline checkpoint |
 | Display probabilities only in the technical research-review view | Raw probabilities are useful for model review but remain unsuitable for the future parent-facing interface |
 | Keep `NOT_SURE` and `NOT_OBSERVED` unscorable | The inference boundary returns `INCOMPLETE` and invokes no model rather than silently converting either response to zero |

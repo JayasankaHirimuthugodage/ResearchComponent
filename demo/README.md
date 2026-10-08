@@ -2,7 +2,7 @@
 
 This directory contains a thin Streamlit adapter for reviewing the current three-domain prediction workflow. It displays the committed questionnaire wording, accepts manual answers, provides clearly labelled synthetic quick-fill examples, and renders Logistic Regression and Extra Trees probabilities and decisions side by side from the same submission.
 
-The app fits both predeclared candidate configurations from the frozen 405-participant development partition in memory: three regularized-logistic classifiers and three Extra Trees classifiers, one per outcome domain. It cannot load or evaluate the 102-participant final-test partition, and it does not serialize a fitted model. Manual answers remain in the local Streamlit session and are not written to files, a database or an API.
+The app fits both predeclared candidate configurations from the frozen 500-participant development partition in memory: three regularized-logistic classifiers and three Extra Trees classifiers, one per outcome domain. It cannot load or evaluate the 125-participant final-test partition, and it does not serialize a fitted model. Manual answers remain in the local Streamlit session and are not written to files, a database or an API.
 
 From the repository root, with `.venv` active:
 

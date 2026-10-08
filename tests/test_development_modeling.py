@@ -19,6 +19,10 @@ from training.contracts import (
 )
 from training.data.development_data import ModelingRecord, select_development_records
 from training.experiments.cross_validation import create_shared_folds
+from training.experiments.calibration import (
+    run_nested_calibration_evaluation,
+    select_balanced_accuracy_threshold,
+)
 from training.experiments.evaluation import (
     binary_probability_metrics,
     decision_threshold_metadata,
@@ -27,7 +31,10 @@ from training.experiments.evaluation import (
 from training.models.common import modeling_arrays
 from training.models.extra_trees import REGULARIZED_EXTRA_TREES
 from training.models.logistic import REGULARIZED_LOGISTIC
+from training.models.random_forest import REGULARIZED_RANDOM_FOREST
 from training.models.registry import DEFAULT_CANDIDATES
+from training.models.svm import REGULARIZED_RBF_SVM
+from training.models.xgboost import REGULARIZED_XGBOOST
 
 
 def synthetic_modeling_records(
@@ -119,6 +126,7 @@ class DevelopmentModelingContractTests(unittest.TestCase):
 
         self.assertEqual(1, metrics["confusion_matrix"]["true_positive"])
         self.assertEqual(1, metrics["confusion_matrix"]["true_negative"])
+        self.assertEqual(1.0, metrics["negative_predictive_value"])
 
     def test_direct_modeling_helper_rejects_an_unscorable_response(self) -> None:
         records = list(synthetic_modeling_records())
@@ -131,6 +139,50 @@ class DevelopmentModelingContractTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "scoreable"):
             modeling_arrays(records)
+
+    def test_nested_calibration_uses_development_folds_only(self) -> None:
+        records = synthetic_modeling_records(records_per_combination=2)
+        selections = {target: REGULARIZED_LOGISTIC for target in TARGET_COLUMNS}
+
+        report = run_nested_calibration_evaluation(
+            records,
+            selections,
+            n_splits=2,
+            n_repeats=1,
+            inner_splits=2,
+            cv_seed=31,
+            model_seed=37,
+        )
+
+        self.assertEqual("development_only_nested_calibration", report["scope"])
+        self.assertFalse(report["final_test_evaluated"])
+        self.assertEqual(0.50, report["threshold"])
+        self.assertEqual(set(TARGET_COLUMNS), set(report["domains"]))
+        for target in TARGET_COLUMNS:
+            domain = report["domains"][target]
+            self.assertEqual(REGULARIZED_LOGISTIC.name, domain["selected_candidate"])
+            self.assertEqual(2, len(domain["fold_results"]))
+            self.assertIn(
+                "negative_predictive_value",
+                domain["calibrated_averaged_oof_metrics"],
+            )
+            self.assertEqual(
+                "averaged_nested_out_of_fold_development_predictions",
+                domain["threshold_selection"]["selection_data"],
+            )
+            self.assertEqual(1, len(domain["threshold_selection"]["repeat_thresholds"]))
+
+    def test_threshold_selection_is_deterministic_and_balanced_accuracy_based(self) -> None:
+        targets = np.asarray([0, 0, 0, 1, 1], dtype=np.int8)
+        probabilities = np.asarray([0.05, 0.20, 0.40, 0.45, 0.80], dtype=float)
+
+        first = select_balanced_accuracy_threshold(targets, probabilities)
+        second = select_balanced_accuracy_threshold(targets, probabilities)
+
+        self.assertEqual(first, second)
+        self.assertEqual(0.45, first["threshold"])
+        self.assertEqual(1.0, first["metrics"]["balanced_accuracy"])
+        self.assertEqual(1.0, first["youdens_j"])
 
     def test_different_probability_cutoff_does_not_inherit_approval(self) -> None:
         metadata = decision_threshold_metadata(
@@ -152,7 +204,7 @@ class DevelopmentModelingContractTests(unittest.TestCase):
         self.assertIsNone(metadata["version"])
         self.assertIsNone(metadata["approval_statement"])
 
-    def test_two_candidate_experiment_emits_aggregate_explanations(self) -> None:
+    def test_five_candidate_experiment_emits_aggregate_explanations(self) -> None:
         records = synthetic_modeling_records(records_per_combination=2)
 
         report = run_development_cross_validation(
@@ -170,7 +222,13 @@ class DevelopmentModelingContractTests(unittest.TestCase):
         )
         self.assertEqual(0.50, report["comparison_threshold"]["value"])
         self.assertEqual(
-            {REGULARIZED_LOGISTIC.name, REGULARIZED_EXTRA_TREES.name},
+            {
+                REGULARIZED_LOGISTIC.name,
+                REGULARIZED_RBF_SVM.name,
+                REGULARIZED_RANDOM_FOREST.name,
+                REGULARIZED_EXTRA_TREES.name,
+                REGULARIZED_XGBOOST.name,
+            },
             set(report["candidates"]),
         )
         candidate = report["candidates"][REGULARIZED_LOGISTIC.name]
@@ -201,6 +259,10 @@ class DevelopmentModelingContractTests(unittest.TestCase):
                 domain["explanation"]["method"],
             )
             self.assertIn("brier_score", domain["averaged_participant_oof_metrics"])
+            self.assertIn(
+                "negative_predictive_value",
+                domain["averaged_participant_oof_metrics"],
+            )
 
         extra_trees = report["candidates"][REGULARIZED_EXTRA_TREES.name]
         self.assertEqual(
@@ -220,6 +282,25 @@ class DevelopmentModelingContractTests(unittest.TestCase):
             )
             self.assertEqual("average_precision", explanation["scoring"])
             self.assertEqual(len(QUESTION_COLUMNS) + 1, len(explanation["values"]))
+
+        for candidate_spec in (
+            REGULARIZED_RBF_SVM,
+            REGULARIZED_RANDOM_FOREST,
+            REGULARIZED_XGBOOST,
+        ):
+            candidate_report = report["candidates"][candidate_spec.name]
+            self.assertEqual(
+                candidate_spec.version,
+                candidate_report["model_configuration_version"],
+            )
+            self.assertEqual(3, candidate_report["models_per_fold"])
+            for target in TARGET_COLUMNS:
+                explanation = candidate_report["domains"][target]["explanation"]
+                self.assertEqual(
+                    "held_out_permutation_importance_average_precision",
+                    explanation["method"],
+                )
+                self.assertEqual(len(QUESTION_COLUMNS) + 1, len(explanation["values"]))
 
         serialized = json.dumps(report, sort_keys=True)
         self.assertNotIn("synthetic-", serialized)

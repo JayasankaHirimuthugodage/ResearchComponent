@@ -1,5 +1,16 @@
 # Dataset audit
 
+> **Snapshot notice (October 8, 2026):** The detailed audit below records the
+> superseded 507-participant snapshot and is retained only as historical evidence.
+> The active modelling snapshot is
+> `data/processed/survey-ml-cross-checkpoint-classification.csv`, contains 625
+> participants and 66 columns, and has SHA-256
+> `464A0CD22DE10A425AAA2921D862DBC040584EB8CC51C27140B3AB5946C419B3`.
+> Its machine-readable aggregate audit is
+> `artifacts/validation/dataset_validation_report.json`. The active deterministic
+> split contains 500 development and 125 locked-test participants with zero
+> participant overlap. Do not use the historical counts below for current results.
+
 Audit date: 2026-08-20  
 Audit scope: aggregate, read-only inspection of the supplied modelling CSV; no participant records are reproduced here.
 
