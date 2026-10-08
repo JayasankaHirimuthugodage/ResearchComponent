@@ -1,8 +1,8 @@
 # Local development prediction demo
 
-This directory contains a thin Streamlit adapter for reviewing the current three-domain prediction workflow. It displays the committed questionnaire wording, accepts manual answers, provides clearly labelled synthetic quick-fill examples, and renders Logistic Regression and Extra Trees probabilities and decisions side by side from the same submission.
+This directory contains a thin Streamlit adapter for reviewing the final three-domain prediction workflow. It displays the committed questionnaire wording, accepts manual answers, keeps the clearly labelled synthetic quick-fill examples, and produces communication, cognitive and social-emotional decisions from the frozen research artifacts.
 
-The app fits both predeclared candidate configurations from the frozen 500-participant development partition in memory: three regularized-logistic classifiers and three Extra Trees classifiers, one per outcome domain. It cannot load or evaluate the 125-participant final-test partition, and it does not serialize a fitted model. Manual answers remain in the local Streamlit session and are not written to files, a database or an API.
+The app checksum-verifies and loads the frozen XGBoost communication model, Logistic Regression cognitive model and XGBoost social-emotional model. It does not fit or update a model, load the research dataset, or evaluate the locked-test partition. Manual answers remain in the local Streamlit session and are not written to files, a database or an API.
 
 From the repository root, with `.venv` active:
 
@@ -11,10 +11,10 @@ python -m pip install -r requirements-demo.txt
 python -m streamlit run demo/development_prediction_demo.py
 ```
 
-Use **Load synthetic complete example** for a quick end-to-end demonstration. The synthetic values are test/demo data only: they are not participants, do not augment training and must not be presented as a representative clinical case.
+Select any checkpoint and use **Load synthetic complete example** for a quick end-to-end demonstration. The control fills the 15 question IDs belonging to the selected checkpoint. The synthetic values are test/demo data only: they are not participants and do not augment training.
 
-Use **Load synthetic incomplete example** to demonstrate the safety boundary: `NOT_SURE` prevents ML prediction rather than being converted to zero.
+Use **Load synthetic incomplete example** to fill the selected checkpoint with one `NOT_SURE` response and demonstrate the no-prediction safety boundary. **Clear all answers** removes the current responses without changing the selected checkpoint.
 
-The Logistic Regression threshold has the recorded pediatrician-approved status for that model version. The numerically identical Extra Trees cutoff remains explicitly experimental because approval does not automatically transfer between model configurations.
+Each domain uses the threshold selected from development-only out-of-fold predictions and stored in its frozen artifact. The questionnaire score cutoff and the three ML probability thresholds remain separate decisions.
 
-This adapter is intentionally separate from the prediction application code in `inference/`. A future microservice or monorepo integration can replace Streamlit with an HTTP adapter without rewriting questionnaire validation, encoding or threshold decisions.
+The main result uses plain, non-diagnostic wording. Raw calibrated probabilities, thresholds and model versions appear only inside the explicitly labelled research/reviewer technical section. A future HTTP adapter can reuse the framework-neutral validation and frozen prediction service.

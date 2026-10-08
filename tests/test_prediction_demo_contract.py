@@ -3,7 +3,10 @@ from __future__ import annotations
 import unittest
 from dataclasses import dataclass
 
-from demo.development_prediction_demo import load_synthetic_fixture
+from demo.development_prediction_demo import (
+    load_synthetic_fixture,
+    synthetic_responses_for_checkpoint,
+)
 from inference.contracts import (
     AssessmentStatus,
     DOMAIN_IDS,
@@ -132,6 +135,29 @@ class QuestionnaireCatalogueTests(unittest.TestCase):
         self.assertIs(encoded.status, AssessmentStatus.INCOMPLETE)
         self.assertIsNone(encoded.feature_values)
         self.assertEqual(("CP24M_COMM_Q3",), encoded.incomplete_question_ids)
+
+    def test_synthetic_examples_match_every_checkpoint(self) -> None:
+        for checkpoint_id in CHECKPOINT_IDS:
+            expected_ids = {
+                question.question_id
+                for question in self.catalog.questions_for_checkpoint(checkpoint_id)
+            }
+            complete = synthetic_responses_for_checkpoint(
+                self.catalog,
+                checkpoint_id,
+                incomplete=False,
+            )
+            incomplete = synthetic_responses_for_checkpoint(
+                self.catalog,
+                checkpoint_id,
+                incomplete=True,
+            )
+
+            self.assertEqual(expected_ids, set(complete))
+            self.assertEqual(expected_ids, set(incomplete))
+            self.assertEqual(15, len(complete))
+            self.assertNotIn("NOT_SURE", complete.values())
+            self.assertEqual(1, tuple(incomplete.values()).count("NOT_SURE"))
 
     def test_missing_or_extra_questions_are_rejected(self) -> None:
         original = submission_from_fixture("synthetic_complete_assessment.json")

@@ -52,6 +52,9 @@ class NotebookContractTests(unittest.TestCase):
         self.assertIn("final-locked-test-report.json", source)
         self.assertIn("Youden's J", source)
         self.assertIn("Five predefined model types", source)
+        self.assertIn("Comparison with the Logistic Regression benchmark", source)
+        self.assertIn("benchmark_candidate = 'logistic_l2_balanced'", source)
+        self.assertIn("Locked-test results were not used for this comparison", source)
         self.assertNotIn("data/processed", source)
 
 

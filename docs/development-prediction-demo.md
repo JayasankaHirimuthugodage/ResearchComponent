@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`demo/development_prediction_demo.py` is a local research-review adapter. It lets a reviewer see the real checkpoint-specific question wording, enter answers manually, and compare how the provisional Logistic Regression and Extra Trees configurations produce future-domain probabilities and decisions from the same answers.
+`demo/development_prediction_demo.py` is a local research-review adapter. It lets a reviewer see the checkpoint-specific question wording, enter answers manually, and run the three frozen domain models from the same answers.
 
 It is not a parent-facing application, a diagnostic tool, a deployed microservice, or final-test evidence.
 
@@ -22,9 +22,9 @@ All 15 fields are required. `NOT_SURE` and `NOT_OBSERVED` remain valid but unsco
 The observed training labels and predicted decisions are different operations:
 
 - In the supplied modelling export, an observed follow-up domain score `<= 50` created that domain's positive training target (`1`).
-- At inference, a predicted positive-class probability `>= 0.50` creates that domain's positive concern decision.
+- At inference, each calibrated probability is compared with its own frozen domain threshold.
 
-The operational predicted-probability threshold of 0.50 was reviewed and approved by the consultant pediatrician for `logistic-l2-balanced-v1`. The repository versions it as `domain-probability-threshold-v1` for that configuration. The same numeric cutoff is shown for `extra-trees-balanced-leaf5-v1` only as an experimental comparison threshold; it has no assigned threshold version or recorded pediatrician approval for that model configuration.
+The frozen thresholds are `0.130882` for communication, `0.109680` for cognitive and `0.126137` for social-emotional. They were selected using development-only out-of-fold predictions and were fixed before locked-test evaluation.
 
 The three outputs are:
 
@@ -32,13 +32,13 @@ The three outputs are:
 - `cognitive_probability` and its decision; and
 - `social_emotional_probability` and its decision.
 
-A positive decision means the model probability is at or above that candidate's displayed 0.50 cutoff. The cutoff is approved for the current Logistic Regression version and experimental for the current Extra Trees version. A positive decision does not mean the child has a diagnosis. Each candidate's displayed overall concern is a deterministic OR of its three domain decisions; there is no fourth model.
+A positive decision means the domain probability is at or above that domain's frozen threshold. A positive decision does not mean the child has a diagnosis. The displayed overall concern is a deterministic OR of the three domain decisions; there is no fourth model.
 
 ## Model status
 
-When a complete answer set is submitted, the demo fits six classifiers in memory using all 500 records in the frozen development partition: three L2-regularized, class-weighted logistic classifiers and three regularized Extra Trees classifiers. Each candidate has one classifier per domain. The 125-record final-test partition remains inaccessible to this path. The fits are cached for the local Streamlit process and are not serialized.
+When a complete answer set is submitted, the demo loads three checksum-verified artifacts: XGBoost for communication, Logistic Regression for cognitive and XGBoost for social-emotional. It does not load the development or locked-test datasets and does not fit or update a model. The verified service is cached for the local Streamlit process.
 
-This development-only fit is provisional. It allows an input-to-output demonstration, but neither candidate is a selected final artifact and a synthetic comparison is not evaluation evidence. Formal candidate comparison still uses the shared development folds and aggregate metrics. Final-test evaluation and model serialization remain later approval gates.
+The artifacts are the final frozen research selections. Using them in this demonstration does not add evaluation evidence, and predictions made from synthetic examples must not be reported as model-performance results.
 
 ## Questionnaire catalogue
 
@@ -48,9 +48,9 @@ Repository inclusion was authorized by the project owner on 2026-08-22. The supp
 
 ## Privacy and synthetic examples
 
-Manual answers are held only in the local Streamlit session. The adapter contains no file write, database, HTTP, analytics or model-artifact operation. Streamlit secret/credential files are ignored by Git.
+Manual answers are held only in the local Streamlit session. The adapter reads the local frozen artifacts but contains no answer-file write, database, HTTP or analytics operation. Streamlit secret/credential files are ignored by Git.
 
-The two committed quick-fill files are explicitly synthetic demonstration fixtures. They are not participant records, are never added to training, and exist only to make a repeatable demo quick. One is complete; the other contains `NOT_SURE` to demonstrate the no-prediction boundary.
+The quick-fill controls generate repeatable synthetic responses for whichever of the 12 checkpoints is currently selected. The complete control fills all 15 checkpoint-specific question IDs. The incomplete control sets one of those answers to `NOT_SURE` to demonstrate the no-prediction boundary. These values are not participant records and are never added to training. The original CP24M fixture files remain as internal compatibility-test inputs.
 
 ## Local command
 
@@ -61,7 +61,7 @@ python -m pip install -r requirements-demo.txt
 python -m streamlit run demo/development_prediction_demo.py
 ```
 
-The first complete comparison fits six models and may take a few seconds. Later predictions in the same Streamlit process reuse the in-memory fits.
+The first complete prediction verifies and loads the three artifacts and may take a few seconds. Later predictions in the same Streamlit process reuse the cached frozen service.
 
 ## Future microservice integration
 
@@ -69,7 +69,7 @@ The reusable code is outside Streamlit:
 
 - `inference/contracts.py` defines transport-independent request/result objects;
 - `inference/questionnaire.py` validates and encodes the versioned catalogue;
-- `inference/predictor.py` owns the three-domain threshold use case through a small model-runtime port; and
-- `training/models/demo_fitting.py` is the development-only scikit-learn adapter.
+- `inference/predictor.py` retains the earlier shared-threshold development comparison use case; and
+- `inference/frozen_models.py` verifies the release and applies each frozen model's own threshold.
 
-A future HTTP adapter can construct the same `QuestionnaireSubmission` and call the same application service. Transport, authentication, storage and production model loading can therefore be added without embedding Streamlit, HTTP or database types in the inference boundary.
+A future HTTP adapter can construct the same `QuestionnaireSubmission` and call the frozen prediction service. Transport, authentication and storage can therefore be added without embedding Streamlit, HTTP or database types in the inference boundary.

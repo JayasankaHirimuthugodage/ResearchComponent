@@ -12,13 +12,18 @@ from inference.contracts import (
     QuestionnaireSubmission,
     SubmissionValidationError,
 )
-from inference.questionnaire import encode_submission, load_questionnaire_catalog
-from training.models.demo_fitting import fit_development_demo_comparison
+from inference.frozen_models import load_frozen_prediction_service
+from inference.questionnaire import (
+    QuestionnaireCatalog,
+    encode_submission,
+    load_questionnaire_catalog,
+)
 
 
 FIXTURE_DIRECTORY = Path(__file__).resolve().parent / "fixtures"
 UNANSWERED = ""
 RESPONSE_KEY_PREFIX = "question_response_"
+SYNTHETIC_RESPONSE_PATTERN = ("YES_USUALLY", "SOMETIMES", "NOT_YET")
 
 
 def load_synthetic_fixture(filename: str) -> dict[str, Any]:
@@ -40,11 +45,38 @@ def _clear_response_state(session_state: Any) -> None:
             del session_state[key]
 
 
-def _apply_fixture(session_state: Any, filename: str) -> None:
-    fixture = load_synthetic_fixture(filename)
+def synthetic_responses_for_checkpoint(
+    catalog: QuestionnaireCatalog,
+    checkpoint_id: str,
+    *,
+    incomplete: bool,
+) -> dict[str, str]:
+    """Create repeatable fictional answers for one selected checkpoint."""
+
+    questions = catalog.questions_for_checkpoint(checkpoint_id)
+    responses = {
+        question.question_id: SYNTHETIC_RESPONSE_PATTERN[index % 3]
+        for index, question in enumerate(questions)
+    }
+    if incomplete:
+        responses[questions[2].question_id] = "NOT_SURE"
+    return responses
+
+
+def _apply_synthetic_example(
+    session_state: Any,
+    catalog: QuestionnaireCatalog,
+    checkpoint_id: str,
+    *,
+    incomplete: bool,
+) -> None:
     _clear_response_state(session_state)
-    session_state["checkpoint_selector"] = fixture["checkpoint_id"]
-    for question_id, response_code in fixture["responses"].items():
+    responses = synthetic_responses_for_checkpoint(
+        catalog,
+        checkpoint_id,
+        incomplete=incomplete,
+    )
+    for question_id, response_code in responses.items():
         session_state[f"{RESPONSE_KEY_PREFIX}{question_id}"] = response_code
 
 
@@ -59,28 +91,19 @@ def main() -> None:
     catalog = load_questionnaire_catalog()
 
     @st.cache_resource(show_spinner=False)
-    def cached_demo_comparison():
-        return fit_development_demo_comparison()
+    def cached_prediction_service():
+        return load_frozen_prediction_service(catalog)
 
     st.title("Three-month developmental prediction — local review demo")
     st.write(
-        "Select a baseline checkpoint and enter the 15 baseline answers. The app fits "
-        "six provisional classifiers across two research candidates in memory, then "
-        "shows both candidates' positive-concern probabilities and threshold decisions."
+        "Select a baseline checkpoint and enter the 15 baseline answers. The app uses "
+        "the three frozen research models to produce separate communication, cognitive, "
+        "and social-emotional concern flags."
     )
     st.caption(
         "No entered answers are written to a file, database, model artifact or network API. "
         "They exist only in this local Streamlit session."
     )
-
-    st.subheader("Quick demonstration controls")
-    quick_complete, quick_incomplete, clear = st.columns(3)
-    if quick_complete.button("Load synthetic complete example", use_container_width=True):
-        _apply_fixture(st.session_state, "synthetic_complete_assessment.json")
-    if quick_incomplete.button("Load synthetic incomplete example", use_container_width=True):
-        _apply_fixture(st.session_state, "synthetic_incomplete_assessment.json")
-    if clear.button("Clear all answers", use_container_width=True):
-        _clear_response_state(st.session_state)
 
     checkpoint_map = catalog.checkpoint_by_id()
     checkpoint_id = st.selectbox(
@@ -93,6 +116,27 @@ def main() -> None:
         ),
         key="checkpoint_selector",
     )
+
+    st.subheader("Quick demonstration controls")
+    st.caption("Synthetic examples are for local demonstration only.")
+    quick_complete, quick_incomplete, clear = st.columns(3)
+    if quick_complete.button("Load synthetic complete example", use_container_width=True):
+        _apply_synthetic_example(
+            st.session_state,
+            catalog,
+            checkpoint_id,
+            incomplete=False,
+        )
+    if quick_incomplete.button("Load synthetic incomplete example", use_container_width=True):
+        _apply_synthetic_example(
+            st.session_state,
+            catalog,
+            checkpoint_id,
+            incomplete=True,
+        )
+    if clear.button("Clear all answers", use_container_width=True):
+        _clear_response_state(st.session_state)
+
     st.caption(
         "This demo does not calculate age or choose a checkpoint. The checkpoint must "
         "already have been determined by the separately validated routing process."
@@ -151,70 +195,57 @@ def main() -> None:
         )
         return
 
-    with st.spinner("Fitting both development-only candidates in memory..."):
-        fitted = cached_demo_comparison()
-        comparison_results = tuple(
-            (candidate, candidate.service.predict_encoded(encoded))
-            for candidate in fitted.candidates
-        )
+    try:
+        with st.spinner("Loading the verified frozen models..."):
+            service = cached_prediction_service()
+            result = service.predict_encoded(encoded)
+    except (FileNotFoundError, ValueError, RuntimeError) as error:
+        st.error(f"The frozen prediction models could not be loaded: {error}")
+        return
 
     st.divider()
-    st.header("Research model comparison")
-    model_columns = st.columns(len(comparison_results))
-    for model_column, (candidate, result) in zip(
-        model_columns,
-        comparison_results,
-        strict=True,
+    st.header("Developmental monitoring result")
+    model_columns = st.columns(3)
+    for model_column, prediction in zip(
+        model_columns, result.domain_predictions, strict=True
     ):
         with model_column:
-            st.subheader(candidate.display_name)
-            if candidate.threshold_approval_statement:
-                st.caption("0.50 decision threshold: approved for this model version")
+            st.subheader(DOMAIN_DISPLAY_NAMES[prediction.domain])
+            if prediction.decision:
+                st.warning("Concern flag")
             else:
-                st.caption("0.50 decision threshold: experimental for this model version")
-            for prediction in result.domain_predictions:
-                decision_text = (
-                    "Positive concern flag"
-                    if prediction.decision
-                    else "No positive concern flag"
-                )
-                st.metric(
-                    DOMAIN_DISPLAY_NAMES[prediction.domain],
-                    f"{prediction.probability:.1%}",
-                )
-                st.write(f"Decision: **{decision_text}**")
+                st.success("No concern flag")
 
-            if result.overall_concern:
-                st.warning(
-                    "Derived overall decision: POSITIVE CONCERN FLAG because at least "
-                    "one domain probability is at or above 0.50."
-                )
-            else:
-                st.success(
-                    "Derived overall decision: NO POSITIVE CONCERN FLAG because all "
-                    "three domain probabilities are below 0.50."
-                )
+    if result.overall_concern:
+        st.warning(
+            "Overall concern flag: at least one developmental domain was flagged. "
+            "This is a monitoring result, not a diagnosis."
+        )
+    else:
+        st.success(
+            "No overall concern flag was produced by the three domain models. "
+            "This is a monitoring result, not a diagnosis."
+        )
     st.caption("Screening for possible concerns")
 
-    with st.expander("Model and contract traceability"):
-        for candidate, result in comparison_results:
-            st.markdown(f"**{candidate.display_name}**")
-            st.write(f"Model version: `{result.model_version}`")
-            st.write(f"Feature schema version: `{result.feature_schema_version}`")
-            st.write(
-                f"Questionnaire schema version: `{result.questionnaire_schema_version}`"
-            )
-            threshold_version = result.threshold_version or "not assigned"
-            st.write(f"Threshold version: `{threshold_version}`")
-            st.write(f"Probability threshold: `{result.threshold:.2f}` (inclusive)")
-            st.write(f"Threshold status: `{candidate.threshold_status}`")
-            if candidate.threshold_approval_statement:
-                st.write(candidate.threshold_approval_statement)
+    with st.expander("Research/reviewer technical details"):
+        st.caption(
+            "The probabilities and thresholds below are for technical review and should "
+            "not be shown as clinical measurements or diagnoses."
+        )
+        for prediction in result.domain_predictions:
+            st.markdown(f"**{DOMAIN_DISPLAY_NAMES[prediction.domain]}**")
+            st.write(f"Calibrated probability: `{prediction.probability:.4f}`")
+            st.write(f"Frozen threshold: `{prediction.threshold:.6f}` (inclusive)")
+            st.write(f"Model version: `{prediction.model_version}`")
+        st.write(f"Model release: `{result.model_version}`")
+        st.write(f"Feature schema version: `{result.feature_schema_version}`")
         st.write(
-            f"Fit scope: `{fitted.provenance.fit_scope}`; "
-            f"development participants: `{fitted.provenance.development_participants}`; "
-            f"final test evaluated: `{fitted.provenance.final_test_evaluated}`; "
-            f"artifact persisted: `{fitted.provenance.artifact_persisted}`."
+            f"Questionnaire schema version: `{result.questionnaire_schema_version}`"
+        )
+        st.write(
+            "Inference uses checksum-verified frozen artifacts. No model is fitted or "
+            "updated from the submitted answers."
         )
 
 

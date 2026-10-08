@@ -89,6 +89,8 @@ class DevelopmentPredictionService:
                     domain=domain,
                     probability=probability,
                     decision=probability >= self.threshold,
+                    threshold=self.threshold,
+                    model_version=self.model_version,
                 )
             )
 

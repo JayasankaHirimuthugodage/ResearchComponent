@@ -105,7 +105,7 @@ Any alternative threshold must be selected using development data only and treat
 
 ### Implemented research threshold policy
 
-The completed research cycle selected a separate calibrated threshold for each domain using averaged nested out-of-fold predictions from the development partition. The objective maximized balanced accuracy, equivalently Youden's J; deterministic ties preferred higher sensitivity, then higher specificity, then the lower threshold. The frozen values are communication `0.130882`, cognitive `0.109680`, and social-emotional `0.126137`. They were fixed before the one-time locked-test evaluation and were not revised afterward. These ML thresholds are separate from the questionnaire score cutoff of `<= 50%`.
+The proposal defines the development-only selection boundary and requires thresholds to be frozen before locked-test evaluation; it does not prescribe Balanced Accuracy or Youden's J. The completed research cycle selected a separate calibrated threshold for each domain using averaged nested out-of-fold predictions from the development partition. As an implementation decision, the objective maximized balanced accuracy, equivalently Youden's J; deterministic ties preferred higher sensitivity, then higher specificity, then the lower threshold. The frozen values are communication `0.130882`, cognitive `0.109680`, and social-emotional `0.126137`. They were fixed before the one-time locked-test evaluation and were not revised afterward. These ML thresholds are separate from the questionnaire score cutoff of `<= 50%`.
 
 ## Evaluation
 

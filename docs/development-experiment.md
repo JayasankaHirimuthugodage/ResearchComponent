@@ -64,7 +64,7 @@ The observed-outcome definition and model decision cutoff are separate:
 - follow-up domain score `<= 50` creates the stored observed target (`0` or `1`);
 - the final calibrated ML thresholds convert predicted probabilities into domain decisions.
 
-The final thresholds were selected separately from averaged nested out-of-fold development predictions by maximizing balanced accuracy, equivalently Youden's J. Ties prefer higher sensitivity, then higher specificity, then the lower threshold. The frozen values are:
+The proposal requires operating thresholds to be selected from development data and fixed before locked-test evaluation. It does not prescribe Balanced Accuracy or Youden's J. This implementation selected the final thresholds separately from averaged nested out-of-fold development predictions by maximizing balanced accuracy, equivalently Youden's J. Ties prefer higher sensitivity, then higher specificity, then the lower threshold. The frozen values are:
 
 | Domain | Selected configuration | Threshold |
 |---|---|---:|

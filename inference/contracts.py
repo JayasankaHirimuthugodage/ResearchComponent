@@ -46,6 +46,8 @@ class DomainPrediction:
     domain: str
     probability: float
     decision: bool
+    threshold: float | None = None
+    model_version: str | None = None
 
 
 @dataclass(frozen=True)
@@ -59,7 +61,7 @@ class PredictionResult:
     model_version: str
     feature_schema_version: str
     questionnaire_schema_version: str
-    threshold: float
+    threshold: float | None
     threshold_version: str | None
 
     def __post_init__(self) -> None:
