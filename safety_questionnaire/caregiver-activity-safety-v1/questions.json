@@ -1,0 +1,55 @@
+{
+  "catalog_schema_version": "1.0",
+  "questionnaire_version": "caregiver-activity-safety-v1",
+  "language": "en",
+  "purpose": "Separate caregiver observations used only for activity-suitability filtering.",
+  "review": {
+    "status": "professionally_reviewed",
+    "reviewer_role": "pediatrician",
+    "review_date": "2026-10-10",
+    "evidence_basis": "reported_by_researcher",
+    "reviewer_identity": "not_stored",
+    "scope": "question wording, response mapping, checkpoint examples and filtering rules"
+  },
+  "response_options": [
+    {"code": "NO_CONCERN_REPORTED", "label": "No concern noticed", "ability_state": "no_concern_reported"},
+    {"code": "CONCERN_REPORTED", "label": "Concern noticed", "ability_state": "concern_reported"},
+    {"code": "UNKNOWN", "label": "Not sure / not observed", "ability_state": "unknown"}
+  ],
+  "questions": [
+    {
+      "question_id": "SAFETY_HEARING",
+      "dimension": "hearing",
+      "text": "Have you noticed, or has anyone told you about, any concern with how your child responds to sounds, voices or spoken communication?"
+    },
+    {
+      "question_id": "SAFETY_VISION",
+      "dimension": "vision",
+      "text": "Have you noticed, or has anyone told you about, any concern with how your child looks at, follows, finds or recognises people and objects?"
+    },
+    {
+      "question_id": "SAFETY_FINE_MOTOR",
+      "dimension": "fine_motor",
+      "text": "Have you noticed, or has anyone told you about, any concern with how your child uses their hands and fingers during age-appropriate activities?"
+    },
+    {
+      "question_id": "SAFETY_GROSS_MOTOR",
+      "dimension": "gross_motor",
+      "text": "Have you noticed, or has anyone told you about, any concern with your child's body control, balance or age-appropriate movement?"
+    }
+  ],
+  "checkpoint_examples": {
+    "CP2M": {"hearing": "responding to familiar voices", "vision": "briefly looking at faces", "fine_motor": "opening the hands", "gross_motor": "comfortable head and body support"},
+    "CP4M": {"hearing": "turning toward sounds", "vision": "following a nearby face or object", "fine_motor": "reaching toward objects", "gross_motor": "holding the head steadily"},
+    "CP6M": {"hearing": "responding to voices", "vision": "visually following people or toys", "fine_motor": "grasping and releasing safe objects", "gross_motor": "rolling or supported sitting"},
+    "CP9M": {"hearing": "locating sounds", "vision": "finding nearby or partly hidden objects", "fine_motor": "moving objects between the hands", "gross_motor": "sitting or moving on the floor"},
+    "CP12M": {"hearing": "responding to names or familiar words", "vision": "locating familiar people or objects", "fine_motor": "picking up safe small items", "gross_motor": "pulling up or supported stepping"},
+    "CP15M": {"hearing": "following simple spoken communication", "vision": "recognising nearby objects", "fine_motor": "handling toys or utensils", "gross_motor": "standing or walking with appropriate support"},
+    "CP18M": {"hearing": "responding to spoken directions", "vision": "finding named objects", "fine_motor": "turning pages or stacking objects", "gross_motor": "walking and changing direction"},
+    "CP24M": {"hearing": "following familiar spoken instructions", "vision": "locating pictures or objects", "fine_motor": "scribbling or manipulating toys", "gross_motor": "walking, running or using steps with support"},
+    "CP30M": {"hearing": "participating in spoken exchanges", "vision": "visually matching or finding objects", "fine_motor": "drawing or handling simple materials", "gross_motor": "jumping or navigating a safe space"},
+    "CP36M": {"hearing": "following verbal activity directions", "vision": "observing people or play materials", "fine_motor": "using crayons or simple objects", "gross_motor": "climbing or moving with balance"},
+    "CP48M": {"hearing": "following conversation or group directions", "vision": "recognising pictures, signs or people", "fine_motor": "drawing and handling play materials", "gross_motor": "coordinated running or stair movement"},
+    "CP60M": {"hearing": "following multi-step spoken directions", "vision": "finding details in pictures or surroundings", "fine_motor": "using drawing, puzzle or fastening materials", "gross_motor": "balance and coordinated movement"}
+  }
+}

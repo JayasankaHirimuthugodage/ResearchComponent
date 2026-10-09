@@ -21,4 +21,10 @@ The main result uses plain, non-diagnostic wording. Raw calibrated probabilities
 
 The overall summary names the specific domains identified for further attention instead of displaying only a generic overall flag. The underlying overall decision remains the logical OR of the three domain decisions.
 
+When at least one domain is flagged, the demonstration asks four separate activity-suitability questions covering hearing, vision, fine-motor and gross-motor observations. These answers never enter the frozen 16-feature model contract. The app uses the flagged domains as retrieval gates, exact `NOT_YET` and `SOMETIMES` question wording as traceable skill context, and the safety observations to filter v0.4 activities before semantic ranking.
+
+The app returns up to three eligible activities independently for each flagged domain. It returns fewer when fewer records pass all restrictions and does not relax safety or approval rules. A zero-concern result does not trigger targeted retrieval. A flagged domain without supported item-level skill context does not receive an invented query.
+
+The activity stage is local safety-filtered semantic retrieval. It does not use a generative LLM and is not complete RAG. Returned activities remain internal research-demo candidates and are not represented as caregiver-deployment-approved interventions.
+
 For each domain, the main result shows the strongest submitted answer supporting the final decision. A single shared notice explains that all answers contribute and that the highlighted observation did not determine the result alone. The reviewer section retains the threshold, supporting, opposing and numerical model-specific contributions: coefficient contributions for Logistic Regression and TreeSHAP contributions for XGBoost. These explanations do not change the prediction and do not claim causation.

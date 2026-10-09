@@ -120,6 +120,47 @@ class ActivityEligibilityTests(unittest.TestCase):
         self.assertEqual((record,), result.eligible)
         self.assertEqual(4, len(result.cautions[record.activity_id]))
 
+    def test_no_concern_reported_is_not_confirmed_ability(self) -> None:
+        record = make_record(
+            "ACT-TEST-NO-CONCERN",
+            {
+                "hearing": "required",
+                "vision": "not_obviously_required",
+                "fine_motor": "not_obviously_required",
+                "gross_motor": "not_obviously_required",
+            },
+        )
+        result = filter_eligible_activities(
+            (record,),
+            EligibilityRequest(
+                "CP2M",
+                "communication",
+                context(AbilityState.NO_CONCERN_REPORTED),
+            ),
+        )
+        self.assertEqual((), result.eligible)
+        self.assertIn("hearing_required_but_not_confirmed", result.withheld[0].reasons)
+
+    def test_no_concern_reported_allows_review_if_concern(self) -> None:
+        record = make_record(
+            "ACT-TEST-NO-CONCERN-REVIEW",
+            {
+                "hearing": "review_if_concern",
+                "vision": "not_obviously_required",
+                "fine_motor": "not_obviously_required",
+                "gross_motor": "not_obviously_required",
+            },
+        )
+        result = filter_eligible_activities(
+            (record,),
+            EligibilityRequest(
+                "CP2M",
+                "communication",
+                context(AbilityState.NO_CONCERN_REPORTED),
+            ),
+        )
+        self.assertEqual((record,), result.eligible)
+
     def test_required_ability_must_be_confirmed(self) -> None:
         record = make_record(
             "ACT-TEST-4",

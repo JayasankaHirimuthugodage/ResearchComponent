@@ -1,2 +1,3 @@
 -r requirements.lock
+-r requirements-activity-retrieval.txt
 streamlit==1.61.1

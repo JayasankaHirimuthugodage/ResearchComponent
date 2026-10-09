@@ -33,6 +33,7 @@ class RetrievalMode(str, Enum):
 
 class AbilityState(str, Enum):
     AVAILABLE = "available"
+    NO_CONCERN_REPORTED = "no_concern_reported"
     CONCERN_REPORTED = "concern_reported"
     UNKNOWN = "unknown"
 

@@ -6,6 +6,19 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
+from activity_recommendation.catalogue import load_activity_catalogue
+from activity_recommendation.embeddings import (
+    SentenceTransformerEncoder,
+    load_embedding_artifacts,
+)
+from activity_recommendation.recommendation_service import (
+    ActivityRecommendationService,
+    RecommendationStatus,
+)
+from activity_recommendation.safety_questionnaire import (
+    load_safety_questionnaire_catalog,
+    safety_context_from_responses,
+)
 from inference.contracts import (
     AssessmentStatus,
     DOMAIN_DISPLAY_NAMES,
@@ -24,7 +37,11 @@ from inference.questionnaire import (
 FIXTURE_DIRECTORY = Path(__file__).resolve().parent / "fixtures"
 UNANSWERED = ""
 RESPONSE_KEY_PREFIX = "question_response_"
+SAFETY_RESPONSE_KEY_PREFIX = "safety_response_"
 SYNTHETIC_RESPONSE_PATTERN = ("YES_USUALLY", "SOMETIMES", "NOT_YET")
+ACTIVITY_ARTIFACT_DIRECTORY = (
+    Path(__file__).resolve().parents[1] / "artifacts" / "activity-embeddings" / "0.4.0"
+)
 
 
 def load_synthetic_fixture(filename: str) -> dict[str, Any]:
@@ -42,8 +59,9 @@ def load_synthetic_fixture(filename: str) -> dict[str, Any]:
 
 def _clear_response_state(session_state: Any) -> None:
     for key in tuple(session_state):
-        if str(key).startswith(RESPONSE_KEY_PREFIX):
+        if str(key).startswith((RESPONSE_KEY_PREFIX, SAFETY_RESPONSE_KEY_PREFIX)):
             del session_state[key]
+    session_state.pop("prediction_requested", None)
 
 
 def format_area_summary(domain_decisions: Mapping[str, bool]) -> str:
@@ -106,10 +124,25 @@ def main() -> None:
         layout="wide",
     )
     catalog = load_questionnaire_catalog()
+    safety_catalog = load_safety_questionnaire_catalog()
 
     @st.cache_resource(show_spinner=False)
     def cached_prediction_service():
         return load_frozen_prediction_service(catalog)
+
+    @st.cache_resource(show_spinner=False)
+    def cached_activity_recommendation_service():
+        activity_catalogue = load_activity_catalogue()
+        artifacts = load_embedding_artifacts(
+            activity_catalogue,
+            ACTIVITY_ARTIFACT_DIRECTORY,
+        )
+        return ActivityRecommendationService(
+            catalog,
+            activity_catalogue,
+            artifacts,
+            SentenceTransformerEncoder(),
+        )
 
     st.title("Three-month developmental prediction — local review demo")
     st.write(
@@ -184,7 +217,9 @@ def main() -> None:
             label_visibility="collapsed",
         )
 
-    if not st.button("Generate development prediction", type="primary"):
+    if st.button("Generate development prediction", type="primary"):
+        st.session_state["prediction_requested"] = True
+    if not st.session_state.get("prediction_requested", False):
         return
 
     unanswered = [question_id for question_id, code in responses.items() if not code]
@@ -247,6 +282,92 @@ def main() -> None:
         st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
         st.markdown(explanation.caregiver_message)
     st.info(CAREGIVER_EXPLANATION_NOTICE)
+
+    st.divider()
+    st.header("Development activity retrieval")
+    if not result.overall_concern:
+        st.info("No developmental domain was flagged for targeted activity retrieval.")
+    else:
+        st.caption(
+            "The following questions are separate from the 15 model inputs and are used "
+            "only to filter activities for suitability."
+        )
+        st.subheader("Activity suitability questions")
+        safety_responses: dict[str, str] = {}
+        safety_options = ("", *safety_catalog.response_labels)
+
+        def safety_response_label(code: str) -> str:
+            return "Choose an answer" if not code else safety_catalog.response_labels[code]
+
+        checkpoint_examples = safety_catalog.checkpoint_examples[checkpoint_id]
+        for question in safety_catalog.questions:
+            st.markdown(f"**{question.text}**")
+            st.caption(f"Example for this checkpoint: {checkpoint_examples[question.dimension]}.")
+            safety_responses[question.question_id] = st.selectbox(
+                "Safety observation",
+                options=safety_options,
+                format_func=safety_response_label,
+                key=f"{SAFETY_RESPONSE_KEY_PREFIX}{question.question_id}",
+                label_visibility="collapsed",
+            )
+
+        if any(not value for value in safety_responses.values()):
+            st.info("Answer all four activity suitability questions to retrieve activities.")
+        elif st.button("Find suitable activities", type="secondary"):
+            try:
+                safety_context = safety_context_from_responses(
+                    safety_catalog,
+                    safety_responses,
+                )
+                with st.spinner("Filtering and ranking eligible activities..."):
+                    recommendations = cached_activity_recommendation_service().recommend(
+                        result,
+                        checkpoint_id,
+                        responses,
+                        safety_context,
+                    )
+            except (FileNotFoundError, ValueError, RuntimeError) as error:
+                st.error(f"Activities could not be retrieved: {error}")
+            else:
+                for domain_result in recommendations.domains:
+                    st.subheader(DOMAIN_DISPLAY_NAMES[domain_result.domain])
+                    if domain_result.status is RecommendationStatus.NO_SUPPORTED_SKILL_CONTEXT:
+                        st.info(
+                            "The submitted answers did not provide a NOT_YET or SOMETIMES "
+                            "observation for a supported skill query in this domain."
+                        )
+                        continue
+                    if domain_result.status is RecommendationStatus.NO_ELIGIBLE_ACTIVITIES:
+                        st.warning(
+                            "No activity remained after checkpoint, domain, review-status "
+                            "and safety filtering."
+                        )
+                        continue
+                    for rank, ranked in enumerate(domain_result.activities, start=1):
+                        activity = ranked.activity
+                        st.markdown(f"**{rank}. {activity.title}**")
+                        st.write(activity.activity_summary)
+                        st.caption(
+                            f"Source: {activity.source_org} · Activity ID: {activity.activity_id} · "
+                            "Internal research-demo candidate"
+                        )
+                        st.markdown(f"[Open the source material]({activity.source_url})")
+                    with st.expander(
+                        f"{DOMAIN_DISPLAY_NAMES[domain_result.domain]} retrieval trace for reviewer"
+                    ):
+                        st.write(
+                            "Question IDs used for skill context: "
+                            + ", ".join(domain_result.skill_query.question_ids)
+                        )
+                        for ranked in domain_result.activities:
+                            st.write(
+                                f"{ranked.activity.activity_id}: similarity "
+                                f"{ranked.similarity_score:.6f}"
+                            )
+                st.caption(
+                    "This is safety-filtered semantic retrieval, not complete RAG. "
+                    "No generative LLM is used."
+                )
 
     with st.expander("Research/reviewer technical details"):
         st.caption(

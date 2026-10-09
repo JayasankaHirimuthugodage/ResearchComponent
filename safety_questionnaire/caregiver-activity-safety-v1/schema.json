@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "caregiver-activity-safety-v1-schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["catalog_schema_version", "questionnaire_version", "language", "purpose", "review", "response_options", "questions", "checkpoint_examples"],
+  "properties": {
+    "catalog_schema_version": {"const": "1.0"},
+    "questionnaire_version": {"const": "caregiver-activity-safety-v1"},
+    "language": {"const": "en"},
+    "purpose": {"type": "string", "minLength": 1},
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reviewer_role", "review_date", "evidence_basis", "reviewer_identity", "scope"],
+      "properties": {
+        "status": {"const": "professionally_reviewed"},
+        "reviewer_role": {"const": "pediatrician"},
+        "review_date": {"type": "string", "format": "date"},
+        "evidence_basis": {"const": "reported_by_researcher"},
+        "reviewer_identity": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1}
+      }
+    },
+    "response_options": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["code", "label", "ability_state"],
+        "properties": {
+          "code": {"enum": ["NO_CONCERN_REPORTED", "CONCERN_REPORTED", "UNKNOWN"]},
+          "label": {"type": "string", "minLength": 1},
+          "ability_state": {"enum": ["no_concern_reported", "concern_reported", "unknown"]}
+        }
+      }
+    },
+    "questions": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["question_id", "dimension", "text"],
+        "properties": {
+          "question_id": {"enum": ["SAFETY_HEARING", "SAFETY_VISION", "SAFETY_FINE_MOTOR", "SAFETY_GROSS_MOTOR"]},
+          "dimension": {"enum": ["hearing", "vision", "fine_motor", "gross_motor"]},
+          "text": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "checkpoint_examples": {
+      "type": "object",
+      "required": ["CP2M", "CP4M", "CP6M", "CP9M", "CP12M", "CP15M", "CP18M", "CP24M", "CP30M", "CP36M", "CP48M", "CP60M"],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^CP(2|4|6|9|12|15|18|24|30|36|48|60)M$": {
+          "type": "object", "additionalProperties": false,
+          "required": ["hearing", "vision", "fine_motor", "gross_motor"],
+          "properties": {
+            "hearing": {"type": "string", "minLength": 1},
+            "vision": {"type": "string", "minLength": 1},
+            "fine_motor": {"type": "string", "minLength": 1},
+            "gross_motor": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}
