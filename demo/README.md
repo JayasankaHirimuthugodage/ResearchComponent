@@ -18,3 +18,5 @@ Use **Load synthetic incomplete example** to fill the selected checkpoint with o
 Each domain uses the threshold selected from development-only out-of-fold predictions and stored in its frozen artifact. The questionnaire score cutoff and the three ML probability thresholds remain separate decisions.
 
 The main result uses plain, non-diagnostic wording. Raw calibrated probabilities, thresholds and model versions appear only inside the explicitly labelled research/reviewer technical section. A future HTTP adapter can reuse the framework-neutral validation and frozen prediction service.
+
+For each domain, the main result shows the strongest submitted answer supporting the final decision and then explains the combined threshold outcome. A single shared notice explains that all answers contribute. The reviewer section retains the supporting, opposing and numerical model-specific contributions: coefficient contributions for Logistic Regression and TreeSHAP contributions for XGBoost. These explanations do not change the prediction and do not claim causation.

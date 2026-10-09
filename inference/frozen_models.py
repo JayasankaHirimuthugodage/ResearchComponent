@@ -20,6 +20,7 @@ from inference.contracts import (
     QuestionnaireSubmission,
 )
 from inference.model_artifact import CalibratedDomainModel
+from inference.explanations import DomainLocalExplanation, explain_complete_assessment
 from inference.questionnaire import EncodedAssessment, QuestionnaireCatalog, encode_submission
 
 
@@ -77,6 +78,19 @@ class FrozenPredictionService:
 
     def predict(self, submission: QuestionnaireSubmission) -> PredictionResult:
         return self.predict_encoded(encode_submission(self.catalog, submission))
+
+    def predict_and_explain_encoded(
+        self,
+        encoded: EncodedAssessment,
+    ) -> tuple[PredictionResult, tuple[DomainLocalExplanation, ...]]:
+        result = self.predict_encoded(encoded)
+        explanations = explain_complete_assessment(
+            self.catalog,
+            self.models,
+            encoded,
+            result.domain_predictions,
+        )
+        return result, explanations
 
     def predict_encoded(self, encoded: EncodedAssessment) -> PredictionResult:
         common = {

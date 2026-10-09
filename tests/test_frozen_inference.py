@@ -13,8 +13,9 @@ from inference.frozen_models import (
     MODEL_RELEASE_VERSION,
     load_frozen_prediction_service,
 )
+from inference.explanations import CAREGIVER_EXPLANATION_NOTICE
 from inference.model_artifact import CalibratedDomainModel
-from inference.questionnaire import load_questionnaire_catalog
+from inference.questionnaire import encode_submission, load_questionnaire_catalog
 from training.contracts import CHECKPOINT_IDS
 
 
@@ -73,6 +74,116 @@ class FrozenInferenceTests(unittest.TestCase):
             any(item.decision for item in result.domain_predictions),
             result.overall_concern,
         )
+
+    def test_model_specific_local_explanations_are_complete_and_deterministic(self) -> None:
+        fixture = submission_from_fixture("synthetic_complete_assessment.json")
+        encoded = encode_submission(self.service.catalog, fixture)
+        first_result, first = self.service.predict_and_explain_encoded(encoded)
+        second_result, second = self.service.predict_and_explain_encoded(encoded)
+
+        self.assertEqual(first_result, second_result)
+        self.assertEqual(first, second)
+        self.assertEqual(
+            (
+                "xgboost_tree_shap_contribution",
+                "logistic_coefficient_contribution",
+                "xgboost_tree_shap_contribution",
+            ),
+            tuple(item.method for item in first),
+        )
+        for prediction, explanation in zip(
+            first_result.domain_predictions,
+            first,
+            strict=True,
+        ):
+            self.assertEqual(16, len(explanation.contributions))
+            self.assertEqual(
+                16,
+                len({item.feature for item in explanation.contributions}),
+            )
+            self.assertIn(
+                "Observation contributing most to this result",
+                explanation.caregiver_message,
+            )
+            self.assertNotIn("Observation pointing in the other direction", explanation.caregiver_message)
+            self.assertNotIn("all 15 answers", explanation.caregiver_message)
+            self.assertNotIn("probability", explanation.caregiver_message.lower())
+            self.assertNotIn("participant", explanation.caregiver_message.lower())
+            questionnaire_items = [
+                item
+                for item in explanation.contributions
+                if item.feature != "baseline_checkpoint_id" and item.direction != "neutral"
+            ]
+            supporting_direction = (
+                "toward_concern" if prediction.decision else "away_from_concern"
+            )
+            item = next(
+                (
+                    value
+                    for value in questionnaire_items
+                    if value.direction == supporting_direction
+                ),
+                None,
+            )
+            if item is not None:
+                self.assertIn(item.display_name, explanation.caregiver_message)
+                self.assertIn(item.input_value_label, explanation.caregiver_message)
+            expected_outcome = (
+                "met or exceeded the domain threshold, so a concern flag was produced"
+                if prediction.decision
+                else "remained below the domain threshold, so no concern flag was produced"
+            )
+            self.assertIn(expected_outcome, explanation.caregiver_message)
+
+        cognitive_prediction = first_result.domain_predictions[1]
+        cognitive_explanation = first[1]
+        self.assertFalse(cognitive_prediction.decision)
+        self.assertIn("remained below", cognitive_explanation.caregiver_message)
+        self.assertIn("moved the model calculation away from", cognitive_explanation.caregiver_message)
+        self.assertNotIn("moved the model calculation toward", cognitive_explanation.caregiver_message)
+        self.assertIn("all 15 answers", CAREGIVER_EXPLANATION_NOTICE)
+        self.assertIn("not diagnoses", CAREGIVER_EXPLANATION_NOTICE)
+
+    def test_different_response_patterns_produce_different_local_explanations(self) -> None:
+        catalog = self.service.catalog
+        checkpoint_id = "CP24M"
+
+        def submission(response_code: str) -> QuestionnaireSubmission:
+            return QuestionnaireSubmission(
+                schema_version=catalog.questionnaire_schema_version,
+                checkpoint_id=checkpoint_id,
+                responses={
+                    question.question_id: response_code
+                    for question in catalog.questions_for_checkpoint(checkpoint_id)
+                },
+            )
+
+        _, positive_pattern = self.service.predict_and_explain_encoded(
+            encode_submission(catalog, submission("YES_USUALLY"))
+        )
+        _, concern_pattern = self.service.predict_and_explain_encoded(
+            encode_submission(catalog, submission("NOT_YET"))
+        )
+
+        for positive, concern in zip(positive_pattern, concern_pattern, strict=True):
+            self.assertNotEqual(positive.caregiver_message, concern.caregiver_message)
+            positive_signature = tuple(
+                (item.feature, item.direction, round(item.contribution, 8))
+                for item in positive.contributions
+            )
+            concern_signature = tuple(
+                (item.feature, item.direction, round(item.contribution, 8))
+                for item in concern.contributions
+            )
+            self.assertNotEqual(positive_signature, concern_signature)
+
+    def test_incomplete_assessment_has_no_local_explanations(self) -> None:
+        fixture = submission_from_fixture("synthetic_incomplete_assessment.json")
+        encoded = encode_submission(self.service.catalog, fixture)
+        result, explanations = self.service.predict_and_explain_encoded(encoded)
+
+        self.assertIs(result.status, AssessmentStatus.INCOMPLETE)
+        self.assertEqual((), explanations)
 
     def test_complete_synthetic_example_predicts_for_every_checkpoint(self) -> None:
         for checkpoint_id in CHECKPOINT_IDS:

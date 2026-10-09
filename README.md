@@ -40,6 +40,7 @@ The CSV is privacy-sensitive and must not be committed, transmitted or published
 - [Research and ML specification](docs/research-ml-specification.md)
 - [Future ML training plan](docs/ml-training-plan.md)
 - [Development-only model comparison](docs/development-experiment.md)
+- [Explainable AI boundary](docs/explainable-ai.md)
 - [Training package map](training/README.md)
 - [Local development prediction demo](docs/development-prediction-demo.md)
 - [Future service architecture](docs/service-architecture-plan.md)

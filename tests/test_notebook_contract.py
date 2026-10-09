@@ -55,6 +55,9 @@ class NotebookContractTests(unittest.TestCase):
         self.assertIn("Comparison with the Logistic Regression benchmark", source)
         self.assertIn("benchmark_candidate = 'logistic_l2_balanced'", source)
         self.assertIn("Locked-test results were not used for this comparison", source)
+        self.assertIn("Global feature explanations and stability", source)
+        self.assertIn("positive_importance_fraction", source)
+        self.assertIn("sign_agreement", source)
         self.assertNotIn("data/processed", source)
 
 

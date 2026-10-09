@@ -46,6 +46,10 @@ The committed catalogue is `questionnaire_catalog/developmental-questionnaire-v3
 
 Repository inclusion was authorized by the project owner on 2026-08-22. The supplied reference did not state an underlying third-party licence or an authoritative external-document identifier, so those values are recorded as `not supplied` rather than inferred.
 
+## Explanation display
+
+For each domain, the main result gives a plain-language summary of the strongest submitted answer supporting the final decision. It shows the checkpoint-specific question, response label and direction, then explains whether the combined result met the threshold. One shared notice explains that all answers and the checkpoint contribute and that the explanation is non-diagnostic. It does not expose probabilities or numerical contribution values. Opposing and supporting contributions remain in the research/reviewer trace, using coefficient contributions for Logistic Regression and model-native TreeSHAP contributions for XGBoost.
+
 ## Privacy and synthetic examples
 
 Manual answers are held only in the local Streamlit session. The adapter reads the local frozen artifacts but contains no answer-file write, database, HTTP or analytics operation. Streamlit secret/credential files are ignored by Git.
@@ -69,7 +73,8 @@ The reusable code is outside Streamlit:
 
 - `inference/contracts.py` defines transport-independent request/result objects;
 - `inference/questionnaire.py` validates and encodes the versioned catalogue;
-- `inference/predictor.py` retains the earlier shared-threshold development comparison use case; and
-- `inference/frozen_models.py` verifies the release and applies each frozen model's own threshold.
+- `inference/predictor.py` retains the earlier shared-threshold development comparison use case;
+- `inference/frozen_models.py` verifies the release and applies each frozen model's own threshold; and
+- `inference/explanations.py` produces model-specific local explanations and caregiver-safe summaries.
 
 A future HTTP adapter can construct the same `QuestionnaireSubmission` and call the frozen prediction service. Transport, authentication and storage can therefore be added without embedding Streamlit, HTTP or database types in the inference boundary.

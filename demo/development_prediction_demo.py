@@ -13,6 +13,7 @@ from inference.contracts import (
     SubmissionValidationError,
 )
 from inference.frozen_models import load_frozen_prediction_service
+from inference.explanations import CAREGIVER_EXPLANATION_NOTICE
 from inference.questionnaire import (
     QuestionnaireCatalog,
     encode_submission,
@@ -120,21 +121,21 @@ def main() -> None:
     st.subheader("Quick demonstration controls")
     st.caption("Synthetic examples are for local demonstration only.")
     quick_complete, quick_incomplete, clear = st.columns(3)
-    if quick_complete.button("Load synthetic complete example", use_container_width=True):
+    if quick_complete.button("Load synthetic complete example", width="stretch"):
         _apply_synthetic_example(
             st.session_state,
             catalog,
             checkpoint_id,
             incomplete=False,
         )
-    if quick_incomplete.button("Load synthetic incomplete example", use_container_width=True):
+    if quick_incomplete.button("Load synthetic incomplete example", width="stretch"):
         _apply_synthetic_example(
             st.session_state,
             catalog,
             checkpoint_id,
             incomplete=True,
         )
-    if clear.button("Clear all answers", use_container_width=True):
+    if clear.button("Clear all answers", width="stretch"):
         _clear_response_state(st.session_state)
 
     st.caption(
@@ -198,7 +199,7 @@ def main() -> None:
     try:
         with st.spinner("Loading the verified frozen models..."):
             service = cached_prediction_service()
-            result = service.predict_encoded(encoded)
+            result, explanations = service.predict_and_explain_encoded(encoded)
     except (FileNotFoundError, ValueError, RuntimeError) as error:
         st.error(f"The frozen prediction models could not be loaded: {error}")
         return
@@ -228,6 +229,12 @@ def main() -> None:
         )
     st.caption("Screening for possible concerns")
 
+    st.subheader("Why the models produced these results")
+    for explanation in explanations:
+        st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
+        st.markdown(explanation.caregiver_message)
+    st.info(CAREGIVER_EXPLANATION_NOTICE)
+
     with st.expander("Research/reviewer technical details"):
         st.caption(
             "The probabilities and thresholds below are for technical review and should "
@@ -238,6 +245,26 @@ def main() -> None:
             st.write(f"Calibrated probability: `{prediction.probability:.4f}`")
             st.write(f"Frozen threshold: `{prediction.threshold:.6f}` (inclusive)")
             st.write(f"Model version: `{prediction.model_version}`")
+        st.divider()
+        st.markdown("**Local feature contributions**")
+        st.caption(
+            "Positive values move the calibrated model output toward a concern flag; "
+            "negative values move it away. Values are model calculations, not clinical scores."
+        )
+        for explanation in explanations:
+            st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
+            st.write(f"Method: `{explanation.method}`")
+            contribution_rows = [
+                {
+                    "Feature": item.display_name,
+                    "Submitted value": item.input_value_label,
+                    "Direction": item.direction.replace("_", " "),
+                    "Contribution": round(item.contribution, 6),
+                }
+                for item in explanation.contributions[:5]
+            ]
+            st.dataframe(contribution_rows, width="stretch", hide_index=True)
+            st.caption(explanation.limitation)
         st.write(f"Model release: `{result.model_version}`")
         st.write(f"Feature schema version: `{result.feature_schema_version}`")
         st.write(
