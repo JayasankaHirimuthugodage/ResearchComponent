@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from inference.contracts import (
     AssessmentStatus,
@@ -44,6 +44,22 @@ def _clear_response_state(session_state: Any) -> None:
     for key in tuple(session_state):
         if str(key).startswith(RESPONSE_KEY_PREFIX):
             del session_state[key]
+
+
+def format_area_summary(domain_decisions: Mapping[str, bool]) -> str:
+    """Describe the specific domains identified by the derived OR decision."""
+
+    identified = [
+        DOMAIN_DISPLAY_NAMES[domain]
+        for domain in DOMAIN_DISPLAY_NAMES
+        if domain_decisions.get(domain) is True
+    ]
+    if not identified:
+        return "No developmental areas were flagged by the current model results."
+    if len(identified) == 1:
+        return f"Area identified for further attention: {identified[0]}"
+    joined = f"{', '.join(identified[:-1])} and {identified[-1]}"
+    return f"Areas identified for further attention: {joined}"
 
 
 def synthetic_responses_for_checkpoint(
@@ -217,19 +233,16 @@ def main() -> None:
             else:
                 st.success("No concern flag")
 
+    area_summary = format_area_summary(
+        {prediction.domain: prediction.decision for prediction in result.domain_predictions}
+    )
     if result.overall_concern:
-        st.warning(
-            "Overall concern flag: at least one developmental domain was flagged. "
-            "This is a monitoring result, not a diagnosis."
-        )
+        st.warning(area_summary)
     else:
-        st.success(
-            "No overall concern flag was produced by the three domain models. "
-            "This is a monitoring result, not a diagnosis."
-        )
+        st.success(area_summary)
     st.caption("Screening for possible concerns")
 
-    st.subheader("Why the models produced these results")
+    st.subheader("What influenced these results")
     for explanation in explanations:
         st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
         st.markdown(explanation.caregiver_message)

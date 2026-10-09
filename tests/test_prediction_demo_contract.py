@@ -4,6 +4,7 @@ import unittest
 from dataclasses import dataclass
 
 from demo.development_prediction_demo import (
+    format_area_summary,
     load_synthetic_fixture,
     synthetic_responses_for_checkpoint,
 )
@@ -187,6 +188,32 @@ class QuestionnaireCatalogueTests(unittest.TestCase):
 
 
 class PredictionApplicationTests(unittest.TestCase):
+    def test_area_summary_names_the_identified_domains(self) -> None:
+        self.assertEqual(
+            "No developmental areas were flagged by the current model results.",
+            format_area_summary(
+                {"communication": False, "cognitive": False, "social_emotional": False}
+            ),
+        )
+        self.assertEqual(
+            "Area identified for further attention: Social / Emotional",
+            format_area_summary(
+                {"communication": False, "cognitive": False, "social_emotional": True}
+            ),
+        )
+        self.assertEqual(
+            "Areas identified for further attention: Communication and Cognitive",
+            format_area_summary(
+                {"communication": True, "cognitive": True, "social_emotional": False}
+            ),
+        )
+        self.assertEqual(
+            "Areas identified for further attention: Communication, Cognitive and Social / Emotional",
+            format_area_summary(
+                {"communication": True, "cognitive": True, "social_emotional": True}
+            ),
+        )
+
     def test_half_probability_is_an_inclusive_positive_concern_decision(self) -> None:
         result = fake_service((0.499, 0.50, 0.80)).predict(
             submission_from_fixture("synthetic_complete_assessment.json")

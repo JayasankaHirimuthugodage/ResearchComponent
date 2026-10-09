@@ -29,7 +29,7 @@ The implementation verifies that the base value plus all feature contributions r
 
 ## Caregiver and reviewer separation
 
-For each domain, the main Streamlit result identifies the strongest submitted questionnaire answer supporting the final decision. It shows the checkpoint-specific question wording, submitted response label and contribution direction, then explains whether the combined result met the domain threshold. One shared notice after the three domains states that all 15 answers and the checkpoint determine each result and that other answers may influence the calculation differently. This avoids repeated wording and keeps opposing contributions in the reviewer trace. The caregiver wording contains no raw probability, numerical contribution value or causal claim and states that the explanations are not diagnoses.
+For each domain, the main Streamlit result identifies the strongest submitted questionnaire answer supporting the final decision. It shows the checkpoint-specific question wording, submitted response label and contribution direction. One shared notice after the three domains states that all 15 answers and the checkpoint contribute, that the highlighted observations did not determine the results alone, and that the results are non-diagnostic. Domain-threshold wording and opposing contributions remain in the reviewer trace. The caregiver wording contains no raw probability, numerical contribution value or causal claim.
 
 The separately labelled research/reviewer section may show:
 

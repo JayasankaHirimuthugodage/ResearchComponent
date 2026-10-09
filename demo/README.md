@@ -19,4 +19,6 @@ Each domain uses the threshold selected from development-only out-of-fold predic
 
 The main result uses plain, non-diagnostic wording. Raw calibrated probabilities, thresholds and model versions appear only inside the explicitly labelled research/reviewer technical section. A future HTTP adapter can reuse the framework-neutral validation and frozen prediction service.
 
-For each domain, the main result shows the strongest submitted answer supporting the final decision and then explains the combined threshold outcome. A single shared notice explains that all answers contribute. The reviewer section retains the supporting, opposing and numerical model-specific contributions: coefficient contributions for Logistic Regression and TreeSHAP contributions for XGBoost. These explanations do not change the prediction and do not claim causation.
+The overall summary names the specific domains identified for further attention instead of displaying only a generic overall flag. The underlying overall decision remains the logical OR of the three domain decisions.
+
+For each domain, the main result shows the strongest submitted answer supporting the final decision. A single shared notice explains that all answers contribute and that the highlighted observation did not determine the result alone. The reviewer section retains the threshold, supporting, opposing and numerical model-specific contributions: coefficient contributions for Logistic Regression and TreeSHAP contributions for XGBoost. These explanations do not change the prediction and do not claim causation.

@@ -128,21 +128,17 @@ class FrozenInferenceTests(unittest.TestCase):
             if item is not None:
                 self.assertIn(item.display_name, explanation.caregiver_message)
                 self.assertIn(item.input_value_label, explanation.caregiver_message)
-            expected_outcome = (
-                "met or exceeded the domain threshold, so a concern flag was produced"
-                if prediction.decision
-                else "remained below the domain threshold, so no concern flag was produced"
-            )
-            self.assertIn(expected_outcome, explanation.caregiver_message)
+            self.assertNotIn("domain threshold", explanation.caregiver_message)
+            self.assertNotIn("combined model result", explanation.caregiver_message)
 
         cognitive_prediction = first_result.domain_predictions[1]
         cognitive_explanation = first[1]
         self.assertFalse(cognitive_prediction.decision)
-        self.assertIn("remained below", cognitive_explanation.caregiver_message)
         self.assertIn("moved the model calculation away from", cognitive_explanation.caregiver_message)
         self.assertNotIn("moved the model calculation toward", cognitive_explanation.caregiver_message)
         self.assertIn("all 15 answers", CAREGIVER_EXPLANATION_NOTICE)
         self.assertIn("not diagnoses", CAREGIVER_EXPLANATION_NOTICE)
+        self.assertIn("did not determine the results alone", CAREGIVER_EXPLANATION_NOTICE)
 
     def test_different_response_patterns_produce_different_local_explanations(self) -> None:
         catalog = self.service.catalog

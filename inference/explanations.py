@@ -18,9 +18,10 @@ from training.models.common import transformed_feature_names
 
 
 CAREGIVER_EXPLANATION_NOTICE = (
-    "Each domain result combines all 15 answers and the selected checkpoint. Other "
-    "answers may influence the calculation differently. These explanations describe "
-    "model calculations only; they are not diagnoses and do not identify causes."
+    "The models considered all 15 answers and the selected checkpoint when producing "
+    "these results. The highlighted observations are examples of influential answers "
+    "and did not determine the results alone. These results support developmental "
+    "monitoring and are not diagnoses."
 )
 
 
@@ -148,19 +149,6 @@ def _caregiver_message(
             f"the model calculation {supporting_text} a concern flag."
         )
 
-    threshold_result = (
-        "met or exceeded the domain threshold, so a concern flag was produced"
-        if decision
-        else "remained below the domain threshold, so no concern flag was produced"
-    )
-    lines.extend(
-        (
-            "",
-            (
-                f"The combined model result {threshold_result}."
-            ),
-        )
-    )
     return "\n".join(lines)
 
 

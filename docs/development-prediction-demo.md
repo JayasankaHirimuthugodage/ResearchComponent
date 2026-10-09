@@ -34,6 +34,8 @@ The three outputs are:
 
 A positive decision means the domain probability is at or above that domain's frozen threshold. A positive decision does not mean the child has a diagnosis. The displayed overall concern is a deterministic OR of the three domain decisions; there is no fourth model.
 
+The caregiver-facing overall summary names the domain or domains identified for further attention. When no domain is positive, it states that no developmental area was flagged by the current model results.
+
 ## Model status
 
 When a complete answer set is submitted, the demo loads three checksum-verified artifacts: XGBoost for communication, Logistic Regression for cognitive and XGBoost for social-emotional. It does not load the development or locked-test datasets and does not fit or update a model. The verified service is cached for the local Streamlit process.
@@ -48,7 +50,7 @@ Repository inclusion was authorized by the project owner on 2026-08-22. The supp
 
 ## Explanation display
 
-For each domain, the main result gives a plain-language summary of the strongest submitted answer supporting the final decision. It shows the checkpoint-specific question, response label and direction, then explains whether the combined result met the threshold. One shared notice explains that all answers and the checkpoint contribute and that the explanation is non-diagnostic. It does not expose probabilities or numerical contribution values. Opposing and supporting contributions remain in the research/reviewer trace, using coefficient contributions for Logistic Regression and model-native TreeSHAP contributions for XGBoost.
+For each domain, the main result gives a plain-language summary of the strongest submitted answer supporting the final decision. It shows the checkpoint-specific question, response label and direction. One shared notice explains that all answers and the checkpoint contribute, that the highlighted observations did not determine the results alone, and that the results are non-diagnostic. It does not expose probabilities, threshold wording or numerical contribution values. Opposing and supporting contributions remain in the research/reviewer trace, using coefficient contributions for Logistic Regression and model-native TreeSHAP contributions for XGBoost.
 
 ## Privacy and synthetic examples
 
