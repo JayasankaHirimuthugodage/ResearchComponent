@@ -1,7 +1,7 @@
 {
   "library_name": "Unified CDC + Vroom Early Childhood Development Activities",
-  "library_version": "0.3.0",
-  "generated_on": "2026-10-09",
+  "library_version": "0.4.0",
+  "generated_on": "2026-10-10",
   "scope": {
     "checkpoints": [
       "CP2M",
@@ -36,9 +36,10 @@
     "source_approval_vs_activity_review": "Source-selection approval reported. Individual activity safety/eligibility annotations remain unreviewed.",
     "age_mapping": "Checkpoint included only within supplied source age range; boundaries inclusive and warrant specific review.",
     "safety_policy": "A review_if_concern flag requires accessibility/suitability review; other flags are not claims of safety. Missing information is unknown, not safe.",
-    "retrieval_policy": "Use retrieval_eligible_for_internal_research_demo for controlled research testing only; for caregiver-facing deployment require a separate approval switch after review.",
+    "retrieval_policy": "Use retrieval_eligible_for_internal_research_demo for controlled research testing only. No record is eligible for caregiver deployment in this snapshot.",
     "frozen_models": "No change to ML prediction artifacts, calibration, thresholds or locked-test reports.",
-    "content_provenance": "CDC records carried from v0.2 as unverified-by-this-pass research paraphrases. Vroom concepts, tip IDs where verified, and age guidance read from official Vroom documents."
+    "content_provenance": "CDC records carried from v0.2 as unverified-by-this-pass research paraphrases. Vroom concepts, tip IDs where verified, and age guidance read from official Vroom documents.",
+    "vroom_v04_review": "Three Vroom records are permanently excluded because their hazards are not represented by the current four-dimensional safety contract; their IDs are reserved and must not be reused. Twenty-three retained records have source-supported wording or conservative safety metadata corrections."
   },
   "source_document_urls": {
     "0_1": "https://assets.ctfassets.net/khbu829tujdl/LyHni4h8ESCUgSOaGoWKw/698282000d890a095c55f564a92911d2/Vroom_TipSheet_Age_0_1_ENG.pdf",
@@ -49,9 +50,10 @@
   },
   "counts": {
     "cdc_draft_activity_records": 180,
-    "vroom_verified_brief_activity_records": 96,
+    "vroom_verified_brief_activity_records": 93,
+    "vroom_permanently_excluded_in_v0_4": 3,
     "vroom_legacy_unverified_excluded": 3,
-    "total_records": 276
+    "total_records": 273
   },
   "legacy_references_excluded_from_active_library": [
     "ACT-VROOM-TIP-00013",
@@ -62,7 +64,7 @@
     {
       "activity_id": "ACT-CDC-02-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Echo little sounds",
       "activity_summary": "When your baby makes a comfortable sound, repeat it gently and wait for another response.",
       "primary_skill": "sound turn-taking",
@@ -116,7 +118,7 @@
     {
       "activity_id": "ACT-CDC-02-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk through daily care",
       "activity_summary": "Describe what you are doing during a calm nappy change or dressing routine.",
       "primary_skill": "responsive language",
@@ -170,7 +172,7 @@
     {
       "activity_id": "ACT-CDC-02-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Gentle song time",
       "activity_summary": "Sing a short familiar song while holding your baby and pause to notice their response.",
       "primary_skill": "early listening",
@@ -224,7 +226,7 @@
     {
       "activity_id": "ACT-CDC-02-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Look and name",
       "activity_summary": "Show a large, high-contrast picture of a face and speak gently about what you see.",
       "primary_skill": "word exposure",
@@ -279,7 +281,7 @@
     {
       "activity_id": "ACT-CDC-02-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sound and pause",
       "activity_summary": "Say a short phrase, pause, and respond to any sound or movement your baby makes.",
       "primary_skill": "communication exchange",
@@ -333,7 +335,7 @@
     {
       "activity_id": "ACT-CDC-02-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Slow visual tracking",
       "activity_summary": "While your baby is awake, slowly move a safe high-contrast object within comfortable view.",
       "primary_skill": "visual attention",
@@ -387,7 +389,7 @@
     {
       "activity_id": "ACT-CDC-02-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Look at a face",
       "activity_summary": "Bring your face into comfortable view and let your baby explore it visually.",
       "primary_skill": "visual attention",
@@ -441,7 +443,7 @@
     {
       "activity_id": "ACT-CDC-02-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Look at bright pictures",
       "activity_summary": "Spend a quiet moment viewing a safe picture book with large contrasting images.",
       "primary_skill": "visual exploration",
@@ -495,7 +497,7 @@
     {
       "activity_id": "ACT-CDC-02-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Gentle rattle location",
       "activity_summary": "Make a soft sound with a safe rattle to the side and watch for an orienting response.",
       "primary_skill": "sensory attention",
@@ -549,7 +551,7 @@
     {
       "activity_id": "ACT-CDC-02-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Observe and respond",
       "activity_summary": "Watch for signs that your baby is interested or needs a break and adjust play accordingly.",
       "primary_skill": "attention regulation",
@@ -601,7 +603,7 @@
     {
       "activity_id": "ACT-CDC-02-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Responsive smile",
       "activity_summary": "Offer a warm smile during a calm face-to-face moment and allow time for a response.",
       "primary_skill": "social reciprocity",
@@ -655,7 +657,7 @@
     {
       "activity_id": "ACT-CDC-02-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Comfort and connection",
       "activity_summary": "Hold or gently comfort your baby when they signal a need for reassurance.",
       "primary_skill": "bonding and regulation",
@@ -707,7 +709,7 @@
     {
       "activity_id": "ACT-CDC-02-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Follow baby cues",
       "activity_summary": "During play, notice when your baby looks away or becomes unsettled and allow a pause.",
       "primary_skill": "cue reading",
@@ -761,7 +763,7 @@
     {
       "activity_id": "ACT-CDC-02-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Calm voice routine",
       "activity_summary": "Use a steady, gentle voice as part of a familiar settling routine.",
       "primary_skill": "co-regulation",
@@ -815,7 +817,7 @@
     {
       "activity_id": "ACT-CDC-02-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Enjoy a shared moment",
       "activity_summary": "Spend a brief device-free period looking, talking and responding to your baby.",
       "primary_skill": "caregiver connection",
@@ -870,7 +872,7 @@
     {
       "activity_id": "ACT-CDC-04-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Copy coos",
       "activity_summary": "Repeat your baby’s cooing or vowel sounds, then allow a pause for a response.",
       "primary_skill": "vocal imitation",
@@ -924,7 +926,7 @@
     {
       "activity_id": "ACT-CDC-04-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Face-to-face chat",
       "activity_summary": "Talk with your baby at a comfortable distance and follow any attempts to respond.",
       "primary_skill": "conversational turn-taking",
@@ -979,7 +981,7 @@
     {
       "activity_id": "ACT-CDC-04-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sing a daily song",
       "activity_summary": "Use a familiar short song during an ordinary care routine.",
       "primary_skill": "sound exposure",
@@ -1033,7 +1035,7 @@
     {
       "activity_id": "ACT-CDC-04-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name familiar things",
       "activity_summary": "Name a safe toy as your baby looks toward or touches it.",
       "primary_skill": "early vocabulary",
@@ -1088,7 +1090,7 @@
     {
       "activity_id": "ACT-CDC-04-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Quiet book talk",
       "activity_summary": "Share a cloth picture book while calmly naming what appears.",
       "primary_skill": "joint attention",
@@ -1143,7 +1145,7 @@
     {
       "activity_id": "ACT-CDC-04-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Follow the moving toy",
       "activity_summary": "Move a large bright toy slowly across your baby’s field of view during awake play.",
       "primary_skill": "tracking",
@@ -1197,7 +1199,7 @@
     {
       "activity_id": "ACT-CDC-04-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Explore a safe grasp toy",
       "activity_summary": "Offer a clean age-appropriate object that can be held or explored safely.",
       "primary_skill": "object exploration",
@@ -1251,7 +1253,7 @@
     {
       "activity_id": "ACT-CDC-04-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Discover toy positions",
       "activity_summary": "Offer safe toys on a blanket in slightly different nearby positions.",
       "primary_skill": "attention and exploration",
@@ -1306,7 +1308,7 @@
     {
       "activity_id": "ACT-CDC-04-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Peekaboo hands",
       "activity_summary": "Briefly hide your own face behind your hands, then reveal it and pause.",
       "primary_skill": "anticipation",
@@ -1360,7 +1362,7 @@
     {
       "activity_id": "ACT-CDC-04-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "See and feel textures",
       "activity_summary": "Let your baby safely feel a soft cloth toy while you describe it.",
       "primary_skill": "sensory exploration",
@@ -1414,7 +1416,7 @@
     {
       "activity_id": "ACT-CDC-04-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Smile and reply",
       "activity_summary": "Respond warmly when your baby smiles or vocalises.",
       "primary_skill": "social reciprocity",
@@ -1469,7 +1471,7 @@
     {
       "activity_id": "ACT-CDC-04-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Peekaboo together",
       "activity_summary": "Play a short, gentle peekaboo game and watch whether your baby wants to continue.",
       "primary_skill": "shared enjoyment",
@@ -1523,7 +1525,7 @@
     {
       "activity_id": "ACT-CDC-04-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Follow favourite cues",
       "activity_summary": "Notice which social games your baby enjoys and repeat them without overstimulation.",
       "primary_skill": "self-regulation",
@@ -1577,7 +1579,7 @@
     {
       "activity_id": "ACT-CDC-04-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Face and voice connection",
       "activity_summary": "Smile and speak to your baby during supported, comfortable play.",
       "primary_skill": "relationship building",
@@ -1632,7 +1634,7 @@
     {
       "activity_id": "ACT-CDC-04-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Calm together",
       "activity_summary": "Cuddle or soothe your baby after playful stimulation, respecting signals to stop.",
       "primary_skill": "co-regulation",
@@ -1684,7 +1686,7 @@
     {
       "activity_id": "ACT-CDC-06-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Babble in turns",
       "activity_summary": "Repeat a sound your baby makes and wait for another sound before replying.",
       "primary_skill": "sound turn-taking",
@@ -1738,7 +1740,7 @@
     {
       "activity_id": "ACT-CDC-06-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Picture pointing and naming",
       "activity_summary": "Look at large pictures together and name objects while following your baby’s attention.",
       "primary_skill": "joint attention",
@@ -1793,7 +1795,7 @@
     {
       "activity_id": "ACT-CDC-06-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Everyday object words",
       "activity_summary": "Name familiar things your baby notices during a walk or home routine.",
       "primary_skill": "word exposure",
@@ -1848,7 +1850,7 @@
     {
       "activity_id": "ACT-CDC-06-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Different friendly voices",
       "activity_summary": "Try gentle changes in pitch or rhythm while speaking and observe responses.",
       "primary_skill": "listening and discrimination",
@@ -1902,7 +1904,7 @@
     {
       "activity_id": "ACT-CDC-06-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sing and pause",
       "activity_summary": "Sing a familiar short song and pause between phrases for your baby’s sounds.",
       "primary_skill": "social language",
@@ -1956,7 +1958,7 @@
     {
       "activity_id": "ACT-CDC-06-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Drop and return",
       "activity_summary": "When your baby drops a safe toy, return it and observe whether the action is repeated.",
       "primary_skill": "cause and effect",
@@ -2011,7 +2013,7 @@
     {
       "activity_id": "ACT-CDC-06-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Follow the gaze",
       "activity_summary": "Notice what interests your baby, point to it, and describe it.",
       "primary_skill": "shared attention",
@@ -2065,7 +2067,7 @@
     {
       "activity_id": "ACT-CDC-06-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Explore a soft toy",
       "activity_summary": "Offer an age-appropriate toy for safe supervised grasping and exploration.",
       "primary_skill": "exploratory learning",
@@ -2120,7 +2122,7 @@
     {
       "activity_id": "ACT-CDC-06-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Different toy sounds",
       "activity_summary": "Let your baby notice different gentle sounds from age-safe objects.",
       "primary_skill": "sensory comparison",
@@ -2174,7 +2176,7 @@
     {
       "activity_id": "ACT-CDC-06-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Supported looking around",
       "activity_summary": "With age-appropriate physical support, let your baby observe different objects nearby.",
       "primary_skill": "environmental exploration",
@@ -2229,7 +2231,7 @@
     {
       "activity_id": "ACT-CDC-06-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Smile for smile",
       "activity_summary": "When your baby smiles or laughs, smile or laugh back during a playful exchange.",
       "primary_skill": "social reciprocity",
@@ -2283,7 +2285,7 @@
     {
       "activity_id": "ACT-CDC-06-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Follow happy signals",
       "activity_summary": "Continue a shared game when your baby enjoys it and stop when they need a break.",
       "primary_skill": "emotion regulation",
@@ -2337,7 +2339,7 @@
     {
       "activity_id": "ACT-CDC-06-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Calming voice",
       "activity_summary": "Use holding, soft speech or song to support a calming routine.",
       "primary_skill": "co-regulation",
@@ -2391,7 +2393,7 @@
     {
       "activity_id": "ACT-CDC-06-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Shared book delight",
       "activity_summary": "Look at pictures together and react warmly to your baby’s sounds or pointing.",
       "primary_skill": "shared attention",
@@ -2446,7 +2448,7 @@
     {
       "activity_id": "ACT-CDC-06-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Gentle turn taking",
       "activity_summary": "Make a sound or expression, pause, and allow the baby to respond in their own way.",
       "primary_skill": "social turn-taking",
@@ -2501,7 +2503,7 @@
     {
       "activity_id": "ACT-CDC-09-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Build on babble",
       "activity_summary": "Respond to repeated baby sounds with a simple familiar word and pause for their reply.",
       "primary_skill": "early vocabulary",
@@ -2555,7 +2557,7 @@
     {
       "activity_id": "ACT-CDC-09-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Wave hello and goodbye",
       "activity_summary": "Model a familiar greeting with a wave and a simple word during daily routines.",
       "primary_skill": "gestural communication",
@@ -2611,7 +2613,7 @@
     {
       "activity_id": "ACT-CDC-09-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name what baby sees",
       "activity_summary": "Describe a safe object that has captured your baby’s attention.",
       "primary_skill": "joint attention",
@@ -2666,7 +2668,7 @@
     {
       "activity_id": "ACT-CDC-09-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Picture-book words",
       "activity_summary": "Point to large familiar pictures and say their names during shared reading.",
       "primary_skill": "word association",
@@ -2721,7 +2723,7 @@
     {
       "activity_id": "ACT-CDC-09-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Gestures for requests",
       "activity_summary": "Model an easy gesture such as waving or pointing when the child wants to communicate.",
       "primary_skill": "nonverbal communication",
@@ -2776,7 +2778,7 @@
     {
       "activity_id": "ACT-CDC-09-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Find the hidden toy",
       "activity_summary": "Show a safe toy, partly cover it with a cloth, and invite the baby to look for it.",
       "primary_skill": "object permanence",
@@ -2831,7 +2833,7 @@
     {
       "activity_id": "ACT-CDC-09-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Again, the dropped toy",
       "activity_summary": "Return a safe dropped object and see whether the baby repeats the action.",
       "primary_skill": "cause and effect",
@@ -2886,7 +2888,7 @@
     {
       "activity_id": "ACT-CDC-09-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Put toys in a container",
       "activity_summary": "Together place large age-safe toys into a container and take them out.",
       "primary_skill": "object relationships",
@@ -2941,7 +2943,7 @@
     {
       "activity_id": "ACT-CDC-09-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Look where it went",
       "activity_summary": "Slowly move a toy out of sight and give time to search with the eyes.",
       "primary_skill": "attention and memory",
@@ -2995,7 +2997,7 @@
     {
       "activity_id": "ACT-CDC-09-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Explore a safe area",
       "activity_summary": "Prepare a supervised space with familiar, safe objects for the baby to investigate.",
       "primary_skill": "environmental exploration",
@@ -3051,7 +3053,7 @@
     {
       "activity_id": "ACT-CDC-09-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Peekaboo surprise",
       "activity_summary": "Play a gentle peekaboo game and respond to your baby’s enjoyment.",
       "primary_skill": "social anticipation",
@@ -3105,7 +3107,7 @@
     {
       "activity_id": "ACT-CDC-09-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Turn-taking toy pass",
       "activity_summary": "Offer a safe toy back and forth, allowing the baby to have a turn.",
       "primary_skill": "social turn-taking",
@@ -3160,7 +3162,7 @@
     {
       "activity_id": "ACT-CDC-09-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Show and share feelings",
       "activity_summary": "Use warm expressions and simple feeling words during play.",
       "primary_skill": "emotion recognition",
@@ -3215,7 +3217,7 @@
     {
       "activity_id": "ACT-CDC-09-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Predictable greeting",
       "activity_summary": "Say goodbye briefly and greet the baby warmly on returning.",
       "primary_skill": "emotional security",
@@ -3270,7 +3272,7 @@
     {
       "activity_id": "ACT-CDC-09-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Stay close while exploring",
       "activity_summary": "Remain nearby while the child investigates a safe play space, and respond to reassurance cues.",
       "primary_skill": "secure exploration",
@@ -3325,7 +3327,7 @@
     {
       "activity_id": "ACT-CDC-12-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Expand a baby word",
       "activity_summary": "Repeat the sound or word your child uses and add one clear descriptive word.",
       "primary_skill": "vocabulary expansion",
@@ -3379,7 +3381,7 @@
     {
       "activity_id": "ACT-CDC-12-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk through handwashing",
       "activity_summary": "Name simple actions while helping your child wash hands or get dressed.",
       "primary_skill": "language in routines",
@@ -3433,7 +3435,7 @@
     {
       "activity_id": "ACT-CDC-12-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Look and name pictures",
       "activity_summary": "Share a sturdy picture book and label things that interest your child.",
       "primary_skill": "object naming",
@@ -3488,7 +3490,7 @@
     {
       "activity_id": "ACT-CDC-12-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Greeting gestures",
       "activity_summary": "Wave hello and goodbye together at natural moments.",
       "primary_skill": "gestural communication",
@@ -3544,7 +3546,7 @@
     {
       "activity_id": "ACT-CDC-12-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Music and imitation",
       "activity_summary": "Sing a familiar short tune and give time for your child’s sounds or gestures.",
       "primary_skill": "sound imitation",
@@ -3598,7 +3600,7 @@
     {
       "activity_id": "ACT-CDC-12-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Large block exploration",
       "activity_summary": "Use large age-appropriate blocks for supervised stacking and knocking down.",
       "primary_skill": "spatial problem solving",
@@ -3653,7 +3655,7 @@
     {
       "activity_id": "ACT-CDC-12-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Lift a book flap",
       "activity_summary": "Explore a sturdy book with simple flaps or textures together.",
       "primary_skill": "curiosity and discovery",
@@ -3708,7 +3710,7 @@
     {
       "activity_id": "ACT-CDC-12-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Find the pictured thing",
       "activity_summary": "Name an object in a large picture and let the child look for it.",
       "primary_skill": "object recognition",
@@ -3763,7 +3765,7 @@
     {
       "activity_id": "ACT-CDC-12-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Make a safe rhythm",
       "activity_summary": "Let your child make gentle sounds with age-appropriate toy instruments.",
       "primary_skill": "cause and effect",
@@ -3818,7 +3820,7 @@
     {
       "activity_id": "ACT-CDC-12-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Discover toys by hand",
       "activity_summary": "Offer different large, safe objects to hold or move while describing what happens.",
       "primary_skill": "object exploration",
@@ -3873,7 +3875,7 @@
     {
       "activity_id": "ACT-CDC-12-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Gentle touch practice",
       "activity_summary": "Model gentle touching of a familiar soft toy and positively notice imitation.",
       "primary_skill": "social routines",
@@ -3928,7 +3930,7 @@
     {
       "activity_id": "ACT-CDC-12-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Soft settling song",
       "activity_summary": "Sing or speak softly during a calm transition or bedtime routine.",
       "primary_skill": "self-regulation support",
@@ -3982,7 +3984,7 @@
     {
       "activity_id": "ACT-CDC-12-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Shared pretend chat",
       "activity_summary": "Use a large soft toy to model a short pretend conversation with the child.",
       "primary_skill": "social imitation",
@@ -4037,7 +4039,7 @@
     {
       "activity_id": "ACT-CDC-12-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Familiar caregiver comfort",
       "activity_summary": "Use familiar words and a comfort object when preparing for a brief routine change.",
       "primary_skill": "emotional security",
@@ -4091,7 +4093,7 @@
     {
       "activity_id": "ACT-CDC-12-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Join the baby’s play",
       "activity_summary": "Follow the child’s preferred safe activity and take simple turns.",
       "primary_skill": "shared interaction",
@@ -4146,7 +4148,7 @@
     {
       "activity_id": "ACT-CDC-15-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Extend first words",
       "activity_summary": "Respond to the child’s word by saying a slightly fuller phrase about the same object.",
       "primary_skill": "language modelling",
@@ -4200,7 +4202,7 @@
     {
       "activity_id": "ACT-CDC-15-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name pointed-to objects",
       "activity_summary": "When the child points, name the object and pause to allow a response.",
       "primary_skill": "joint attention",
@@ -4255,7 +4257,7 @@
     {
       "activity_id": "ACT-CDC-15-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Gesture-and-word game",
       "activity_summary": "Model simple gestures paired with everyday words during familiar routines.",
       "primary_skill": "communication gestures",
@@ -4311,7 +4313,7 @@
     {
       "activity_id": "ACT-CDC-15-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Photo-family conversation",
       "activity_summary": "Look at family photos and name familiar people or pets together.",
       "primary_skill": "social vocabulary",
@@ -4366,7 +4368,7 @@
     {
       "activity_id": "ACT-CDC-15-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Stuffed-toy telephone",
       "activity_summary": "Pretend a large soft toy is talking and invite the child to answer with sounds or gestures.",
       "primary_skill": "social language",
@@ -4421,7 +4423,7 @@
     {
       "activity_id": "ACT-CDC-15-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Block tower play",
       "activity_summary": "Build a short tower from large blocks, then allow the child to copy or change it.",
       "primary_skill": "construction play",
@@ -4476,7 +4478,7 @@
     {
       "activity_id": "ACT-CDC-15-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Find it behind the chair",
       "activity_summary": "Let the child watch you hide briefly, then invite them to discover where you are.",
       "primary_skill": "search and anticipation",
@@ -4531,7 +4533,7 @@
     {
       "activity_id": "ACT-CDC-15-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Put away the toys",
       "activity_summary": "Invite the child to put large toys into a basket in a familiar cleanup routine.",
       "primary_skill": "sequencing",
@@ -4586,7 +4588,7 @@
     {
       "activity_id": "ACT-CDC-15-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Explore a new book",
       "activity_summary": "After a favourite book, share another age-suitable book and notice new details.",
       "primary_skill": "curiosity and novelty",
@@ -4640,7 +4642,7 @@
     {
       "activity_id": "ACT-CDC-15-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "In-and-out discovery",
       "activity_summary": "Put a large safe object into a container and invite the child to remove it.",
       "primary_skill": "object relations",
@@ -4695,7 +4697,7 @@
     {
       "activity_id": "ACT-CDC-15-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Clean-up song together",
       "activity_summary": "Sing a simple cleanup song as you take turns putting toys away.",
       "primary_skill": "cooperation",
@@ -4751,7 +4753,7 @@
     {
       "activity_id": "ACT-CDC-15-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Warm praise for helping",
       "activity_summary": "Notice a small helpful action and respond with specific, gentle praise.",
       "primary_skill": "positive interaction",
@@ -4805,7 +4807,7 @@
     {
       "activity_id": "ACT-CDC-15-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Bubble-play exchange",
       "activity_summary": "An adult blows bubbles while the child responds and participates from a safe distance.",
       "primary_skill": "shared enjoyment",
@@ -4860,7 +4862,7 @@
     {
       "activity_id": "ACT-CDC-15-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Play with a favourite song",
       "activity_summary": "Sing or move together to a family song, responding to the child’s preferences.",
       "primary_skill": "shared enjoyment",
@@ -4915,7 +4917,7 @@
     {
       "activity_id": "ACT-CDC-15-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Take turns finding",
       "activity_summary": "Play a very simple supervised finding game with a familiar caregiver.",
       "primary_skill": "social participation",
@@ -4970,7 +4972,7 @@
     {
       "activity_id": "ACT-CDC-18-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Add one word",
       "activity_summary": "When the child names an object, add a short phrase that extends the meaning.",
       "primary_skill": "language modelling",
@@ -5024,7 +5026,7 @@
     {
       "activity_id": "ACT-CDC-18-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name body parts",
       "activity_summary": "Point to a familiar body part and name it; allow the child to respond in their own way.",
       "primary_skill": "receptive language",
@@ -5079,7 +5081,7 @@
     {
       "activity_id": "ACT-CDC-18-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Picture naming",
       "activity_summary": "Share a picture book and invite the child to identify familiar objects.",
       "primary_skill": "expressive language",
@@ -5134,7 +5136,7 @@
     {
       "activity_id": "ACT-CDC-18-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Choose between two",
       "activity_summary": "Offer two suitable items and invite a look, gesture or word to express a choice.",
       "primary_skill": "functional communication",
@@ -5189,7 +5191,7 @@
     {
       "activity_id": "ACT-CDC-18-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk at eye level",
       "activity_summary": "During a calm exchange, position yourself for comfortable interaction and respond to the child.",
       "primary_skill": "social communication",
@@ -5244,7 +5246,7 @@
     {
       "activity_id": "ACT-CDC-18-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Pretend to feed a toy",
       "activity_summary": "Model feeding a doll or stuffed animal with an empty toy spoon; let the child imitate.",
       "primary_skill": "symbolic play",
@@ -5299,7 +5301,7 @@
     {
       "activity_id": "ACT-CDC-18-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Roll a ball back",
       "activity_summary": "Gently roll a soft large ball between adult and child on a clear floor.",
       "primary_skill": "cause and effect",
@@ -5355,7 +5357,7 @@
     {
       "activity_id": "ACT-CDC-18-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Objects in and out",
       "activity_summary": "Place large safe objects in a container and invite repeated removal and return.",
       "primary_skill": "spatial relations",
@@ -5410,7 +5412,7 @@
     {
       "activity_id": "ACT-CDC-18-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Push a toy vehicle",
       "activity_summary": "Demonstrate a large toy car moving along the floor and invite experimentation.",
       "primary_skill": "functional object use",
@@ -5466,7 +5468,7 @@
     {
       "activity_id": "ACT-CDC-18-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "What do you notice?",
       "activity_summary": "Ask an easy question about something immediately visible during play.",
       "primary_skill": "attention and reasoning",
@@ -5521,7 +5523,7 @@
     {
       "activity_id": "ACT-CDC-18-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Notice someone’s feelings",
       "activity_summary": "During story time, label a simple emotion and model a gentle response.",
       "primary_skill": "empathy building",
@@ -5576,7 +5578,7 @@
     {
       "activity_id": "ACT-CDC-18-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Take turns with pretend food",
       "activity_summary": "Adult and child alternate feeding a toy in pretend play.",
       "primary_skill": "turn taking",
@@ -5631,7 +5633,7 @@
     {
       "activity_id": "ACT-CDC-18-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Calming corner with caregiver",
       "activity_summary": "Use a quiet, comfortable area and stay close while the child settles after distress.",
       "primary_skill": "self-regulation",
@@ -5683,7 +5685,7 @@
     {
       "activity_id": "ACT-CDC-18-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Praise helpful moments",
       "activity_summary": "Acknowledge a helpful choice such as returning a toy to its place.",
       "primary_skill": "prosocial behaviour",
@@ -5737,7 +5739,7 @@
     {
       "activity_id": "ACT-CDC-18-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Bubble turn taking",
       "activity_summary": "An adult produces bubbles; the child and caregiver alternate gestures or actions.",
       "primary_skill": "social reciprocity",
@@ -5792,7 +5794,7 @@
     {
       "activity_id": "ACT-CDC-24-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Expand a short phrase",
       "activity_summary": "Respond to a two-word request with a slightly longer clear sentence.",
       "primary_skill": "sentence expansion",
@@ -5846,7 +5848,7 @@
     {
       "activity_id": "ACT-CDC-24-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sing body-part names",
       "activity_summary": "Use a simple song to name familiar body parts and pause for the child’s participation.",
       "primary_skill": "vocabulary",
@@ -5901,7 +5903,7 @@
     {
       "activity_id": "ACT-CDC-24-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name puzzle pieces",
       "activity_summary": "During a simple puzzle, name familiar animals or shapes as pieces are moved.",
       "primary_skill": "label learning",
@@ -5957,7 +5959,7 @@
     {
       "activity_id": "ACT-CDC-24-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Countdown before play",
       "activity_summary": "Say a short predictable phrase before rolling a ball or starting another safe game.",
       "primary_skill": "language anticipation",
@@ -6011,7 +6013,7 @@
     {
       "activity_id": "ACT-CDC-24-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk while helping",
       "activity_summary": "Describe a small household task as the child helps in an age-appropriate way.",
       "primary_skill": "functional language",
@@ -6065,7 +6067,7 @@
     {
       "activity_id": "ACT-CDC-24-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Press-and-result toy",
       "activity_summary": "Explore a large age-safe cause-and-effect toy and notice what happens when activated.",
       "primary_skill": "cause and effect",
@@ -6120,7 +6122,7 @@
     {
       "activity_id": "ACT-CDC-24-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Simple shape puzzle",
       "activity_summary": "Invite the child to explore a few large puzzle shapes and matching positions.",
       "primary_skill": "problem solving",
@@ -6175,7 +6177,7 @@
     {
       "activity_id": "ACT-CDC-24-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Build then change",
       "activity_summary": "Construct a small block structure, then change it and discuss what happened.",
       "primary_skill": "spatial reasoning",
@@ -6230,7 +6232,7 @@
     {
       "activity_id": "ACT-CDC-24-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sand and container experiment",
       "activity_summary": "With direct supervision and safe materials, move sand or water between large containers.",
       "primary_skill": "experimentation",
@@ -6285,7 +6287,7 @@
     {
       "activity_id": "ACT-CDC-24-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Pretend with clothes",
       "activity_summary": "Use safe loose dress-up items in a brief adult-supervised pretend scenario.",
       "primary_skill": "symbolic thought",
@@ -6341,7 +6343,7 @@
     {
       "activity_id": "ACT-CDC-24-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Take turns building",
       "activity_summary": "Take turns adding a large block to a simple structure.",
       "primary_skill": "turn-taking",
@@ -6396,7 +6398,7 @@
     {
       "activity_id": "ACT-CDC-24-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Help set out napkins",
       "activity_summary": "Invite the child to do an age-appropriate helper task and acknowledge the contribution.",
       "primary_skill": "prosocial participation",
@@ -6451,7 +6453,7 @@
     {
       "activity_id": "ACT-CDC-24-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Practice sharing words",
       "activity_summary": "During play with another child, model a short request for a turn.",
       "primary_skill": "peer interaction",
@@ -6505,7 +6507,7 @@
     {
       "activity_id": "ACT-CDC-24-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Pretend dress-up together",
       "activity_summary": "Join the child in an age-appropriate pretend role using safe clothes.",
       "primary_skill": "shared imagination",
@@ -6560,7 +6562,7 @@
     {
       "activity_id": "ACT-CDC-24-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Celebrate helpful behaviour",
       "activity_summary": "Offer specific positive feedback when the child cooperates in a simple routine.",
       "primary_skill": "cooperation",
@@ -6614,7 +6616,7 @@
     {
       "activity_id": "ACT-CDC-30-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Ask about a picture",
       "activity_summary": "Ask an easy who, what or where question while looking at a favourite book.",
       "primary_skill": "question answering",
@@ -6669,7 +6671,7 @@
     {
       "activity_id": "ACT-CDC-30-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name colours and body parts",
       "activity_summary": "During ordinary play, name a visible colour or familiar body part and invite a response.",
       "primary_skill": "vocabulary",
@@ -6724,7 +6726,7 @@
     {
       "activity_id": "ACT-CDC-30-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Use comparing words",
       "activity_summary": "Describe safe objects with pairs such as big/small or in/out.",
       "primary_skill": "conceptual vocabulary",
@@ -6779,7 +6781,7 @@
     {
       "activity_id": "ACT-CDC-30-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk about the pretend shop",
       "activity_summary": "Join the child’s pretend scenario and encourage a short phrase about what is happening.",
       "primary_skill": "expressive language",
@@ -6833,7 +6835,7 @@
     {
       "activity_id": "ACT-CDC-30-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Read and respond",
       "activity_summary": "Share a short picture book and pause to listen to the child’s comments.",
       "primary_skill": "back-and-forth speech",
@@ -6888,7 +6890,7 @@
     {
       "activity_id": "ACT-CDC-30-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Puzzle with large pieces",
       "activity_summary": "Solve a simple age-suitable shape or animal puzzle together.",
       "primary_skill": "problem solving",
@@ -6943,7 +6945,7 @@
     {
       "activity_id": "ACT-CDC-30-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Big and small sorting",
       "activity_summary": "Compare two large safe objects and discuss which seems bigger.",
       "primary_skill": "categorisation",
@@ -6997,7 +6999,7 @@
     {
       "activity_id": "ACT-CDC-30-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Pretend box vehicle",
       "activity_summary": "Offer a stable large cardboard box for supervised pretend play as a car or bus.",
       "primary_skill": "symbolic thinking",
@@ -7052,7 +7054,7 @@
     {
       "activity_id": "ACT-CDC-30-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Make a simple mark",
       "activity_summary": "With age-suitable drawing tools, experiment with lines or circles on paper.",
       "primary_skill": "representation",
@@ -7107,7 +7109,7 @@
     {
       "activity_id": "ACT-CDC-30-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "New use for familiar toy",
       "activity_summary": "During free play, let the child explore a different safe use of a familiar object.",
       "primary_skill": "creative problem solving",
@@ -7162,7 +7164,7 @@
     {
       "activity_id": "ACT-CDC-30-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Practice peer turn-taking",
       "activity_summary": "Model a request and a turn during a supervised game with another child.",
       "primary_skill": "social negotiation",
@@ -7216,7 +7218,7 @@
     {
       "activity_id": "ACT-CDC-30-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Choose between options",
       "activity_summary": "Offer two or three appropriate activity options so the child can make a choice.",
       "primary_skill": "autonomy",
@@ -7271,7 +7273,7 @@
     {
       "activity_id": "ACT-CDC-30-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Praise kind actions",
       "activity_summary": "Notice when the child shares or helps, and describe the positive action.",
       "primary_skill": "positive social behaviour",
@@ -7325,7 +7327,7 @@
     {
       "activity_id": "ACT-CDC-30-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Pretend cooking together",
       "activity_summary": "Take turns acting out safe kitchen roles in imaginative play.",
       "primary_skill": "cooperative play",
@@ -7380,7 +7382,7 @@
     {
       "activity_id": "ACT-CDC-30-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Follow-the-leader game",
       "activity_summary": "Play a gentle movement-copying game, changing leader when ready.",
       "primary_skill": "shared regulation",
@@ -7435,7 +7437,7 @@
     {
       "activity_id": "ACT-CDC-36-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Tell me about a picture",
       "activity_summary": "Ask the child what is happening in an image and invite one more detail.",
       "primary_skill": "descriptive speech",
@@ -7490,7 +7492,7 @@
     {
       "activity_id": "ACT-CDC-36-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Add to their sentence",
       "activity_summary": "Repeat what the child says in a slightly fuller, natural sentence.",
       "primary_skill": "sentence modelling",
@@ -7544,7 +7546,7 @@
     {
       "activity_id": "ACT-CDC-36-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Two-step directions",
       "activity_summary": "During a familiar game, give two simple directions and allow time for a response.",
       "primary_skill": "receptive language",
@@ -7599,7 +7601,7 @@
     {
       "activity_id": "ACT-CDC-36-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Simple songs and rhymes",
       "activity_summary": "Sing an age-appropriate familiar rhyme and take turns on the words.",
       "primary_skill": "phonological exposure",
@@ -7653,7 +7655,7 @@
     {
       "activity_id": "ACT-CDC-36-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk about new places",
       "activity_summary": "Use a story or pretend play to introduce words about a forthcoming new situation.",
       "primary_skill": "social language",
@@ -7708,7 +7710,7 @@
     {
       "activity_id": "ACT-CDC-36-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Count everyday objects",
       "activity_summary": "Count safe toys or familiar items together while pointing to each one.",
       "primary_skill": "early numeracy",
@@ -7763,7 +7765,7 @@
     {
       "activity_id": "ACT-CDC-36-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Find matching pairs",
       "activity_summary": "Look for two matching objects or pictures among a small selection.",
       "primary_skill": "categorisation",
@@ -7818,7 +7820,7 @@
     {
       "activity_id": "ACT-CDC-36-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Solve a small problem",
       "activity_summary": "Ask what might help when a simple play obstacle occurs, then try a safe solution.",
       "primary_skill": "problem solving",
@@ -7873,7 +7875,7 @@
     {
       "activity_id": "ACT-CDC-36-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Opposite words game",
       "activity_summary": "Act out or illustrate safe opposites such as big/small and quiet/loud.",
       "primary_skill": "classification",
@@ -7928,7 +7930,7 @@
     {
       "activity_id": "ACT-CDC-36-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Draw simple shapes",
       "activity_summary": "Offer large crayons and paper to copy a line or basic shape as comfortable.",
       "primary_skill": "visual reasoning",
@@ -7983,7 +7985,7 @@
     {
       "activity_id": "ACT-CDC-36-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name an emotion",
       "activity_summary": "Talk about how a story character might feel using simple feeling words.",
       "primary_skill": "emotion vocabulary",
@@ -8038,7 +8040,7 @@
     {
       "activity_id": "ACT-CDC-36-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Try a calm-down routine",
       "activity_summary": "Practice a child-friendly calming routine such as slow breaths with caregiver support.",
       "primary_skill": "emotion regulation",
@@ -8092,7 +8094,7 @@
     {
       "activity_id": "ACT-CDC-36-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Plan a shared game",
       "activity_summary": "Let the child choose between two safe cooperative games and follow their lead.",
       "primary_skill": "autonomy and cooperation",
@@ -8147,7 +8149,7 @@
     {
       "activity_id": "ACT-CDC-36-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Gentle-hands rule",
       "activity_summary": "Practice a positive rule for play, with calm reminders and encouragement.",
       "primary_skill": "prosocial behaviour",
@@ -8202,7 +8204,7 @@
     {
       "activity_id": "ACT-CDC-36-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Role-play visiting somewhere",
       "activity_summary": "Act out an upcoming unfamiliar situation with toys or simple roles.",
       "primary_skill": "social confidence",
@@ -8257,7 +8259,7 @@
     {
       "activity_id": "ACT-CDC-48-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "What happens next?",
       "activity_summary": "Pause while reading a story and invite the child to predict the next event.",
       "primary_skill": "narrative language",
@@ -8312,7 +8314,7 @@
     {
       "activity_id": "ACT-CDC-48-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Answer a why question",
       "activity_summary": "Discuss a familiar action and invite an age-appropriate reason or explanation.",
       "primary_skill": "explanatory language",
@@ -8366,7 +8368,7 @@
     {
       "activity_id": "ACT-CDC-48-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Story sequence words",
       "activity_summary": "Use first, next and last while describing a simple daily activity.",
       "primary_skill": "sequencing language",
@@ -8420,7 +8422,7 @@
     {
       "activity_id": "ACT-CDC-48-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Ask for a turn politely",
       "activity_summary": "Model a short friendly request during a cooperative game.",
       "primary_skill": "social communication",
@@ -8474,7 +8476,7 @@
     {
       "activity_id": "ACT-CDC-48-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Complete-sentence chat",
       "activity_summary": "Build on the child’s comments with clear sentences during shared activities.",
       "primary_skill": "sentence modelling",
@@ -8528,7 +8530,7 @@
     {
       "activity_id": "ACT-CDC-48-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Compare objects",
       "activity_summary": "Ask about the colours, shapes and sizes of several familiar objects.",
       "primary_skill": "classification",
@@ -8582,7 +8584,7 @@
     {
       "activity_id": "ACT-CDC-48-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Count a small set",
       "activity_summary": "Count a handful of safe objects together and check the total.",
       "primary_skill": "number concepts",
@@ -8637,7 +8639,7 @@
     {
       "activity_id": "ACT-CDC-48-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Matching-card game",
       "activity_summary": "Try a simple game matching familiar images or shapes.",
       "primary_skill": "memory and pattern",
@@ -8692,7 +8694,7 @@
     {
       "activity_id": "ACT-CDC-48-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Plan a pretend meal",
       "activity_summary": "Gather safe toy dishes and decide the order of steps in a pretend meal.",
       "primary_skill": "planning and sequencing",
@@ -8747,7 +8749,7 @@
     {
       "activity_id": "ACT-CDC-48-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Question and investigate",
       "activity_summary": "Follow the child’s why question and look for an age-appropriate answer together.",
       "primary_skill": "inquiry and reasoning",
@@ -8802,7 +8804,7 @@
     {
       "activity_id": "ACT-CDC-48-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Practice new-setting visits",
       "activity_summary": "Act out a new place or meeting with pretend characters before the visit.",
       "primary_skill": "social adjustment",
@@ -8857,7 +8859,7 @@
     {
       "activity_id": "ACT-CDC-48-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk about a sad friend",
       "activity_summary": "Discuss a simple example of sadness and what a kind friend might do.",
       "primary_skill": "empathy",
@@ -8912,7 +8914,7 @@
     {
       "activity_id": "ACT-CDC-48-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Play a taking-turns game",
       "activity_summary": "Use a simple board or floor game to practise waiting for turns.",
       "primary_skill": "turn taking",
@@ -8967,7 +8969,7 @@
     {
       "activity_id": "ACT-CDC-48-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Role-play resolving a conflict",
       "activity_summary": "Pretend two toys want the same object and discuss a fair solution.",
       "primary_skill": "peer problem solving",
@@ -9022,7 +9024,7 @@
     {
       "activity_id": "ACT-CDC-48-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Freeze-and-go game",
       "activity_summary": "Practice pausing and restarting movement to a clear cue in a safe space.",
       "primary_skill": "self-control",
@@ -9077,7 +9079,7 @@
     {
       "activity_id": "ACT-CDC-60-COM-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Explain the construction",
       "activity_summary": "Ask the child how they built something and why they chose the design.",
       "primary_skill": "explanatory speech",
@@ -9131,7 +9133,7 @@
     {
       "activity_id": "ACT-CDC-60-COM-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Retell a picture story",
       "activity_summary": "Invite the child to describe what is happening in a sequence of pictures.",
       "primary_skill": "narrative speech",
@@ -9186,7 +9188,7 @@
     {
       "activity_id": "ACT-CDC-60-COM-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Play rhyming words",
       "activity_summary": "Say a familiar word and invite the child to think of a rhyming sound.",
       "primary_skill": "phonological awareness",
@@ -9240,7 +9242,7 @@
     {
       "activity_id": "ACT-CDC-60-COM-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk about tomorrow",
       "activity_summary": "Use words such as yesterday, today and tomorrow during everyday planning.",
       "primary_skill": "temporal language",
@@ -9294,7 +9296,7 @@
     {
       "activity_id": "ACT-CDC-60-COM-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Ask deeper story questions",
       "activity_summary": "Read together and ask what a character might do next and why.",
       "primary_skill": "comprehension",
@@ -9349,7 +9351,7 @@
     {
       "activity_id": "ACT-CDC-60-COG-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Puzzle-piece thinking",
       "activity_summary": "Offer an age-appropriate puzzle and talk about ways pieces might fit.",
       "primary_skill": "planning and problem solving",
@@ -9404,7 +9406,7 @@
     {
       "activity_id": "ACT-CDC-60-COG-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Memory matching",
       "activity_summary": "Play a short game remembering and finding pairs of familiar pictures.",
       "primary_skill": "memory and attention",
@@ -9459,7 +9461,7 @@
     {
       "activity_id": "ACT-CDC-60-COG-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "I Spy with objects",
       "activity_summary": "Describe a nearby object and let the child identify it using the clues.",
       "primary_skill": "attention and reasoning",
@@ -9514,7 +9516,7 @@
     {
       "activity_id": "ACT-CDC-60-COG-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Put story events in order",
       "activity_summary": "Use a short familiar story to discuss what happens first and last.",
       "primary_skill": "sequencing",
@@ -9569,7 +9571,7 @@
     {
       "activity_id": "ACT-CDC-60-COG-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Small block design",
       "activity_summary": "Invite the child to plan and build a safe structure using blocks.",
       "primary_skill": "spatial reasoning",
@@ -9624,7 +9626,7 @@
     {
       "activity_id": "ACT-CDC-60-SOC-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Talk about story feelings",
       "activity_summary": "Discuss why a character feels happy, afraid or disappointed in a story.",
       "primary_skill": "emotion understanding",
@@ -9679,7 +9681,7 @@
     {
       "activity_id": "ACT-CDC-60-SOC-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Practise group-game rules",
       "activity_summary": "Play a brief age-appropriate game that involves waiting and following rules.",
       "primary_skill": "cooperation",
@@ -9735,7 +9737,7 @@
     {
       "activity_id": "ACT-CDC-60-SOC-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Plan a pretend school day",
       "activity_summary": "Use a toy-based pretend scene to practise meeting new people and routines.",
       "primary_skill": "social readiness",
@@ -9790,7 +9792,7 @@
     {
       "activity_id": "ACT-CDC-60-SOC-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Choose and lead a game",
       "activity_summary": "Offer a few safe play choices and let the child lead the shared activity.",
       "primary_skill": "autonomy",
@@ -9845,7 +9847,7 @@
     {
       "activity_id": "ACT-CDC-60-SOC-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Calming place together",
       "activity_summary": "Practise using a reassuring calm space and supportive words when upset.",
       "primary_skill": "self-regulation",
@@ -9898,8 +9900,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00267",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Shopping Switcheroo",
       "activity_summary": "Describe things the baby notices while shopping.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -9926,8 +9928,8 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
-        "vision": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
+        "vision": "review_if_concern",
         "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
@@ -9937,12 +9939,17 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00428",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Bat It",
       "activity_summary": "Offer a safe overhead toy for playful reaching.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -9967,8 +9974,8 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
-        "vision": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
+        "vision": "review_if_concern",
         "fine_motor": "review_if_concern",
         "gross_motor": "review_if_concern"
       },
@@ -9978,12 +9985,19 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision",
+        "fine_motor",
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00186",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Big Kids",
       "activity_summary": "Watch older children together and talk about play.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10026,7 +10040,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00229",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sound Off",
       "activity_summary": "Make simple sounds and pause for baby responses.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10068,7 +10082,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00237",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "In the Bag",
       "activity_summary": "Name safe objects taken from a bag.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10111,7 +10125,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00361",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Dry Dance",
       "activity_summary": "Playfully label toes and fingers during drying.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10154,7 +10168,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00471",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "High in the Sky",
       "activity_summary": "Describe a new view while safely holding baby.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10196,7 +10210,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00796",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Eye-to-Eye",
       "activity_summary": "Chat face-to-face and follow the baby’s attention.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10238,7 +10252,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00797",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Ready, Set, Play!",
       "activity_summary": "Notice play signals and follow the child’s lead.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10280,7 +10294,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00811",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sound Sensor",
       "activity_summary": "Make gentle sounds and observe orientation responses.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10322,8 +10336,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00812",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Favorite Sounds",
       "activity_summary": "Introduce different gentle noises, noticing preferences.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10351,22 +10365,27 @@
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
         "hearing": "review_if_concern",
-        "vision": "not_established_as_essential_in_brief_descriptor",
+        "vision": "review_if_concern",
         "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use a gentle, comfortable sound from a safe object controlled by the adult. Stop if the child is distressed.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00828",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Here I Am!",
       "activity_summary": "Move nearby and speak while baby locates you.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10409,7 +10428,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-01025",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Snack Talk",
       "activity_summary": "Describe your own snack and its characteristics.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10451,7 +10470,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00437",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Diaper Song",
       "activity_summary": "Sing about changing time and echo baby noises.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10495,7 +10514,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00496",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Singing Laundry",
       "activity_summary": "Sing through laundry steps and echo baby sounds.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10538,7 +10557,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00562",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Mealtime Melodies",
       "activity_summary": "Sing gently at feeding time, responding to cues.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10581,8 +10600,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00082",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Sharing the Story",
       "activity_summary": "Explore a safe book through touch and narration.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10613,21 +10632,25 @@
       "safety_demands": {
         "hearing": "not_established_as_essential_in_brief_descriptor",
         "vision": "not_established_as_essential_in_brief_descriptor",
-        "fine_motor": "not_established_as_essential_in_brief_descriptor",
+        "fine_motor": "review_if_concern",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use a clean, intact, age-appropriate book under adult supervision.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00122",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Space Explorer",
       "activity_summary": "Describe positions while securely moving with baby.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10661,17 +10684,21 @@
         "gross_motor": "review_if_concern"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "The adult must hold and support the child securely, including appropriate head and body support. Stop if the child is uncomfortable.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00033",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Skin Sensations",
       "activity_summary": "Name comfortable tactile sensations during care.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10706,17 +10733,19 @@
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use only comfortable temperatures and gentle touch during supervised care. Stop if the child is uncomfortable.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": []
     },
     {
       "activity_id": "ACT-VROOM-TIP-00057",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sing-Song Voice",
       "activity_summary": "Respond to baby sounds using melodic speech.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10760,7 +10789,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00314",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Calming Song",
       "activity_summary": "Sing softly and notice requests for more or pause.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10804,7 +10833,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00429",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "A Changing Conversation",
       "activity_summary": "Make playful sounds during changing and await responses.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10847,10 +10876,10 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00438",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Blowfish",
-      "activity_summary": "Explore facial expressions and mouth movement together.",
+      "activity_summary": "Gently bring the baby's feet toward their cheeks while making a playful fish face together.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
       "full_instructions_location": "official_source_pdf",
       "domains": [
@@ -10883,19 +10912,24 @@
         "gross_motor": "review_if_concern"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Support the child's body securely and keep movement within a comfortable range. Stop if the child resists or appears uncomfortable.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "vision",
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00470",
-      "record_version": "1.1",
-      "library_version": "0.3.0",
+      "record_version": "1.2",
+      "library_version": "0.4.0",
       "title": "Lip Lesson",
-      "activity_summary": "Observe and play with mouth movements and sounds.",
+      "activity_summary": "With clean hands, touch your lips with your fingers while making a sound, then notice the child's response.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
       "full_instructions_location": "official_source_pdf",
       "domains": [
@@ -10923,21 +10957,26 @@
       "safety_demands": {
         "hearing": "review_if_concern",
         "vision": "not_established_as_essential_in_brief_descriptor",
-        "fine_motor": "not_established_as_essential_in_brief_descriptor",
-        "gross_motor": "review_if_concern"
+        "fine_motor": "review_if_concern",
+        "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use clean hands and gentle touch. Do not place fingers inside the child's mouth.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00497",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Laundry Pointing",
       "activity_summary": "Talk about clothing and notice baby gestures.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -10982,7 +11021,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00553",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Mealtime Detective",
       "activity_summary": "Observe, name and explore feeding-time clues.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11027,7 +11066,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00559",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Colorful Meal",
       "activity_summary": "Talk about colors of everyday mealtime items.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11072,7 +11111,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00791",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Slow Dance",
       "activity_summary": "Share gentle supported movement while noticing baby cues.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11116,7 +11155,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00189",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Did You Hear That?",
       "activity_summary": "Pause and listen for everyday sounds together.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11161,7 +11200,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00021",
       "record_version": "1.1",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Share a Stare",
       "activity_summary": "Follow shared looking and respond with facial engagement.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11204,7 +11243,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00004",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Song Traditions",
       "activity_summary": "Sing familiar words during predictable daily routines.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11251,8 +11290,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00268",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Cart Vision",
       "activity_summary": "Talk about sensory details while shopping together.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11285,7 +11324,7 @@
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
         "hearing": "review_if_concern",
-        "vision": "not_established_as_essential_in_brief_descriptor",
+        "vision": "review_if_concern",
         "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
@@ -11295,12 +11334,17 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00439",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Texture Time",
       "activity_summary": "Describe fabric and objects during everyday care.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11348,7 +11392,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00073",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Body Language",
       "activity_summary": "Exchange simple gestures and words with your child.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11396,7 +11440,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00036",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sound Searchers",
       "activity_summary": "Listen and identify everyday noises together.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11439,8 +11483,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00062",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "What’s That?",
       "activity_summary": "Follow your child’s pointing and name the object.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11468,7 +11512,7 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
         "vision": "review_if_concern",
         "fine_motor": "review_if_concern",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
@@ -11479,12 +11523,18 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision",
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00066",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Stop and Start the Music",
       "activity_summary": "Practice on-off words with stop-start play.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11528,7 +11578,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00311",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Mirror Play",
       "activity_summary": "Compare familiar facial features in a mirror.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11572,7 +11622,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00442",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Mirror, Mirror",
       "activity_summary": "Locate named facial features using a safe mirror.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11616,7 +11666,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00478",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "What Are YOU Thinking?",
       "activity_summary": "Take turns comparing family clothes and sizes.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11658,53 +11708,9 @@
       "last_metadata_review": "2026-10-09"
     },
     {
-      "activity_id": "ACT-VROOM-TIP-00503",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
-      "title": "Laundry Ins and Outs",
-      "activity_summary": "Describe objects entering and leaving a laundry basket.",
-      "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
-      "full_instructions_location": "official_source_pdf",
-      "domains": [
-        "cognitive",
-        "communication"
-      ],
-      "checkpoint_ids": [
-        "CP12M",
-        "CP15M",
-        "CP18M",
-        "CP24M"
-      ],
-      "source_org": "Vroom",
-      "source_collection": "Vroom official public tip sheets",
-      "source_url": "https://assets.ctfassets.net/khbu829tujdl/2oHlhQZZBWU8yq8acmwUy6/1c24e1c4340e3ece406d76babc3b1f11/Vroom_TipSheet_Age_1-2_ENG.pdf",
-      "source_page": 5,
-      "source_tip_id": "503",
-      "source_age_min_months": 12,
-      "source_age_max_months": 24,
-      "source_relation": "verified_official_tip_title_activity_concept_and_age_band",
-      "attribution": "Vroom, a program of the Bezos Family Foundation; full official tip and Brainy Background at cited PDF/page.",
-      "approval_basis": "pediatrician_and_supervisor_reported_Vroom_source_use_permission",
-      "individual_activity_review": "not_documented",
-      "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
-      "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
-        "vision": "not_established_as_essential_in_brief_descriptor",
-        "fine_motor": "review_if_concern",
-        "gross_motor": "not_established_as_essential_in_brief_descriptor"
-      },
-      "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
-      "retrieval_eligible_for_internal_research_demo": true,
-      "retrieval_eligible_for_caregiver_deployment": false,
-      "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
-      "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
-    },
-    {
       "activity_id": "ACT-VROOM-TIP-00807",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Where Is It?",
       "activity_summary": "Hide a safe toy and take turns searching.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11747,8 +11753,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00822",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Mirror Dance",
       "activity_summary": "Take turns copying each other’s comfortable movements.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11776,7 +11782,7 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
         "vision": "review_if_concern",
         "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "review_if_concern"
@@ -11787,12 +11793,18 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision",
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00848",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Read to Me",
       "activity_summary": "Look at everyday pictures and discuss familiar objects.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11820,7 +11832,7 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
         "vision": "review_if_concern",
         "fine_motor": "review_if_concern",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
@@ -11831,12 +11843,18 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision",
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00051",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Stair Count",
       "activity_summary": "Count steps only during safely assisted stair practice.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11868,17 +11886,21 @@
         "gross_motor": "review_if_concern"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use only during direct adult assistance on stairs. Hold the child's hand or provide equivalent secure support throughout.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00841",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Where’s the Crayon?",
       "activity_summary": "Guess which closed hand conceals a safe object.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11910,17 +11932,21 @@
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use a clean, intact, age-appropriate, non-choking object controlled by the adult throughout the activity.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00190",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name That Sound",
       "activity_summary": "Take turns recognising sounds outdoors.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -11961,7 +11987,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00194",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Pointer Power",
       "activity_summary": "Point out and describe familiar visible things.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12003,7 +12029,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00232",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Shhh, What’s That?",
       "activity_summary": "Pause and guess the source of common noises.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12045,7 +12071,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00271",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Ins and Outs",
       "activity_summary": "Notice things moving into and out of places.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12087,7 +12113,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00504",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Laundry Sort",
       "activity_summary": "Match familiar socks during supervised laundry.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12128,7 +12154,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00501",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Laundry Detective",
       "activity_summary": "Take turns guessing whose clothing is whose.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12170,7 +12196,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00049",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Category Convos",
       "activity_summary": "Trade examples of foods and other familiar categories.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12213,7 +12239,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00054",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Smile and Wink",
       "activity_summary": "Take turns copying simple friendly facial gestures.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12255,7 +12281,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00147",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "What’s Next?",
       "activity_summary": "Ask your child to predict the next routine step.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12298,7 +12324,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00152",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Use Your Words",
       "activity_summary": "Support expressing a frustrated feeling with helpful words.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12341,7 +12367,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00153",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "No Words?",
       "activity_summary": "Discuss how animals communicate through nonverbal signals.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12384,7 +12410,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00182",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "New to You",
       "activity_summary": "Explore a safe unfamiliar play experience together.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12425,8 +12451,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00204",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Up and Over",
       "activity_summary": "Explore varied movements over a safe ground marker.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12455,21 +12481,25 @@
       "safety_demands": {
         "hearing": "not_established_as_essential_in_brief_descriptor",
         "vision": "not_established_as_essential_in_brief_descriptor",
-        "fine_motor": "review_if_concern",
+        "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "review_if_concern"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use a flat, soft marker on a clear floor area. Keep movements comfortable and supervise throughout.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00246",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Touch Talk",
       "activity_summary": "Compare and describe the feel of familiar fabrics.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12512,7 +12542,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00270",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Food Favorites",
       "activity_summary": "Take turns sharing food likes and dislikes.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12554,8 +12584,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00272",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Shopping List Scribble",
       "activity_summary": "Share a shopping list and make meaningful marks.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12582,8 +12612,8 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
-        "vision": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
+        "vision": "review_if_concern",
         "fine_motor": "review_if_concern",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
@@ -12593,12 +12623,18 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision",
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00404",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "What Do You Feel?",
       "activity_summary": "Guess a safe object by feeling inside a bag.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12631,17 +12667,21 @@
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use only clean, intact, age-appropriate, non-choking objects under direct adult supervision.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-34-P02-01",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Rhyme Time",
       "activity_summary": "Invent rhyming words in playful turns.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12682,7 +12722,7 @@
     {
       "activity_id": "ACT-VROOM-34-P02-02",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name That Tune",
       "activity_summary": "Hum familiar music and invite guesses.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12724,7 +12764,7 @@
     {
       "activity_id": "ACT-VROOM-34-P02-03",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Would You Rather?",
       "activity_summary": "Take turns explaining imaginary choices.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12766,7 +12806,7 @@
     {
       "activity_id": "ACT-VROOM-34-P03-04",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Fill in the Blank",
       "activity_summary": "Create a shared story by completing phrases.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12808,7 +12848,7 @@
     {
       "activity_id": "ACT-VROOM-34-P03-05",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Smile and Wink Game",
       "activity_summary": "Copy a changing sequence of facial gestures.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12849,8 +12889,8 @@
     },
     {
       "activity_id": "ACT-VROOM-34-P03-06",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Move Like Me",
       "activity_summary": "Copy actions, then follow verbal movement directions.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12877,7 +12917,7 @@
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
         "hearing": "review_if_concern",
-        "vision": "not_established_as_essential_in_brief_descriptor",
+        "vision": "review_if_concern",
         "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "review_if_concern"
       },
@@ -12887,12 +12927,18 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision",
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-34-P04-07",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Memory Book",
       "activity_summary": "Talk about photographs of familiar events.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12934,7 +12980,7 @@
     {
       "activity_id": "ACT-VROOM-34-P04-08",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Do as I Say, Not as I Do",
       "activity_summary": "Follow spoken instructions while ignoring conflicting gestures.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -12975,7 +13021,7 @@
     {
       "activity_id": "ACT-VROOM-34-P04-09",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Pretend Packing",
       "activity_summary": "Take turns planning items for an imaginary trip.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13016,8 +13062,8 @@
     },
     {
       "activity_id": "ACT-VROOM-34-P05-10",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Guess Who!",
       "activity_summary": "Invent stories about people passing nearby.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13044,7 +13090,7 @@
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
         "hearing": "review_if_concern",
-        "vision": "not_established_as_essential_in_brief_descriptor",
+        "vision": "review_if_concern",
         "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
@@ -13054,12 +13100,17 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-34-P05-11",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Stop and Go",
       "activity_summary": "Practice freezing and moving in a safe space.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13085,7 +13136,7 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
         "vision": "not_established_as_essential_in_brief_descriptor",
         "fine_motor": "not_established_as_essential_in_brief_descriptor",
         "gross_motor": "review_if_concern"
@@ -13096,12 +13147,17 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-34-P06-12",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Reporting Live!",
       "activity_summary": "Ask and answer pretend reporter questions.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13142,7 +13198,7 @@
     {
       "activity_id": "ACT-VROOM-34-P06-13",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Finger Marker",
       "activity_summary": "Guess shapes traced gently on an open palm.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13183,7 +13239,7 @@
     {
       "activity_id": "ACT-VROOM-34-P07-14",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Silent Game",
       "activity_summary": "Use gestures while taking turns playing quietly.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13224,8 +13280,8 @@
     },
     {
       "activity_id": "ACT-VROOM-34-P08-15",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Drummer Beats",
       "activity_summary": "Create and copy simple rhythms on safe objects.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13251,23 +13307,28 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
         "vision": "not_established_as_essential_in_brief_descriptor",
         "fine_motor": "review_if_concern",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
+      "safeguarding_notes": "Use safe household objects and keep the sound at a comfortable level. Stop if the child is uncomfortable.",
       "retrieval_eligible_for_internal_research_demo": true,
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-34-P09-16",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Laundry Delivery",
       "activity_summary": "Sort laundry by the places items belong.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13295,7 +13356,7 @@
         "hearing": "not_established_as_essential_in_brief_descriptor",
         "vision": "not_established_as_essential_in_brief_descriptor",
         "fine_motor": "review_if_concern",
-        "gross_motor": "not_established_as_essential_in_brief_descriptor"
+        "gross_motor": "review_if_concern"
       },
       "suitability_mapping_status": "preliminary_research_annotation",
       "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
@@ -13303,12 +13364,17 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "fine_motor",
+        "gross_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-34-P09-17",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Spot the Color",
       "activity_summary": "Name matching colors from household objects.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13348,50 +13414,9 @@
       "last_metadata_review": "2026-10-09"
     },
     {
-      "activity_id": "ACT-VROOM-TIP-00195",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
-      "title": "What Floats?",
-      "activity_summary": "Explore floating and sinking with close water supervision.",
-      "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
-      "full_instructions_location": "official_source_pdf",
-      "domains": [
-        "cognitive"
-      ],
-      "checkpoint_ids": [
-        "CP48M",
-        "CP60M"
-      ],
-      "source_org": "Vroom",
-      "source_collection": "Vroom official public tip sheets",
-      "source_url": "https://assets.ctfassets.net/khbu829tujdl/39B0taLOtWwKkKGMo42Eig/c2d95c37a3ba74297712fd30ab7ad9c6/Vroom_TipSheet_Age_4_5_ENG.pdf",
-      "source_page": 2,
-      "source_tip_id": "195",
-      "source_age_min_months": 48,
-      "source_age_max_months": 60,
-      "source_relation": "verified_official_tip_title_activity_concept_and_age_band",
-      "attribution": "Vroom, a program of the Bezos Family Foundation; full official tip and Brainy Background at cited PDF/page.",
-      "approval_basis": "pediatrician_and_supervisor_reported_Vroom_source_use_permission",
-      "individual_activity_review": "not_documented",
-      "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
-      "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
-        "vision": "not_established_as_essential_in_brief_descriptor",
-        "fine_motor": "not_established_as_essential_in_brief_descriptor",
-        "gross_motor": "not_established_as_essential_in_brief_descriptor"
-      },
-      "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
-      "retrieval_eligible_for_internal_research_demo": true,
-      "retrieval_eligible_for_caregiver_deployment": false,
-      "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
-      "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
-    },
-    {
       "activity_id": "ACT-VROOM-TIP-00011",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Face Off",
       "activity_summary": "Take turns showing and identifying contrasting emotions.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13432,7 +13457,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00012",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Letter Lookout",
       "activity_summary": "Spot a chosen letter in everyday settings.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13474,7 +13499,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00023",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Today’s To-Do",
       "activity_summary": "Plan daily events together through conversation.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13516,7 +13541,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00024",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Tomorrow Talk",
       "activity_summary": "Imagine tomorrow and answer follow-up questions.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13558,7 +13583,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00028",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Super Silly Handshake",
       "activity_summary": "Invent and remember several handshake steps.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13600,7 +13625,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00040",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Practice Positivity",
       "activity_summary": "Rephrase a negative idea in constructive language.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13642,7 +13667,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00042",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Love Connections",
       "activity_summary": "Take turns inventing playful comparisons.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13684,7 +13709,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00056",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Smiles Switch",
       "activity_summary": "Copy then reverse simple smile-wink patterns.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13725,8 +13750,8 @@
     },
     {
       "activity_id": "ACT-VROOM-TIP-00060",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
+      "record_version": "1.1",
+      "library_version": "0.4.0",
       "title": "Acting Out",
       "activity_summary": "Discuss a difficult moment and draw better choices.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13752,7 +13777,7 @@
       "individual_activity_review": "not_documented",
       "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
       "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
+        "hearing": "review_if_concern",
         "vision": "review_if_concern",
         "fine_motor": "review_if_concern",
         "gross_motor": "not_established_as_essential_in_brief_descriptor"
@@ -13763,12 +13788,18 @@
       "retrieval_eligible_for_caregiver_deployment": false,
       "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
       "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
+      "last_metadata_review": "2026-10-09",
+      "updated_at": "2026-10-10",
+      "safety_review_categories": [
+        "hearing",
+        "vision",
+        "fine_motor"
+      ]
     },
     {
       "activity_id": "ACT-VROOM-TIP-00214",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Name Game",
       "activity_summary": "Invent names for pictured people by letters.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13810,7 +13841,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00215",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Waiting Games",
       "activity_summary": "Invent counting and singing games while waiting.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13852,7 +13883,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00217",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Find the B’s",
       "activity_summary": "Take turns finding words beginning with a sound.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13892,51 +13923,9 @@
       "last_metadata_review": "2026-10-09"
     },
     {
-      "activity_id": "ACT-VROOM-TIP-00557",
-      "record_version": "1.0",
-      "library_version": "0.3.0",
-      "title": "Playful Dinner Prep",
-      "activity_summary": "Explore alternative task strategies during safe meal preparation.",
-      "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
-      "full_instructions_location": "official_source_pdf",
-      "domains": [
-        "cognitive",
-        "social_emotional"
-      ],
-      "checkpoint_ids": [
-        "CP48M",
-        "CP60M"
-      ],
-      "source_org": "Vroom",
-      "source_collection": "Vroom official public tip sheets",
-      "source_url": "https://assets.ctfassets.net/khbu829tujdl/39B0taLOtWwKkKGMo42Eig/c2d95c37a3ba74297712fd30ab7ad9c6/Vroom_TipSheet_Age_4_5_ENG.pdf",
-      "source_page": 10,
-      "source_tip_id": "557",
-      "source_age_min_months": 48,
-      "source_age_max_months": 60,
-      "source_relation": "verified_official_tip_title_activity_concept_and_age_band",
-      "attribution": "Vroom, a program of the Bezos Family Foundation; full official tip and Brainy Background at cited PDF/page.",
-      "approval_basis": "pediatrician_and_supervisor_reported_Vroom_source_use_permission",
-      "individual_activity_review": "not_documented",
-      "content_reuse_permission": "permission_reported_by_researcher_scope_not_document_examined",
-      "safety_demands": {
-        "hearing": "not_established_as_essential_in_brief_descriptor",
-        "vision": "not_established_as_essential_in_brief_descriptor",
-        "fine_motor": "not_established_as_essential_in_brief_descriptor",
-        "gross_motor": "not_established_as_essential_in_brief_descriptor"
-      },
-      "suitability_mapping_status": "preliminary_research_annotation",
-      "safeguarding_notes": "Adult supervision; use age-appropriate safe materials; assess sensory/motor accessibility; source instructions govern; do not apply unsupported adaptations.",
-      "retrieval_eligible_for_internal_research_demo": true,
-      "retrieval_eligible_for_caregiver_deployment": false,
-      "retrieval_block_reason_for_caregiver": "individual_suitability_safety_and_reuse_scope_not_independently_signed_off",
-      "status": "source_verified_research_candidate",
-      "last_metadata_review": "2026-10-09"
-    },
-    {
       "activity_id": "ACT-VROOM-TIP-00619",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Sign Game",
       "activity_summary": "Guess the meaning of familiar signs using clues.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -13978,7 +13967,7 @@
     {
       "activity_id": "ACT-VROOM-TIP-00623",
       "record_version": "1.0",
-      "library_version": "0.3.0",
+      "library_version": "0.4.0",
       "title": "Fortune Teller",
       "activity_summary": "Predict what may happen at the next destination.",
       "instruction_type": "brief_original_research_descriptor_not_full_vroom_tip",
@@ -14017,5 +14006,10 @@
       "status": "source_verified_research_candidate",
       "last_metadata_review": "2026-10-09"
     }
+  ],
+  "vroom_activity_ids_permanently_excluded_in_v0_4": [
+    "ACT-VROOM-TIP-00503",
+    "ACT-VROOM-TIP-00195",
+    "ACT-VROOM-TIP-00557"
   ]
 }

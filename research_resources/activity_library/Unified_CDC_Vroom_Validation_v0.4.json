@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.4.0",
+  "total_records": 273,
+  "unique_ids": 273,
+  "source_counts": {
+    "CDC": 180,
+    "Vroom": 93
+  },
+  "vroom_verified_by_age_sheet": {
+    "0_1": 30,
+    "1_2": 21,
+    "2_3": 11,
+    "3_4": 17,
+    "4_5": 14
+  },
+  "coverage_all_36_combinations": true,
+  "combinations_with_both_CDC_and_Vroom": 36,
+  "minimum_combined_records_per_checkpoint_domain": 10,
+  "vroom_active_records": 93,
+  "vroom_permanently_excluded_in_v0_4": 3,
+  "vroom_retained_records_corrected_in_v0_4": 23,
+  "vroom_legacy_references_excluded": 3,
+  "caregiver_deployment_eligible": 0,
+  "internal_demo_eligible": 273,
+  "duplicate_ids": 0,
+  "records_with_all_four_safety_dimensions": 273,
+  "records_with_source_url": 273
+}
