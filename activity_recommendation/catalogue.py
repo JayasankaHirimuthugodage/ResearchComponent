@@ -4,18 +4,34 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
 
-from .contracts import ActivityLibraryValidationError, ActivityRecord
+from .contracts import CHECKPOINT_IDS, DOMAIN_IDS, ActivityLibraryValidationError, ActivityRecord
 
 
 DEFAULT_LIBRARY_PATH = Path(
     "research_resources/activity_library/Unified_CDC_Vroom_ActivityLibrary_v0.4.json"
 )
 DEFAULT_SCHEMA_PATH = Path(__file__).with_name("schemas") / "activity-library-v0.4.schema.json"
+SOURCE_ORDER = {"CDC": 0, "Vroom": 1}
+
+
+def activity_order_key(record: dict[str, object]) -> tuple[int, int, int, str, str]:
+    """Return the approved deterministic internal catalogue order."""
+
+    checkpoint_ids = tuple(str(value) for value in record["checkpoint_ids"])
+    domains = tuple(str(value) for value in record["domains"])
+    return (
+        min(CHECKPOINT_IDS.index(value) for value in checkpoint_ids),
+        min(DOMAIN_IDS.index(value) for value in domains),
+        SOURCE_ORDER[str(record["source_org"])],
+        str(record["title"]).casefold(),
+        str(record["activity_id"]),
+    )
 
 
 @dataclass(frozen=True)
@@ -73,6 +89,27 @@ def load_activity_catalogue(
     identifiers = [record["activity_id"] for record in activities]
     if len(identifiers) != len(set(identifiers)):
         raise ActivityLibraryValidationError("Activity IDs must be unique.")
+    source_counts = Counter(record["source_org"] for record in activities)
+    expected_source_counts = {
+        "CDC": document["counts"]["cdc_draft_activity_records"],
+        "Vroom": document["counts"]["vroom_verified_brief_activity_records"],
+    }
+    if source_counts != expected_source_counts:
+        raise ActivityLibraryValidationError(
+            f"Declared source counts {expected_source_counts} do not match {dict(source_counts)}."
+        )
+
+    excluded_ids = set(document["all_active_catalogue_exclusion_ids"])
+    active_excluded_overlap = sorted(excluded_ids.intersection(identifiers))
+    if active_excluded_overlap:
+        raise ActivityLibraryValidationError(
+            "Excluded activity IDs must not appear in the active catalogue: "
+            + ", ".join(active_excluded_overlap)
+        )
+    if activities != sorted(activities, key=activity_order_key):
+        raise ActivityLibraryValidationError(
+            "Activities must use the approved checkpoint, domain, source, title and ID order."
+        )
 
     records = tuple(_to_activity_record(record) for record in activities)
     return ActivityCatalogue(

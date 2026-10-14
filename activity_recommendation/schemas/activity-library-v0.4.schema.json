@@ -9,6 +9,8 @@
     "generated_on",
     "scope",
     "counts",
+    "all_active_catalogue_exclusion_ids",
+    "handoff_metadata",
     "activities"
   ],
   "properties": {
@@ -63,18 +65,66 @@
     "counts": {
       "type": "object",
       "required": [
-        "total_records"
+        "total_records",
+        "cdc_draft_activity_records",
+        "vroom_verified_brief_activity_records",
+        "records_eligible_for_internal_research_demo",
+        "records_eligible_for_caregiver_deployment"
       ],
       "properties": {
         "total_records": {
-          "type": "integer",
-          "minimum": 0
+          "const": 232
+        },
+        "cdc_draft_activity_records": {
+          "const": 179
+        },
+        "vroom_verified_brief_activity_records": {
+          "const": 53
+        },
+        "records_eligible_for_internal_research_demo": {
+          "const": 232
+        },
+        "records_eligible_for_caregiver_deployment": {
+          "const": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "all_active_catalogue_exclusion_ids": {
+      "type": "array",
+      "minItems": 44,
+      "maxItems": 44,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^ACT-[A-Z0-9-]+$"
+      }
+    },
+    "handoff_metadata": {
+      "type": "object",
+      "required": [
+        "status",
+        "clinical_approval_count",
+        "requires_activity_embedding_rebuild",
+        "changed_model_artifacts"
+      ],
+      "properties": {
+        "clinical_approval_count": {
+          "const": 0
+        },
+        "requires_activity_embedding_rebuild": {
+          "const": true
+        },
+        "changed_model_artifacts": {
+          "const": false
         }
       },
       "additionalProperties": true
     },
     "activities": {
       "type": "array",
+      "minItems": 232,
+      "maxItems": 232,
       "items": {
         "$ref": "#/$defs/activity"
       }
@@ -135,6 +185,11 @@
         "individual_activity_review",
         "suitability_mapping_status",
         "safety_demands",
+        "caregiver_guide",
+        "additional_safety_hazard_tags",
+        "additional_safety_notes_for_review",
+        "pediatrician_validation_status",
+        "caregiver_readiness",
         "retrieval_eligible_for_internal_research_demo",
         "retrieval_eligible_for_caregiver_deployment"
       ],
@@ -241,11 +296,52 @@
           },
           "additionalProperties": false
         },
+        "caregiver_guide": {
+          "type": "object",
+          "required": [
+            "what_you_need",
+            "how_to_start",
+            "what_to_do",
+            "how_your_child_can_join",
+            "how_long",
+            "optional_adaptation",
+            "when_to_pause_or_stop",
+            "supervision_and_safety",
+            "caregiver_reassurance"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "what_you_need": { "type": "string", "minLength": 1 },
+            "how_to_start": { "type": "string", "minLength": 1 },
+            "what_to_do": { "type": "string", "minLength": 1 },
+            "how_your_child_can_join": { "type": "string", "minLength": 1 },
+            "how_long": { "type": "string", "minLength": 1 },
+            "optional_adaptation": { "type": "string", "minLength": 1 },
+            "when_to_pause_or_stop": { "type": "string", "minLength": 1 },
+            "supervision_and_safety": { "type": "string", "minLength": 1 },
+            "caregiver_reassurance": { "type": "string", "minLength": 1 }
+          }
+        },
+        "additional_safety_hazard_tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "additional_safety_notes_for_review": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "pediatrician_validation_status": {
+          "const": "PENDING_INDEPENDENT_REVIEW"
+        },
+        "caregiver_readiness": {
+          "const": "EDITORIALLY_PREPARED_FOR_PAEDIATRICIAN_REVIEW_NOT_VALIDATED"
+        },
         "retrieval_eligible_for_internal_research_demo": {
-          "type": "boolean"
+          "const": true
         },
         "retrieval_eligible_for_caregiver_deployment": {
-          "type": "boolean"
+          "const": false
         }
       },
       "additionalProperties": true

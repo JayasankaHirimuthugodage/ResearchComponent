@@ -66,7 +66,7 @@ class ActivityRetrievalTests(unittest.TestCase):
             )
             artifacts = load_embedding_artifacts(self.catalogue, target)
 
-            self.assertEqual(273, artifacts.embeddings.shape[0])
+            self.assertEqual(232, artifacts.embeddings.shape[0])
             self.assertEqual(EMBEDDING_DIMENSION, artifacts.embeddings.shape[1])
             self.assertEqual(
                 tuple(record.activity_id for record in self.catalogue.records),
@@ -188,7 +188,7 @@ class ActivityRetrievalTests(unittest.TestCase):
             EligibilityRequest("CP2M", "communication", all_available()),
         )
         artifacts = EmbeddingArtifacts(
-            np.zeros((273, EMBEDDING_DIMENSION), dtype=np.float32),
+            np.zeros((len(self.catalogue.records), EMBEDDING_DIMENSION), dtype=np.float32),
             tuple(record.activity_id for record in self.catalogue.records),
             {record.activity_id: i for i, record in enumerate(self.catalogue.records)},
             {},

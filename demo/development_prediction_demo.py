@@ -19,6 +19,10 @@ from activity_recommendation.safety_questionnaire import (
     load_safety_questionnaire_catalog,
     safety_context_from_responses,
 )
+from demo.activity_presentation import (
+    caregiver_activity_content,
+    reviewer_activity_provenance,
+)
 from inference.contracts import (
     AssessmentStatus,
     DOMAIN_DISPLAY_NAMES,
@@ -345,13 +349,9 @@ def main() -> None:
                         continue
                     for rank, ranked in enumerate(domain_result.activities, start=1):
                         activity = ranked.activity
-                        st.markdown(f"**{rank}. {activity.title}**")
-                        st.write(activity.activity_summary)
-                        st.caption(
-                            f"Source: {activity.source_org} · Activity ID: {activity.activity_id} · "
-                            "Internal research-demo candidate"
-                        )
-                        st.markdown(f"[Open the source material]({activity.source_url})")
+                        title, instructions = caregiver_activity_content(activity)
+                        st.markdown(f"**{rank}. {title}**")
+                        st.write(instructions)
                     with st.expander(
                         f"{DOMAIN_DISPLAY_NAMES[domain_result.domain]} retrieval trace for reviewer"
                     ):
@@ -360,9 +360,14 @@ def main() -> None:
                             + ", ".join(domain_result.skill_query.question_ids)
                         )
                         for ranked in domain_result.activities:
+                            provenance = reviewer_activity_provenance(ranked.activity)
                             st.write(
-                                f"{ranked.activity.activity_id}: similarity "
+                                f"{provenance['activity_id']}: source "
+                                f"{provenance['source_org']}; similarity "
                                 f"{ranked.similarity_score:.6f}"
+                            )
+                            st.markdown(
+                                f"[Open official source material]({provenance['source_url']})"
                             )
                 st.caption(
                     "This is safety-filtered semantic retrieval, not complete RAG. "
