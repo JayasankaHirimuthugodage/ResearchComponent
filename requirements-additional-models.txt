@@ -1,0 +1,4 @@
+# Isolated development-only additional-model experiment.
+# Install interpret-core in .venv-additional-models; do not merge into requirements.lock.
+catboost==1.2.8
+interpret-core==0.7.8
