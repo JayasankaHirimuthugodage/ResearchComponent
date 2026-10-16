@@ -1,0 +1,4 @@
+# Isolated TabICLv2 development-only experiment; do not merge into requirements.lock.
+tabicl==2.2.0
+pandas==2.2.3
+
