@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "activity-library-v0.5.schema.json",
+  "title": "Unified CDC and Vroom Activity Library v0.5",
+  "type": "object",
+  "required": [
+    "library_name",
+    "library_version",
+    "generated_on",
+    "scope",
+    "counts",
+    "all_active_catalogue_exclusion_ids",
+    "handoff_metadata",
+    "activities",
+    "caregiver_deployment_approval"
+  ],
+  "properties": {
+    "library_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "library_version": {
+      "const": "0.5.0"
+    },
+    "generated_on": {
+      "type": "string",
+      "format": "date"
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "checkpoints",
+        "domains",
+        "safety_dimensions"
+      ],
+      "properties": {
+        "checkpoints": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/checkpoint"
+          },
+          "minItems": 12,
+          "maxItems": 12
+        },
+        "domains": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/domain"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "safety_dimensions": {
+          "const": [
+            "hearing",
+            "vision",
+            "fine_motor",
+            "gross_motor"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "total_records",
+        "cdc_draft_activity_records",
+        "vroom_verified_brief_activity_records",
+        "records_eligible_for_internal_research_demo",
+        "records_eligible_for_caregiver_deployment"
+      ],
+      "properties": {
+        "total_records": {
+          "const": 232
+        },
+        "cdc_draft_activity_records": {
+          "const": 179
+        },
+        "vroom_verified_brief_activity_records": {
+          "const": 53
+        },
+        "records_eligible_for_internal_research_demo": {
+          "const": 232
+        },
+        "records_eligible_for_caregiver_deployment": {
+          "const": 232
+        }
+      },
+      "additionalProperties": true
+    },
+    "all_active_catalogue_exclusion_ids": {
+      "type": "array",
+      "minItems": 44,
+      "maxItems": 44,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^ACT-[A-Z0-9-]+$"
+      }
+    },
+    "handoff_metadata": {
+      "type": "object",
+      "required": [
+        "status",
+        "clinical_approval_count",
+        "requires_activity_embedding_rebuild",
+        "changed_model_artifacts"
+      ],
+      "properties": {
+        "clinical_approval_count": {
+          "const": 232
+        },
+        "requires_activity_embedding_rebuild": {
+          "const": false
+        },
+        "changed_model_artifacts": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "activities": {
+      "type": "array",
+      "minItems": 232,
+      "maxItems": 232,
+      "items": {
+        "$ref": "#/$defs/activity"
+      }
+    },
+    "caregiver_deployment_approval": {
+      "type": "object",
+      "required": [
+        "approver_role",
+        "approval_date",
+        "scope",
+        "additional_conditions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "approver_role": {
+          "const": "Pediatrician"
+        },
+        "approval_date": {
+          "const": "2026-10-18"
+        },
+        "scope": {
+          "const": "all_232_active_activities"
+        },
+        "additional_conditions": {
+          "const": "none_supplied"
+        }
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "checkpoint": {
+      "enum": [
+        "CP2M",
+        "CP4M",
+        "CP6M",
+        "CP9M",
+        "CP12M",
+        "CP15M",
+        "CP18M",
+        "CP24M",
+        "CP30M",
+        "CP36M",
+        "CP48M",
+        "CP60M"
+      ]
+    },
+    "domain": {
+      "enum": [
+        "communication",
+        "cognitive",
+        "social_emotional"
+      ]
+    },
+    "safetyDemand": {
+      "enum": [
+        "review_if_concern",
+        "not_obviously_required",
+        "not_established_as_essential_in_brief_descriptor",
+        "required",
+        "ability_required",
+        "unknown",
+        "not_assessed",
+        "not_documented"
+      ]
+    },
+    "activity": {
+      "type": "object",
+      "required": [
+        "activity_id",
+        "record_version",
+        "library_version",
+        "title",
+        "activity_summary",
+        "domains",
+        "checkpoint_ids",
+        "source_org",
+        "source_url",
+        "source_page",
+        "source_tip_id",
+        "status",
+        "individual_activity_review",
+        "suitability_mapping_status",
+        "safety_demands",
+        "caregiver_guide",
+        "additional_safety_hazard_tags",
+        "additional_safety_notes_for_review",
+        "pediatrician_validation_status",
+        "caregiver_readiness",
+        "retrieval_eligible_for_internal_research_demo",
+        "retrieval_eligible_for_caregiver_deployment"
+      ],
+      "properties": {
+        "activity_id": {
+          "type": "string",
+          "pattern": "^ACT-[A-Z0-9-]+$"
+        },
+        "record_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "library_version": {
+          "const": "0.5.0"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "activity_summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "primary_skill": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "domains": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domain"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "checkpoint_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/checkpoint"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "source_org": {
+          "enum": [
+            "CDC",
+            "Vroom"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source_page": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "source_tip_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "draft_for_validation",
+            "source_verified_research_candidate"
+          ]
+        },
+        "individual_activity_review": {
+          "type": "string",
+          "minLength": 1
+        },
+        "suitability_mapping_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "safety_demands": {
+          "type": "object",
+          "required": [
+            "hearing",
+            "vision",
+            "fine_motor",
+            "gross_motor"
+          ],
+          "properties": {
+            "hearing": {
+              "$ref": "#/$defs/safetyDemand"
+            },
+            "vision": {
+              "$ref": "#/$defs/safetyDemand"
+            },
+            "fine_motor": {
+              "$ref": "#/$defs/safetyDemand"
+            },
+            "gross_motor": {
+              "$ref": "#/$defs/safetyDemand"
+            }
+          },
+          "additionalProperties": false
+        },
+        "caregiver_guide": {
+          "type": "object",
+          "required": [
+            "what_you_need",
+            "how_to_start",
+            "what_to_do",
+            "how_your_child_can_join",
+            "how_long",
+            "optional_adaptation",
+            "when_to_pause_or_stop",
+            "supervision_and_safety",
+            "caregiver_reassurance"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "what_you_need": {
+              "type": "string",
+              "minLength": 1
+            },
+            "how_to_start": {
+              "type": "string",
+              "minLength": 1
+            },
+            "what_to_do": {
+              "type": "string",
+              "minLength": 1
+            },
+            "how_your_child_can_join": {
+              "type": "string",
+              "minLength": 1
+            },
+            "how_long": {
+              "type": "string",
+              "minLength": 1
+            },
+            "optional_adaptation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "when_to_pause_or_stop": {
+              "type": "string",
+              "minLength": 1
+            },
+            "supervision_and_safety": {
+              "type": "string",
+              "minLength": 1
+            },
+            "caregiver_reassurance": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additional_safety_hazard_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "additional_safety_notes_for_review": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pediatrician_validation_status": {
+          "const": "APPROVED_BY_PEDIATRICIAN_2026-10-18"
+        },
+        "caregiver_readiness": {
+          "const": "APPROVED_FOR_CONTROLLED_CAREGIVER_PROTOTYPE_RETRIEVAL"
+        },
+        "retrieval_eligible_for_internal_research_demo": {
+          "const": true
+        },
+        "retrieval_eligible_for_caregiver_deployment": {
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

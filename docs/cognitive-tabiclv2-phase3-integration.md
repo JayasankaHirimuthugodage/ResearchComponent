@@ -1,0 +1,15 @@
+# Cognitive TabICLv2 Phase 3A context contract
+
+This experimental Cognitive adapter must never call `load_development_dataset()` at runtime because that loader validates the combined 625-person source before filtering. The Phase 3A context loader accepts only a separately provisioned development-only CSV with exactly `participant_key`, the frozen 16 feature columns, and `target_cognitive_concern`.
+
+An authorized deployment configuration supplies the source path, provenance path, source SHA-256, sorted-membership SHA-256, original dataset SHA-256, split fingerprint, and the forbidden combined-source path. Provenance alone is not access control: the source must be readable only by the local application service account, outside web/static directories, with least-privilege filesystem ACLs. A missing, altered, unauthorized, malformed, non-500-row, wrong-membership, or wrong-positive-count source fails closed. The context is held only in an in-process cache and is never serialized, logged, returned, or copied.
+
+No suitable independent development-only source currently exists. A separately approved offline provisioning step must extract exactly the development rows under controlled access, write the strict allowlist schema to a protected location, create provenance metadata and trusted hashes, verify the 53 Cognitive positives and membership, record deletion/retention ownership, then revoke extraction access. That process requires explicit approval because it reads the combined source and handles locked-test records.
+
+The adapter reads calibration and threshold values from the finalized experimental manifest, verifies the approved local checkpoint and `tabicl==2.2.0`, disables downloads, uses CPU-only eight-estimator TabICLv2 later through an injected context factory, and applies `sigmoid(coefficient * logit(raw_probability) + intercept)` before the frozen inclusive threshold. It is not selected by default. A future composite release loader and any inference/XAI activation require separate approval.
+
+## Phase 3K cache-backed experimental path
+
+The cache-backed experimental path is a separate, opt-in runtime. It references the Phase 3J protected artifact by one fixed external path, exact byte size, and SHA-256. Before pickle deserialization it verifies the cache release manifest, the original finalized Cognitive manifest binding, the approved checkpoint, `tabicl==2.2.0`, and the artifact checksum. After loading, it rejects any estimator that retains ordinary training arrays or lacks a KV cache.
+
+It accepts no development-context configuration and therefore does not open the 500-participant CSV at application inference. Communication and Social-emotional continue to use their frozen XGBoost references; Cognitive applies the frozen TabICLv2 calibration and inclusive threshold. The release is development-only and experimental, preserves the Logistic Regression rollback reference, provides no Cognitive feature attribution (`unavailable_pending_model_specific_validation`), and is not imported by the historical loader or Streamlit interface.

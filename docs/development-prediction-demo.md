@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`demo/development_prediction_demo.py` is a local research-review adapter. It lets a reviewer see the checkpoint-specific question wording, enter answers manually, and run the three frozen domain models from the same answers.
+`demo/development_prediction_demo.py` is a local research-review adapter. It lets a reviewer see checkpoint-specific question wording, enter answers manually, and run either the default development-only experimental three-domain release or the historical frozen rollback release.
 
 It is not a parent-facing application, a diagnostic tool, a deployed microservice, or final-test evidence.
 
@@ -24,7 +24,7 @@ The observed training labels and predicted decisions are different operations:
 - In the supplied modelling export, an observed follow-up domain score `<= 50` created that domain's positive training target (`1`).
 - At inference, each calibrated probability is compared with its own frozen domain threshold.
 
-The frozen thresholds are `0.130882` for communication, `0.109680` for cognitive and `0.126137` for social-emotional. They were selected using development-only out-of-fold predictions and were fixed before locked-test evaluation.
+Each selected release uses its own frozen domain thresholds. The default experimental Cognitive TabICLv2 release uses calibrated probability threshold `0.1503614235173848` with inclusive comparison. The historical rollback release retains its original frozen Logistic Regression threshold. Thresholds are not recalculated by the demo.
 
 The three outputs are:
 
@@ -38,7 +38,7 @@ The caregiver-facing overall summary names the domain or domains identified for 
 
 ## Model status
 
-When a complete answer set is submitted, the demo loads three checksum-verified artifacts: XGBoost for communication, Logistic Regression for cognitive and XGBoost for social-emotional. It does not load the development or locked-test datasets and does not fit or update a model. The verified service is cached for the local Streamlit process.
+When a complete answer set is submitted, the default release lazily loads checksum-verified Communication/Social-emotional XGBoost artifacts and the verified Cognitive TabICLv2 KV-cache. The historical rollback release instead uses Cognitive Logistic Regression. Neither path loads the development or locked-test datasets, fits, or updates a model. The selected service is cached for the local Streamlit process.
 
 The artifacts are the final frozen research selections. Using them in this demonstration does not add evaluation evidence, and predictions made from synthetic examples must not be reported as model-performance results.
 
@@ -50,7 +50,11 @@ Repository inclusion was authorized by the project owner on 2026-08-22. The supp
 
 ## Explanation display
 
-For each domain, the main result gives a plain-language summary of the strongest submitted answer supporting the final decision. It shows the checkpoint-specific question, response label and direction. One shared notice explains that all answers and the checkpoint contribute, that the highlighted observations did not determine the results alone, and that the results are non-diagnostic. It does not expose probabilities, threshold wording or numerical contribution values. Opposing and supporting contributions remain in the research/reviewer trace, using coefficient contributions for Logistic Regression and model-native TreeSHAP contributions for XGBoost.
+The historical release retains its existing model-specific explanation display. For the experimental default, the Communication and Social-emotional XGBoost artifacts use the existing TreeSHAP contribution method in calibrated-logit space. Those contributions are model calculations, not causal effects, clinical importance, or direct additions to calibrated probabilities.
+
+The experimental Cognitive TabICLv2 path never reuses Logistic Regression coefficients or XGBoost contributions. After an explicit reviewer action, it runs a bounded local model-behaviour analysis: for each of the 15 valid submitted answers it evaluates the other two valid response codes while holding the checkpoint and other 14 answers fixed. This creates exactly 30 alternate predictions using the already initialized verified KV-cache-backed Cognitive model and its frozen calibration. It reports calibrated probability differences relative to the actual baseline prediction. It is not SHAP, feature attribution, population importance, causal evidence, clinical advice, or independent validation. The operation is not performed automatically at page rendering or prediction submission.
+
+The caregiver view does not display question-by-question alternatives. It presents only a plain-language Cognitive screening summary, the non-diagnostic limitation, and guidance to discuss concerns with an appropriate healthcare professional. The optional 30-alternative analysis and its complete table are reserved for the separate researcher expander. This presentation performs no additional Cognitive model calls and does not persist questionnaire answers or explanation results.
 
 ## Privacy and synthetic examples
 

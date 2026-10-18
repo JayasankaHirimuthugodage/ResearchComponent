@@ -30,11 +30,20 @@ from inference.contracts import (
     SubmissionValidationError,
 )
 from inference.frozen_models import load_frozen_prediction_service
+from inference.experimental_release import EXPERIMENTAL_KV_CACHE_COMPOSITE_RELEASE
+from inference.tabiclv2_kv_cache_runtime import (
+    CACHE_RUNTIME_AUTHORIZATION,
+    build_kv_cache_experimental_runtime_service,
+)
 from inference.explanations import CAREGIVER_EXPLANATION_NOTICE
 from inference.questionnaire import (
     QuestionnaireCatalog,
     encode_submission,
     load_questionnaire_catalog,
+)
+from inference.tabiclv2_explanations import (
+    TabICLv2ExplanationStatus,
+    analyze_tabiclv2_cognitive_model_behaviour,
 )
 
 
@@ -43,9 +52,15 @@ UNANSWERED = ""
 RESPONSE_KEY_PREFIX = "question_response_"
 SAFETY_RESPONSE_KEY_PREFIX = "safety_response_"
 SYNTHETIC_RESPONSE_PATTERN = ("YES_USUALLY", "SOMETIMES", "NOT_YET")
+HISTORICAL_RELEASE_OPTION = "Historical frozen release"
+EXPERIMENTAL_RELEASE_OPTION = "Experimental, development-only TabICLv2 KV-cache release — not independently validated or clinically deployed"
+DEFAULT_RELEASE_OPTION = EXPERIMENTAL_RELEASE_OPTION
 ACTIVITY_ARTIFACT_DIRECTORY = (
     Path(__file__).resolve().parents[1] / "artifacts" / "activity-embeddings" / "0.4.0"
 )
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+EXPERIMENTAL_COMPOSITE_MANIFEST = PROJECT_ROOT / "models" / "experimental-three-domain-tabiclv2-kv-cache-v1" / "release-manifest.json"
+EXPERIMENTAL_CHECKPOINT = PROJECT_ROOT / ".venv-tabiclv2" / "hf-cache" / "hub" / "models--jingang--TabICL" / "snapshots" / "4dcd344ece2c00be9e831fdd35bed57b5ad83e19" / "tabicl-classifier-v2-20260212.ckpt"
 
 
 def load_synthetic_fixture(filename: str) -> dict[str, Any]:
@@ -119,6 +134,43 @@ def _apply_synthetic_example(
         session_state[f"{RESPONSE_KEY_PREFIX}{question_id}"] = response_code
 
 
+def experimental_explanation_status(encoded) -> TabICLv2ExplanationStatus:
+    """UI-only status; it does not construct or query an experimental model."""
+    if encoded.status is AssessmentStatus.INCOMPLETE:
+        return TabICLv2ExplanationStatus.NOT_APPLICABLE_INCOMPLETE
+    return TabICLv2ExplanationStatus.AVAILABLE_LOCAL_MODEL_BEHAVIOUR
+
+
+def _experimental_explanation_key(release_option: str, encoded, model_version: str) -> tuple[object, ...]:
+    """Bind an opt-in analysis to the exact submitted answers and selected release."""
+    return (release_option, model_version, encoded.feature_values)
+
+
+def _response_value_label(value: int) -> str:
+    return {0: "Not yet", 1: "Sometimes", 2: "Yes, usually"}[value]
+
+
+def caregiver_domain_message(decision: bool) -> str:
+    """Return a non-diagnostic interpretation for one frozen domain decision."""
+
+    if decision:
+        return "This screening result suggests that additional monitoring may be helpful. It is not a diagnosis."
+    return "This screening result did not flag this area. It does not rule out developmental needs."
+
+
+def selected_prediction_service(
+    release_option: str,
+    historical_factory,
+    experimental_factory,
+):
+    """Invoke only the deliberately selected release factory after validation."""
+    if release_option == HISTORICAL_RELEASE_OPTION:
+        return historical_factory(), False
+    if release_option == EXPERIMENTAL_RELEASE_OPTION:
+        return experimental_factory(), True
+    raise ValueError("Unknown research model release selection.")
+
+
 def main() -> None:
     import streamlit as st
 
@@ -133,6 +185,16 @@ def main() -> None:
     @st.cache_resource(show_spinner=False)
     def cached_prediction_service():
         return load_frozen_prediction_service(catalog)
+
+    @st.cache_resource(show_spinner=False)
+    def cached_experimental_prediction_service():
+        return build_kv_cache_experimental_runtime_service(
+            catalog,
+            repository_root=PROJECT_ROOT,
+            composite_manifest=EXPERIMENTAL_COMPOSITE_MANIFEST,
+            checkpoint=EXPERIMENTAL_CHECKPOINT,
+            execution_authorization=CACHE_RUNTIME_AUTHORIZATION,
+        )
 
     @st.cache_resource(show_spinner=False)
     def cached_activity_recommendation_service():
@@ -151,13 +213,28 @@ def main() -> None:
     st.title("Three-month developmental prediction — local review demo")
     st.write(
         "Select a baseline checkpoint and enter the 15 baseline answers. The app uses "
-        "the three frozen research models to produce separate communication, cognitive, "
+        "the selected three-domain research release to produce separate communication, cognitive, "
         "and social-emotional concern flags."
     )
     st.caption(
         "No entered answers are written to a file, database, model artifact or network API. "
         "They exist only in this local Streamlit session."
     )
+    release_option = st.radio(
+        "Research model release",
+        options=(EXPERIMENTAL_RELEASE_OPTION, HISTORICAL_RELEASE_OPTION),
+        index=0,
+        help=(
+            "The experimental option is development-only and uses the verified protected "
+            "Cognitive KV-cache only after a complete assessment is submitted. The historical "
+            "frozen release remains available as a rollback option."
+        ),
+    )
+    if release_option == EXPERIMENTAL_RELEASE_OPTION:
+        st.warning(
+            "Experimental TabICLv2 selection is development-only. It predicts questionnaire-defined "
+            "follow-up concerns, not clinical diagnoses."
+        )
 
     checkpoint_map = catalog.checkpoint_by_id()
     checkpoint_id = st.selectbox(
@@ -210,7 +287,7 @@ def main() -> None:
         if question.domain != current_domain:
             current_domain = question.domain
             domain_number = 0
-            st.subheader(DOMAIN_DISPLAY_NAMES[current_domain])
+            st.subheader(f"{DOMAIN_DISPLAY_NAMES[current_domain]} questions")
         domain_number += 1
         st.markdown(f"**{domain_number}. {question.text}**")
         responses[question.question_id] = st.selectbox(
@@ -245,6 +322,11 @@ def main() -> None:
         return
 
     if encoded.status is AssessmentStatus.INCOMPLETE:
+        if release_option == EXPERIMENTAL_RELEASE_OPTION:
+            st.caption(
+                "Experimental Cognitive explanation status: "
+                f"`{experimental_explanation_status(encoded).value}`."
+            )
         st.warning(
             "Assessment status: INCOMPLETE. At least one answer is 'Not sure' or "
             "'Not observed', so no ML probability or decision is produced."
@@ -252,15 +334,23 @@ def main() -> None:
         return
 
     try:
-        with st.spinner("Loading the verified frozen models..."):
-            service = cached_prediction_service()
-            result, explanations = service.predict_and_explain_encoded(encoded)
+        with st.spinner("Loading the selected verified research models..."):
+            service, experimental = selected_prediction_service(
+                release_option,
+                cached_prediction_service,
+                cached_experimental_prediction_service,
+            )
+            if experimental:
+                result = service.predict_encoded(encoded)
+                explanations = service.explain_xgboost_encoded(encoded, result)
+            else:
+                result, explanations = service.predict_and_explain_encoded(encoded)
     except (FileNotFoundError, ValueError, RuntimeError) as error:
-        st.error(f"The frozen prediction models could not be loaded: {error}")
+        st.error(f"The selected research prediction models could not be loaded: {error}")
         return
 
     st.divider()
-    st.header("Developmental monitoring result")
+    st.header("Your developmental screening result")
     model_columns = st.columns(3)
     for model_column, prediction in zip(
         model_columns, result.domain_predictions, strict=True
@@ -268,9 +358,10 @@ def main() -> None:
         with model_column:
             st.subheader(DOMAIN_DISPLAY_NAMES[prediction.domain])
             if prediction.decision:
-                st.warning("Concern flag")
+                st.warning("Additional monitoring may be helpful")
             else:
-                st.success("No concern flag")
+                st.success("Not flagged by this screening")
+            st.caption(caregiver_domain_message(prediction.decision))
 
     area_summary = format_area_summary(
         {prediction.domain: prediction.decision for prediction in result.domain_predictions}
@@ -279,16 +370,91 @@ def main() -> None:
         st.warning(area_summary)
     else:
         st.success(area_summary)
-    st.caption("Screening for possible concerns")
+    st.caption("These are screening results for possible follow-up concerns, not diagnoses.")
 
-    st.subheader("What influenced these results")
-    for explanation in explanations:
-        st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
-        st.markdown(explanation.caregiver_message)
-    st.info(CAREGIVER_EXPLANATION_NOTICE)
+    st.subheader("Understanding these results")
+    if experimental:
+        for explanation in explanations:
+            st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
+            st.markdown(explanation.caregiver_message)
+        st.info(CAREGIVER_EXPLANATION_NOTICE)
+        explanation_key = _experimental_explanation_key(
+            release_option, encoded, result.model_version
+        )
+        if st.session_state.get("experimental_cognitive_explanation_key") != explanation_key:
+            st.session_state.pop("experimental_cognitive_explanation", None)
+            st.session_state.pop("experimental_cognitive_explanation_key", None)
+        cognitive_prediction = next(
+            prediction
+            for prediction in result.domain_predictions
+            if prediction.domain == "cognitive"
+        )
+        with st.container(border=True):
+            st.markdown("**Cognitive development**")
+            st.write(
+                caregiver_domain_message(cognitive_prediction.decision)
+            )
+            st.caption(
+                "This screening result considers the full set of answers for this developmental "
+                "checkpoint. It is not a diagnosis."
+            )
+            st.write(
+                "If you have concerns about thinking, learning, memory, or problem-solving skills, "
+                "please discuss them with an appropriate healthcare professional."
+            )
+        with st.expander("Researcher: Cognitive local model-behaviour analysis"):
+            st.caption(
+                "This optional research view evaluates 30 one-at-a-time hypothetical alternatives. "
+                "It is not a caregiver explanation, feature attribution, causal explanation, or clinical advice."
+            )
+            request_cognitive_explanation = st.button(
+                "Run 30-alternative Cognitive analysis for researcher review",
+                key="researcher_cognitive_explanation_request",
+            )
+        if request_cognitive_explanation:
+            try:
+                with st.spinner("Evaluating 30 bounded hypothetical response alternatives..."):
+                    st.session_state["experimental_cognitive_explanation"] = (
+                        analyze_tabiclv2_cognitive_model_behaviour(
+                            catalog,
+                            encoded,
+                            cognitive_prediction,
+                            service.cognitive,
+                        )
+                    )
+                    st.session_state["experimental_cognitive_explanation_key"] = explanation_key
+            except (ValueError, RuntimeError) as error:
+                st.error(f"Cognitive model-behaviour analysis could not be generated: {error}")
+        cognitive_behaviour = st.session_state.get("experimental_cognitive_explanation")
+        if cognitive_behaviour is not None:
+            with st.expander("Researcher: Cognitive local model-behaviour results"):
+                st.write(
+                    f"Baseline calibrated concern probability: `{cognitive_behaviour.baseline_probability:.4f}`"
+                )
+                st.write(
+                    f"Frozen threshold: `{cognitive_behaviour.threshold:.6f}` (inclusive)"
+                )
+                rows = [
+                    {
+                        "Question domain": DOMAIN_DISPLAY_NAMES[item.question_domain],
+                        "Question": item.question_text,
+                        "Submitted response": _response_value_label(item.original_response),
+                        "Hypothetical response": _response_value_label(item.alternative_response),
+                        "Alternative probability": round(item.alternative_probability, 6),
+                        "Probability difference": round(item.probability_change, 6),
+                    }
+                    for item in cognitive_behaviour.variations
+                ]
+                st.dataframe(rows, width="stretch", hide_index=True)
+                st.caption(cognitive_behaviour.limitation)
+    else:
+        for explanation in explanations:
+            st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
+            st.markdown(explanation.caregiver_message)
+        st.info(CAREGIVER_EXPLANATION_NOTICE)
 
     st.divider()
-    st.header("Development activity retrieval")
+    st.header("Approved development activities")
     if not result.overall_concern:
         st.info("No developmental domain was flagged for targeted activity retrieval.")
     else:
@@ -350,8 +516,10 @@ def main() -> None:
                     for rank, ranked in enumerate(domain_result.activities, start=1):
                         activity = ranked.activity
                         title, instructions = caregiver_activity_content(activity)
-                        st.markdown(f"**{rank}. {title}**")
-                        st.write(instructions)
+                        with st.container(border=True):
+                            st.markdown(f"**{rank}. {title}**")
+                            st.caption(DOMAIN_DISPLAY_NAMES[domain_result.domain])
+                            st.write(instructions)
                     with st.expander(
                         f"{DOMAIN_DISPLAY_NAMES[domain_result.domain]} retrieval trace for reviewer"
                     ):
@@ -385,25 +553,40 @@ def main() -> None:
             st.write(f"Frozen threshold: `{prediction.threshold:.6f}` (inclusive)")
             st.write(f"Model version: `{prediction.model_version}`")
         st.divider()
-        st.markdown("**Local feature contributions**")
-        st.caption(
-            "Positive values move the calibrated model output toward a concern flag; "
-            "negative values move it away. Values are model calculations, not clinical scores."
-        )
-        for explanation in explanations:
-            st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
-            st.write(f"Method: `{explanation.method}`")
-            contribution_rows = [
-                {
-                    "Feature": item.display_name,
-                    "Submitted value": item.input_value_label,
-                    "Direction": item.direction.replace("_", " "),
-                    "Contribution": round(item.contribution, 6),
-                }
-                for item in explanation.contributions[:5]
-            ]
-            st.dataframe(contribution_rows, width="stretch", hide_index=True)
-            st.caption(explanation.limitation)
+        if experimental:
+            st.markdown("**Experimental explanation methods**")
+            for explanation in explanations:
+                st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
+                st.write(f"Method: `{explanation.method}`")
+                st.caption(
+                    "TreeSHAP contributions are calculated in the calibrated logit space; "
+                    "they are not raw-margin values or causal effects."
+                )
+            st.markdown("**Cognitive TabICLv2**")
+            st.caption(
+                "Optional local model-behaviour analysis uses calibrated probability changes, "
+                "not SHAP or feature attribution."
+            )
+        else:
+            st.markdown("**Local feature contributions**")
+            st.caption(
+                "Positive values move the calibrated model output toward a concern flag; "
+                "negative values move it away. Values are model calculations, not clinical scores."
+            )
+            for explanation in explanations:
+                st.markdown(f"**{DOMAIN_DISPLAY_NAMES[explanation.domain]}**")
+                st.write(f"Method: `{explanation.method}`")
+                contribution_rows = [
+                    {
+                        "Feature": item.display_name,
+                        "Submitted value": item.input_value_label,
+                        "Direction": item.direction.replace("_", " "),
+                        "Contribution": round(item.contribution, 6),
+                    }
+                    for item in explanation.contributions[:5]
+                ]
+                st.dataframe(contribution_rows, width="stretch", hide_index=True)
+                st.caption(explanation.limitation)
         st.write(f"Model release: `{result.model_version}`")
         st.write(f"Feature schema version: `{result.feature_schema_version}`")
         st.write(

@@ -6,6 +6,8 @@ import unittest
 from pathlib import Path
 
 from activity_recommendation.catalogue import (
+    CAREGIVER_APPROVED_LIBRARY_PATH,
+    CAREGIVER_APPROVED_SCHEMA_PATH,
     DEFAULT_LIBRARY_PATH,
     activity_order_key,
     load_activity_catalogue,
@@ -13,12 +15,50 @@ from activity_recommendation.catalogue import (
 from activity_recommendation.contracts import (
     CHECKPOINT_IDS,
     DOMAIN_IDS,
+    AbilityState,
     SAFETY_DIMENSIONS,
     ActivityLibraryValidationError,
+    EligibilityRequest,
+    RetrievalMode,
+    SafetyContext,
 )
+from activity_recommendation.embeddings import load_embedding_artifacts
+from activity_recommendation.eligibility import filter_eligible_activities
 
 
 class ActivityCatalogueTests(unittest.TestCase):
+    def test_versioned_caregiver_approved_successor_covers_all_active_records(self) -> None:
+        catalogue = load_activity_catalogue(
+            CAREGIVER_APPROVED_LIBRARY_PATH,
+            CAREGIVER_APPROVED_SCHEMA_PATH,
+        )
+        self.assertEqual("0.5.0", catalogue.library_version)
+        self.assertEqual(232, len(catalogue.records))
+        self.assertTrue(all(record.caregiver_deployment_eligible for record in catalogue.records))
+        document = json.loads(CAREGIVER_APPROVED_LIBRARY_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(232, document["counts"]["records_eligible_for_caregiver_deployment"])
+        self.assertEqual("Pediatrician", document["caregiver_deployment_approval"]["approver_role"])
+        self.assertEqual("2026-10-18", document["caregiver_deployment_approval"]["approval_date"])
+
+    def test_approved_successor_has_a_matching_embedding_manifest_and_caregiver_filter(self) -> None:
+        catalogue = load_activity_catalogue(
+            CAREGIVER_APPROVED_LIBRARY_PATH,
+            CAREGIVER_APPROVED_SCHEMA_PATH,
+        )
+        artifacts = load_embedding_artifacts(catalogue, Path("artifacts/activity-embeddings/0.5.0"))
+        self.assertEqual(232, len(artifacts.activity_ids))
+        eligible = filter_eligible_activities(
+            catalogue.records,
+            EligibilityRequest(
+                "CP2M",
+                "communication",
+                SafetyContext(*(AbilityState.AVAILABLE,) * 4),
+                RetrievalMode.CAREGIVER_DEPLOYMENT,
+            ),
+        )
+        self.assertTrue(eligible.eligible)
+        self.assertTrue(all(item.caregiver_deployment_eligible for item in eligible.eligible))
+
     def test_canonical_library_loads_with_expected_contract(self) -> None:
         catalogue = load_activity_catalogue()
 

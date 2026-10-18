@@ -58,6 +58,7 @@ class ActivityRecommendationService:
         safety_context: SafetyContext,
         *,
         top_k: int = 3,
+        mode: RetrievalMode = RetrievalMode.INTERNAL_RESEARCH_DEMO,
     ) -> ActivityRecommendationResult:
         if top_k < 1 or top_k > 3:
             raise ValueError("The research workflow supports between one and three results.")
@@ -119,7 +120,7 @@ class ActivityRecommendationService:
                     checkpoint_id,
                     domain,
                     safety_context,
-                    RetrievalMode.INTERNAL_RESEARCH_DEMO,
+                    mode,
                 ),
             )
             activities = retrieve_top_k(

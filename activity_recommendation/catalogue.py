@@ -17,6 +17,14 @@ DEFAULT_LIBRARY_PATH = Path(
     "research_resources/activity_library/Unified_CDC_Vroom_ActivityLibrary_v0.4.json"
 )
 DEFAULT_SCHEMA_PATH = Path(__file__).with_name("schemas") / "activity-library-v0.4.schema.json"
+# This successor is intentionally opt-in.  Existing research/demo callers remain on v0.4
+# until an explicitly approved caregiver-facing integration selects it.
+CAREGIVER_APPROVED_LIBRARY_PATH = Path(
+    "research_resources/activity_library/Unified_CDC_Vroom_ActivityLibrary_v0.5.json"
+)
+CAREGIVER_APPROVED_SCHEMA_PATH = (
+    Path(__file__).with_name("schemas") / "activity-library-v0.5.schema.json"
+)
 SOURCE_ORDER = {"CDC": 0, "Vroom": 1}
 
 
