@@ -20,6 +20,8 @@ class FakeStore:
         self.sessions: dict[str, str] = {}
         self.profiles: dict[str, dict] = {}
 
+    async def check_connection(self): return True
+
     async def create_user(self, **kwargs):
         if kwargs["email"] in self.users:
             raise RuntimeError("duplicate")
@@ -112,6 +114,12 @@ class BackendApiContractTests(TestCase):
         safety = self.client.get("/api/v1/activity-suitability-questions")
         self.assertEqual(200, safety.status_code)
         self.safety_responses = {item["id"]: "NO_CONCERN_REPORTED" for item in safety.json()["questions"]}
+
+    def test_health_and_readiness_are_minimal(self) -> None:
+        self.assertEqual({"status": "ok"}, self.client.get("/health").json())
+        response = self.client.get("/ready")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual({"status": "ready"}, response.json())
 
     def test_incomplete_answers_do_not_call_model_and_are_caregiver_safe(self) -> None:
         responses = {question_id: self.scorable for question_id in self.question_ids}; responses[self.question_ids[0]] = self.unscorable

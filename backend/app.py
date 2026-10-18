@@ -24,6 +24,7 @@ from inference.questionnaire import QuestionnaireCatalog, encode_submission, loa
 
 
 class Store(Protocol):
+    async def check_connection(self) -> bool: ...
     async def create_user(self, **kwargs) -> dict[str, Any] | None: ...
     async def find_user_by_email(self, email: str) -> dict[str, Any] | None: ...
     async def create_session(self, **kwargs) -> None: ...
@@ -179,6 +180,20 @@ def create_app(*, settings: Settings, store: Store, catalog: QuestionnaireCatalo
 
     @app.get("/health")
     async def health(): return {"status": "ok"}
+
+    @app.get("/ready")
+    async def ready():
+        """Confirm required dependencies without exposing their configuration."""
+        check_connection = getattr(store, "check_connection", None)
+        if check_connection is None:
+            raise HTTPException(503, "Service is not ready.")
+        try:
+            connected = await check_connection()
+        except Exception:
+            raise HTTPException(503, "Service is not ready.") from None
+        if not connected:
+            raise HTTPException(503, "Service is not ready.")
+        return {"status": "ready"}
 
     @app.post("/api/v1/auth/sign-up", status_code=201)
     async def sign_up(payload: SignUp):

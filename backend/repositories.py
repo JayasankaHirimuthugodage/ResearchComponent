@@ -8,6 +8,9 @@ from pymongo import ASCENDING, AsyncMongoClient
 class MongoRepository:
     def __init__(self, uri: str, database_name: str) -> None:
         self.client = AsyncMongoClient(uri); self.db = self.client[database_name]
+    async def check_connection(self) -> bool:
+        await self.client.admin.command("ping")
+        return True
     async def ensure_indexes(self) -> None:
         await self.db.users.create_index("email", unique=True); await self.db.child_profiles.create_index([("owner_user_id", ASCENDING)]); await self.db.sessions.create_index("expires_at", expireAfterSeconds=0)
     async def create_user(self, **kwargs) -> dict[str, Any]:

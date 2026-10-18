@@ -12,6 +12,7 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 .coverage
+.demo-runtime/
 
 .streamlit/secrets.toml
 .streamlit/credentials.toml
