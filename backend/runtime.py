@@ -8,6 +8,20 @@ from inference.tabiclv2_explanations import analyze_tabiclv2_cognitive_model_beh
 from inference.tabiclv2_kv_cache_runtime import CACHE_RUNTIME_AUTHORIZATION, build_kv_cache_experimental_runtime_service
 
 
+def _decision_supporting_cognitive_variations(variations, decision: bool, limit: int = 3):
+    """Rank answer variations that move away from the displayed decision."""
+    grouped = {}
+    for variation in variations:
+        change = variation.probability_change
+        supports_result = change < 0 if decision else change > 0
+        if not supports_result:
+            continue
+        previous = grouped.get(variation.question_id)
+        if previous is None or abs(change) > abs(previous.probability_change):
+            grouped[variation.question_id] = variation
+    return sorted(grouped.values(), key=lambda item: -abs(item.probability_change))[:limit]
+
+
 class ExistingExperimentalRuntime:
     def __init__(self, catalog) -> None:
         self.catalog = catalog
@@ -39,6 +53,7 @@ class ExistingExperimentalRuntime:
             return result, ()
 
         xgboost = {item.domain: item for item in service.explain_xgboost_encoded(encoded, result)}
+        decisions = {item.domain: item.decision for item in result.domain_predictions}
         cognitive_prediction = next(item for item in result.domain_predictions if item.domain == "cognitive")
         cognitive = analyze_tabiclv2_cognitive_model_behaviour(
             self.catalog, encoded, cognitive_prediction, service.cognitive
@@ -46,40 +61,47 @@ class ExistingExperimentalRuntime:
 
         def xgboost_summary(domain: str):
             explanation = xgboost[domain]
+            supporting_direction = "toward_concern" if decisions[domain] else "away_from_concern"
             observations = [
-                {"question": item.display_name}
+                {
+                    "question": item.display_name,
+                    "questionnaire_domain": item.feature.rsplit("_q", 1)[0],
+                    "response": item.input_value_label,
+                    "relationship": (
+                        "toward_further_attention" if decisions[domain] else "away_from_further_attention"
+                    ),
+                }
                 for item in explanation.contributions
-                if item.feature != "baseline_checkpoint_id"
+                if item.feature != "baseline_checkpoint_id" and item.direction == supporting_direction
             ][:3]
             return {
                 "domain": domain,
                 "method": "local_model_observation_summary",
-                "headline": "What the screening considered",
+                "headline": "Answer most relevant to this result",
                 "observations": observations,
                 "limitation": (
-                    "These points help explain this screening summary. They do not identify a "
-                    "cause or provide a diagnosis."
+                    "These answers help explain the result but do not identify a cause."
                 ),
             }
 
-        grouped: dict[str, object] = {}
-        for variation in cognitive.variations:
-            previous = grouped.get(variation.question_id)
-            if previous is None or abs(variation.probability_change) > abs(previous.probability_change):
-                grouped[variation.question_id] = variation
         cognitive_observations = [
-            {"question": item.question_text}
-            for item in sorted(grouped.values(), key=lambda item: -abs(item.probability_change))[:3]
+            {
+                "question": item.question_text,
+                "questionnaire_domain": item.question_domain,
+                "response": {0: "Not yet", 1: "Sometimes", 2: "Yes, usually"}[item.original_response],
+                "relationship": "response_variation",
+            }
+            for item in _decision_supporting_cognitive_variations(
+                cognitive.variations, cognitive.baseline_decision
+            )
         ]
         cognitive_summary = {
             "domain": "cognitive",
             "method": "local_one_answer_model_behaviour_summary",
-            "headline": "What the cognitive screening checked",
+            "headline": "Answer most relevant to this result",
             "observations": cognitive_observations,
             "limitation": (
-                "The cognitive screening checked how its calculation changed when one answer at a time "
-                "was varied while all other answers stayed the same. This is not a cause, diagnosis, or "
-                "measure of clinical importance."
+                "These answers help explain the result but do not identify a cause."
             ),
         }
         return result, (xgboost_summary("communication"), cognitive_summary, xgboost_summary("social_emotional"))

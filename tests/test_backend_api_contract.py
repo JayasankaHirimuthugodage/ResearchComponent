@@ -87,7 +87,7 @@ class CountingExplanationProvider:
             overall_concern=True, incomplete_question_ids=(), model_version="synthetic", feature_schema_version="synthetic",
             questionnaire_schema_version="developmental-questionnaire-v3", threshold=None, threshold_version=None,
         )
-        domain = lambda value, headline: {"domain": value, "method": "synthetic", "headline": headline, "observations": [{"question": "Synthetic question"}], "limitation": "Synthetic non-causal explanation."}
+        domain = lambda value, headline: {"domain": value, "method": "synthetic", "headline": headline, "observations": [{"question": "Synthetic question", "questionnaire_domain": value, "response": "Sometimes", "relationship": "toward_further_attention"}], "limitation": "Synthetic non-causal explanation."}
         return result, (domain("communication", "What the screening considered"), domain("cognitive", "What the cognitive screening checked"), domain("social_emotional", "What the screening considered"))
 
 

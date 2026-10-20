@@ -304,7 +304,7 @@ def create_app(*, settings: Settings, store: Store, catalog: QuestionnaireCatalo
         return {
             "status": "complete",
             "checkpoint_id": route.checkpoint_id,
-            "notice": "All answers were considered together. The points highlighted here help explain the screening summary. They are not a diagnosis or medical advice.",
+            "notice": "All answers were considered together. Highlighted answers help explain model behaviour, but they do not show a cause, provide a diagnosis, or replace medical advice.",
             "domains": list(domains),
         }
 

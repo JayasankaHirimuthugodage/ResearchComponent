@@ -1,0 +1,37 @@
+﻿case_id,checkpoint,scenario_label,communication_probability,communication_concern,cognitive_probability,cognitive_concern,social_emotional_probability,social_emotional_concern,overall_concern,activity_recommendation_count,activity_status,execution_status
+CP2M-P,CP2M,Mostly achieved,0.0034243348,False,0.0009542569,False,0.0030411948,False,False,0,no_concern,success
+CP2M-O1,CP2M,Mixed answers,0.3637785369,True,0.5874592109,True,0.2446884285,True,True,9,ready,success
+CP2M-O2,CP2M,Mostly not yet,0.6294831726,True,0.9556482745,True,0.8484737278,True,True,9,ready,success
+CP4M-P,CP4M,Mixed answers,0.5265583043,True,0.1515171400,True,0.1190084773,False,True,6,ready,success
+CP4M-O1,CP4M,Mostly not yet,0.6679851596,True,0.9399838338,True,0.6570747897,True,True,9,ready,success
+CP4M-O2,CP4M,Mostly achieved,0.0078664594,False,0.0015424429,False,0.0081464866,False,False,0,no_concern,success
+CP6M-P,CP6M,Mostly not yet,0.8189098887,True,0.8480753214,True,0.7562522407,True,True,9,ready,success
+CP6M-O1,CP6M,Mostly achieved,0.0133695696,False,0.0006510013,False,0.0032296061,False,False,0,no_concern,success
+CP6M-O2,CP6M,Mixed answers,0.1280597341,False,0.1386197854,False,0.4952691109,True,True,3,ready,success
+CP9M-P,CP9M,Mostly achieved,0.0052940190,False,0.0011920944,False,0.0074126543,False,False,0,no_concern,success
+CP9M-O1,CP9M,Mixed answers,0.1843905619,True,0.1892303399,True,0.1754563351,True,True,9,ready,success
+CP9M-O2,CP9M,Mostly not yet,0.6194325969,True,0.9300963233,True,0.8686853527,True,True,9,ready,success
+CP12M-P,CP12M,Mixed answers,0.5139185486,True,0.2537218560,True,0.2144857539,True,True,9,ready,success
+CP12M-O1,CP12M,Mostly not yet,0.5568179517,True,0.9238871848,True,0.8510903892,True,True,9,ready,success
+CP12M-O2,CP12M,Mostly achieved,0.0055052025,False,0.0007721115,False,0.0190196383,False,False,0,no_concern,success
+CP15M-P,CP15M,Mostly not yet,0.8784480149,True,0.9371558577,True,0.7667636752,True,True,9,ready,success
+CP15M-O1,CP15M,Mostly achieved,0.0186898120,False,0.0010190813,False,0.0045760903,False,False,0,no_concern,success
+CP15M-O2,CP15M,Mixed answers,0.5011812923,True,0.1648620540,True,0.3094702024,True,True,9,ready,success
+CP18M-P,CP18M,Mostly achieved,0.0056578179,False,0.0017059032,False,0.0022788395,False,False,0,no_concern,success
+CP18M-O1,CP18M,Mixed answers,0.2368997956,True,0.2905138667,True,0.3143176287,True,True,9,ready,success
+CP18M-O2,CP18M,Mostly not yet,0.7919340377,True,0.9604526418,True,0.8166388567,True,True,9,ready,success
+CP24M-P,CP24M,Mixed answers,0.4055112978,True,0.1037334039,False,0.2656165726,True,True,6,ready,success
+CP24M-O1,CP24M,Mostly not yet,0.6295984899,True,0.8190505413,True,0.7876175597,True,True,9,ready,success
+CP24M-O2,CP24M,Mostly achieved,0.0100943182,False,0.0013395185,False,0.0073271602,False,False,0,no_concern,success
+CP30M-P,CP30M,Mostly not yet,0.8649845225,True,0.9064580001,True,0.7914957702,True,True,9,ready,success
+CP30M-O1,CP30M,Mostly achieved,0.0164652526,False,0.0005577303,False,0.0013821350,False,False,0,no_concern,success
+CP30M-O2,CP30M,Mixed answers,0.3983296155,True,0.1540479569,True,0.3782166216,True,True,9,ready,success
+CP36M-P,CP36M,Mostly achieved,0.0053234402,False,0.0007426999,False,0.0038038320,False,False,0,no_concern,success
+CP36M-O1,CP36M,Mixed answers,0.0738718818,False,0.1634471674,True,0.0609937374,False,True,3,ready,success
+CP36M-O2,CP36M,Mostly not yet,0.6520217528,True,0.8527139053,True,0.6412603251,True,True,9,ready,success
+CP48M-P,CP48M,Mixed answers,0.5489376666,True,0.3628536386,True,0.2251844863,True,True,9,ready,success
+CP48M-O1,CP48M,Mostly not yet,0.5292119897,True,0.9458708678,True,0.8587029076,True,True,9,ready,success
+CP48M-O2,CP48M,Mostly achieved,0.0091574464,False,0.0010775720,False,0.0040812321,False,False,0,no_concern,success
+CP60M-P,CP60M,Mostly not yet,0.8159444366,True,0.9274692030,True,0.8877553174,True,True,9,ready,success
+CP60M-O1,CP60M,Mostly achieved,0.0176404436,False,0.0006651649,False,0.0016639078,False,False,0,no_concern,success
+CP60M-O2,CP60M,Mixed answers,0.2294896189,True,0.1929629564,True,0.3253714446,True,True,9,ready,success
