@@ -110,9 +110,9 @@ def _overall_caregiver_summary(domain_predictions) -> str:
     }
     identified = [labels[item.domain] for item in domain_predictions if item.decision]
     if not identified:
-        return "This screening did not flag any of the three areas. It does not rule out developmental needs."
+        return "This three-month prediction did not identify any of the three areas for additional monitoring. It does not rule out developmental needs."
     return (
-        "This screening suggests that additional monitoring may be helpful for: "
+        "This three-month prediction suggests that additional monitoring may be helpful for: "
         + ", ".join(identified)
         + ". It is not a diagnosis."
     )
