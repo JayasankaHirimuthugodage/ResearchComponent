@@ -26,8 +26,8 @@ function AuthScreen({ onAuthenticated }: { onAuthenticated: (email: string) => v
 }
 
 function Dashboard({ profile, questionnaire, startSelection, setView }: { profile: ChildProfile | null; questionnaire: Questionnaire | null; startSelection: () => void; setView: (view: View) => void }) {
-  if (!profile || !questionnaire) return <section className="page-content"><p className="eyebrow">Mental development</p><h1>Ready to begin a development check?</h1><p className="lead">Choose a child profile to see the development check prepared for their age.</p><section className="next-card"><h2>Select child profile</h2><p>Choose the child who will complete the development check.</p><button className="primary-button primary-button--active" onClick={startSelection} type="button">Select child profile</button></section></section>
-  return <section className="page-content dashboard-page"><p className="eyebrow">Mental development</p><h1>{profileName(profile)}&apos;s developmental check</h1><p className="lead">{checkpointLabel(questionnaire.checkpoint_id)} &middot; An age-appropriate caregiver observation check is ready.</p><section className="ready-card"><div className="ready-card__icon"><Sparkles size={22} /></div><div><p className="ready-card__eyebrow">Age-appropriate check</p><h2>{checkpointLabel(questionnaire.checkpoint_id)}</h2><p>{questionnaire.questions.length} questions across communication, cognitive, and social-emotional development.</p></div><span className="status-pill">Ready now</span></section><h2 className="section-heading">Development areas</h2><div className="domain-chips"><span className="chip chip--blue">Communication</span><span className="chip chip--pink">Cognitive</span><span className="chip">Social-emotional</span></div><section className="previous-card"><span className="previous-card__icon"><ClipboardList size={20} /></span><div><h2>Before you begin</h2><p>Choose the answer that best represents what you usually observe. This screening supports early monitoring and does not provide a diagnosis.</p></div></section><button className="primary-button primary-button--active" onClick={() => setView('assessment-intro')} type="button">Start assessment</button><button className="text-button" onClick={startSelection} type="button">Choose another child</button></section>
+  if (!profile || !questionnaire) return <section className="page-content"><h1>Ready to begin a development check?</h1><p className="lead">Choose a child profile to see the development check prepared for their age.</p><section className="next-card"><h2>Select child profile</h2><p>Choose the child who will complete the development check.</p><button className="primary-button primary-button--active" onClick={startSelection} type="button">Select child profile</button></section></section>
+  return <section className="page-content dashboard-page"><h1>{profileName(profile)}&apos;s developmental check</h1><p className="lead">{checkpointLabel(questionnaire.checkpoint_id)} &middot; An age-appropriate caregiver observation check is ready.</p><section className="ready-card"><div className="ready-card__icon"><Sparkles size={22} /></div><div><p className="ready-card__eyebrow">Age-appropriate check</p><h2>{checkpointLabel(questionnaire.checkpoint_id)}</h2><p>{questionnaire.questions.length} questions across communication, cognitive, and social-emotional development.</p></div><span className="status-pill">Ready now</span></section><h2 className="section-heading">Development areas</h2><div className="domain-chips"><span className="chip chip--blue">Communication</span><span className="chip chip--pink">Cognitive</span><span className="chip">Social-emotional</span></div><section className="previous-card"><span className="previous-card__icon"><ClipboardList size={20} /></span><div><h2>Before you begin</h2><p>Choose the answer that best represents what you usually observe. This screening supports early monitoring and does not provide a diagnosis.</p></div></section><button className="primary-button primary-button--active" onClick={() => setView('assessment-intro')} type="button">Start assessment</button><button className="text-button" onClick={startSelection} type="button">Choose another child</button></section>
 }
 
 function Profiles({ mode, profiles, loading, error, select, showDetails, setView }: { mode: ProfileMode; profiles: ChildProfile[]; loading: boolean; error: string; select: (profile: ChildProfile) => void; showDetails: (profile: ChildProfile) => void; setView: (view: View) => void }) {
@@ -108,15 +108,27 @@ function ActivitySuitability({ questions, options, submit, setView }: { question
 }
 
 function ActivityPlan({ activities, select, setView }: { activities: ActivityResponse; select: (title: string, instructions: string) => void; setView: (view: View) => void }) {
-  const cards = activities.domains.flatMap((domain) => domain.activities.map((activity) => ({ ...activity, domain: domainLabel[domain.domain] ?? domain.domain })))
+  const cards = Array.from(activities.domains.reduce((unique, domain) => {
+    const label = domainLabel[domain.domain] ?? domain.domain
+    for (const activity of domain.activities) {
+      const key = `${activity.title}\u0000${activity.instructions}`
+      const existing = unique.get(key)
+      if (existing) {
+        if (!existing.domains.includes(label)) existing.domains.push(label)
+      } else {
+        unique.set(key, { ...activity, domains: [label] })
+      }
+    }
+    return unique
+  }, new Map<string, { title: string; instructions: string; domains: string[] }>()).values())
   return <section className="page-content activity-page">
     <button className="back-link" onClick={() => setView('results')} type="button"><ArrowLeft size={17} /> Prediction results</button>
     <p className="eyebrow">Activity plan</p>
     <h1>Activities for your child</h1>
     <p className="lead">{activities.message}</p>
-    {cards.length ? <div className="activity-card-list">{cards.map((activity, index) => <article className={`activity-card ${index % 2 ? 'activity-card--pink' : ''}`} key={`${activity.domain}-${activity.title}`}>
+    {cards.length ? <div className="activity-card-list">{cards.map((activity, index) => <article className={`activity-card ${index % 2 ? 'activity-card--pink' : ''}`} key={`${activity.title}-${activity.instructions}`}>
       <span className="activity-number">{index + 1}</span>
-      <div className="activity-card__content"><span className="activity-domain">{activity.domain}</span><h2>{activity.title}</h2><p>Open the activity to see the steps and safety guidance.</p></div>
+      <div className="activity-card__content"><span className="activity-domain">{activity.domains.join(' · ')}</span><h2>{activity.title}</h2><p>Open the activity to see the steps and safety guidance.</p></div>
       <button aria-label={`View activity: ${activity.title}`} onClick={() => select(activity.title, activity.instructions)} type="button">View activity</button>
     </article>)}</div> : <section className="results-placeholder"><Info size={21} /><div><strong>No targeted activity cards are available.</strong><p>{activities.message}</p></div></section>}
     <button className="primary-button primary-button--active" onClick={() => setView('dashboard')} type="button">Return to dashboard</button>
