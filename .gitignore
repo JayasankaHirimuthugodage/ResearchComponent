@@ -18,3 +18,6 @@ __pycache__/
 .streamlit/credentials.toml
 .venv-tabiclv2/
 .venv-tabiclv2-xai/
+.venv*/
+venv/
+env/
