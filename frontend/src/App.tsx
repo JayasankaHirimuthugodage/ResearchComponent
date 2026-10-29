@@ -1,183 +1,18 @@
-import { Activity, ArrowLeft, Baby, Brain, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, ClipboardList, Flag, Info, Menu, Plus, Sparkles, Syringe, UserRound, X } from 'lucide-react'
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { api, type ActivityResponse, type CaregiverExplanation, type ChildProfile, type Prediction, type ProfileInput, type Questionnaire, type SafetyQuestion } from './api'
-
-type View = 'auth' | 'dashboard' | 'profiles' | 'profile-detail' | 'new-profile' | 'assessment-intro' | 'questionnaire' | 'results' | 'activity-suitability' | 'activity-plan' | 'activity-detail'
-type AuthMode = 'sign-in' | 'sign-up'
-type ProfileMode = 'manage' | 'select-for-assessment'
-type RecoverableView = 'results' | 'activity-suitability' | 'activity-plan' | 'activity-detail'
-type DemoRecovery = { version: 1; profile_id: string; assessment_responses: Record<string, string>; safety_responses?: Record<string, string>; view: RecoverableView; activity_title?: string }
-const recoveryKey = 'development-demo-recovery-v1'
-const languages = ['Sinhala', 'Tamil', 'English', 'Another language']
-const domainLabel: Record<string, string> = { communication: 'Communication', cognitive: 'Cognitive development', social_emotional: 'Social and emotional development' }
-const checkpointLabel = (id: string) => id.replace(/^CP/, '').replace('M', '-month check')
-const profileName = (profile: ChildProfile) => profile.display_name?.trim() || 'Your child'
-function currentAge(dateOfBirth: string) { const birth = new Date(`${dateOfBirth}T00:00:00`); const today = new Date(); let months = (today.getFullYear() - birth.getFullYear()) * 12 + today.getMonth() - birth.getMonth(); if (today.getDate() < birth.getDate()) months -= 1; months = Math.max(0, months); const years = Math.floor(months / 12); const remainingMonths = months % 12; return years ? `${years} ${years === 1 ? 'year' : 'years'}${remainingMonths ? `, ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}` : ''}` : `${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}` }
-
-function Sidebar({ activeLabel, open, onClose, authenticated, email, onNavigate, signOut }: { activeLabel: string; open: boolean; onClose: () => void; authenticated: boolean; email: string | null; onNavigate: (label: string) => void; signOut: () => void }) {
-  const nav = [['Profile', UserRound], ['Child Growth', ChartNoAxesColumnIncreasing], ['Vaccination', Syringe], ['ECC Screening', Activity], ['Mental Development', Brain]] as const
-  return <aside aria-label="Primary navigation" className={`sidebar ${open ? 'sidebar--open' : ''}`}><div className="sidebar__brand"><span>Child</span> Care<button aria-label="Close navigation" className="icon-button sidebar__close" onClick={onClose}><X size={20} /></button></div><nav className="sidebar__nav">{nav.map(([label, Icon]) => <button className={`nav-item ${label === activeLabel ? 'nav-item--active' : ''}`} key={label} onClick={() => onNavigate(label)} type="button"><Icon size={18} /><span>{label}</span>{label !== 'Profile' ? <ChevronDown className="nav-item__chevron" size={16} /> : null}</button>)}</nav><div className="sidebar__footer"><span className="avatar">{authenticated ? email?.slice(0, 1).toUpperCase() : 'C'}</span><div><strong>{authenticated ? 'Caregiver account' : 'Local demo access'}</strong><small>{authenticated ? email : 'Sign in to continue'}</small>{authenticated ? <button className="signout-button" onClick={signOut} type="button">Sign out</button> : null}</div></div></aside>
-}
-
-function AuthScreen({ onAuthenticated }: { onAuthenticated: (email: string) => void }) {
-  const [mode, setMode] = useState<AuthMode>('sign-in'); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [confirm, setConfirm] = useState(''); const [busy, setBusy] = useState(false); const [error, setError] = useState('')
-  async function submit(event: FormEvent) { event.preventDefault(); setError(''); if (mode === 'sign-up' && password !== confirm) return setError('The two passwords do not match.'); setBusy(true); try { if (mode === 'sign-up') await api.signUp(email, password); const session = await api.signIn(email, password); onAuthenticated(session.email) } catch (reason) { setError(reason instanceof Error ? reason.message : 'Unable to continue.') } finally { setBusy(false) } }
-  return <section className="auth-layout" aria-labelledby="auth-title"><div className="auth-intro"><p className="eyebrow">AI-Driven Multi-Model System for Child Health</p><h1 id="auth-title">Helping you support your child&apos;s healthy development.</h1><p className="lead">Sign in or create an account to continue.</p></div><section className="auth-card"><div className="auth-card__heading"><h2>{mode === 'sign-in' ? 'Welcome back' : 'Create caregiver account'}</h2><p>{mode === 'sign-in' ? 'Sign in to continue with your child profiles.' : 'Use an email and a password of at least 12 characters.'}</p></div><form onSubmit={submit}>{mode === 'sign-up' ? <label><span>Your name <em>optional</em></span><input placeholder="Caregiver name" /></label> : null}<label><span>Email address</span><input autoComplete="email" onChange={(event) => setEmail(event.target.value)} required type="email" value={email} /></label><label><span>Password</span><input autoComplete={mode === 'sign-in' ? 'current-password' : 'new-password'} minLength={12} onChange={(event) => setPassword(event.target.value)} required type="password" value={password} /></label>{mode === 'sign-up' ? <label><span>Confirm password</span><input autoComplete="new-password" minLength={12} onChange={(event) => setConfirm(event.target.value)} required type="password" value={confirm} /></label> : null}{error ? <p className="form-error">{error}</p> : null}<button className="primary-button primary-button--full" disabled={busy} type="submit">{busy ? 'Please wait...' : mode === 'sign-in' ? 'Sign in' : 'Create account'}</button></form><div className="auth-card__switch"><span>{mode === 'sign-in' ? 'New caregiver?' : 'Already have an account?'}</span><button onClick={() => { setMode(mode === 'sign-in' ? 'sign-up' : 'sign-in'); setError('') }} type="button">{mode === 'sign-in' ? 'Create an account' : 'Sign in instead'}</button></div></section></section>
-}
-
-function Dashboard({ profile, questionnaire, startSelection, setView }: { profile: ChildProfile | null; questionnaire: Questionnaire | null; startSelection: () => void; setView: (view: View) => void }) {
-  if (!profile || !questionnaire) return <section className="page-content"><h1>Ready to begin a development check?</h1><p className="lead">Choose a child profile to see the development check prepared for their age.</p><section className="next-card"><h2>Select child profile</h2><p>Choose the child who will complete the development check.</p><button className="primary-button primary-button--active" onClick={startSelection} type="button">Select child profile</button></section></section>
-  return <section className="page-content dashboard-page"><h1>{profileName(profile)}&apos;s developmental check</h1><p className="lead">{checkpointLabel(questionnaire.checkpoint_id)} &middot; An age-appropriate caregiver observation check is ready.</p><section className="ready-card"><div className="ready-card__icon"><Sparkles size={22} /></div><div><p className="ready-card__eyebrow">Age-appropriate check</p><h2>{checkpointLabel(questionnaire.checkpoint_id)}</h2><p>{questionnaire.questions.length} questions across communication, cognitive, and social-emotional development.</p></div><span className="status-pill">Ready now</span></section><h2 className="section-heading">Development areas</h2><div className="domain-chips"><span className="chip chip--blue">Communication</span><span className="chip chip--pink">Cognitive</span><span className="chip">Social-emotional</span></div><section className="previous-card"><span className="previous-card__icon"><ClipboardList size={20} /></span><div><h2>Before you begin</h2><p>Choose the answer that best represents what you usually observe. This screening supports early monitoring and does not provide a diagnosis.</p></div></section><button className="primary-button primary-button--active" onClick={() => setView('assessment-intro')} type="button">Start assessment</button><button className="text-button" onClick={startSelection} type="button">Choose another child</button></section>
-}
-
-function Profiles({ mode, profiles, loading, error, select, showDetails, setView }: { mode: ProfileMode; profiles: ChildProfile[]; loading: boolean; error: string; select: (profile: ChildProfile) => void; showDetails: (profile: ChildProfile) => void; setView: (view: View) => void }) {
-  const selecting = mode === 'select-for-assessment'
-  return <section className="page-content profile-page">{selecting ? <button className="back-link" onClick={() => setView('dashboard')} type="button"><ArrowLeft size={17} /> Mental development</button> : null}<p className="eyebrow">Child profiles</p><h1>{selecting ? 'Choose a child for a development check' : 'Child profiles'}</h1><p className="lead">{selecting ? 'Choose the child who will complete the development check.' : 'Add and view the child profiles saved to your caregiver account.'}</p>{error ? <p className="form-error">{error}</p> : null}<div className="profile-list">{loading ? <p>Loading profiles...</p> : profiles.map((profile) => selecting ? <button className="profile-card" key={profile.id} onClick={() => select(profile)} type="button"><span className="profile-card__icon"><Baby size={21} /></span><span><strong>{profileName(profile)}</strong><small>{currentAge(profile.date_of_birth)} old · Select for a development check</small></span><ChevronRight className="profile-card__arrow" size={20} /></button> : <article className="profile-card profile-card--static" key={profile.id}><span className="profile-card__icon"><Baby size={21} /></span><span><strong>{profileName(profile)}</strong><small>{currentAge(profile.date_of_birth)} old</small></span><button className="profile-card__details" onClick={() => showDetails(profile)} type="button">View details</button></article>)}</div>{!loading && profiles.length === 0 ? <p className="empty-state">No child profiles yet. Add one to begin.</p> : null}<button className="outline-button" onClick={() => setView('new-profile')} type="button"><Plus size={18} /> Add child profile</button></section>
-}
-
-function ProfileDetails({ profile, setView }: { profile: ChildProfile; setView: (view: View) => void }) { return <section className="page-content profile-page"><button className="back-link" onClick={() => setView('profiles')} type="button"><ArrowLeft size={17} /> Child profiles</button><p className="eyebrow">Child profile</p><h1>{profileName(profile)}</h1><p className="lead">Current age: <strong>{currentAge(profile.date_of_birth)}</strong></p><section className="profile-details-card"><div><span>Date of birth</span><strong>{new Date(`${profile.date_of_birth}T00:00:00`).toLocaleDateString()}</strong></div><div><span>Sex recorded at birth</span><strong>{profile.sex_recorded_at_birth === 'male' ? 'Male' : 'Female'}</strong></div><div><span>Born prematurely</span><strong>{profile.premature_status === 'yes' ? 'Yes' : profile.premature_status === 'no' ? 'No' : 'Not sure'}</strong></div>{profile.premature_status === 'yes' && profile.gestational_age_weeks ? <div><span>Gestational age at birth</span><strong>{profile.gestational_age_weeks} weeks</strong></div> : null}<div><span>Birth-weight range</span><strong>{profile.birth_weight_range}</strong></div><div><span>Languages spoken at home</span><strong>{profile.home_languages.join(', ')}</strong></div></section></section> }
-
-function NewProfile({ created, setView }: { created: (profile: ChildProfile) => void; setView: (view: View) => void }) {
-  const [premature, setPremature] = useState<'yes' | 'no' | 'not_sure' | ''>(''); const [languagesSelected, setLanguagesSelected] = useState<string[]>([]); const [busy, setBusy] = useState(false); const [error, setError] = useState('')
-  function language(value: string) { setLanguagesSelected((items) => items.includes(value) ? items.filter((item) => item !== value) : [...items, value]) }
-  async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setError(''); if (!languagesSelected.length) return setError('Select at least one home language.'); const fields = new FormData(event.currentTarget); const weeks = fields.get('gestational_age_weeks'); const payload: ProfileInput = { display_name: String(fields.get('display_name') || '') || null, date_of_birth: String(fields.get('date_of_birth')), sex_recorded_at_birth: String(fields.get('sex_recorded_at_birth')) as 'male' | 'female', premature_status: premature as 'yes' | 'no' | 'not_sure', gestational_age_weeks: premature === 'yes' && weeks ? Number(weeks) : null, birth_weight_range: String(fields.get('birth_weight_range')), home_languages: languagesSelected }; setBusy(true); try { created(await api.createProfile(payload)) } catch (reason) { setError(reason instanceof Error ? reason.message : 'Unable to save the child profile.') } finally { setBusy(false) } }
-  return <section className="page-content profile-page"><button className="back-link" onClick={() => setView('profiles')} type="button"><ArrowLeft size={17} /> Child profiles</button><p className="eyebrow">New child profile</p><h1>Tell us about your child</h1><form className="profile-form" onSubmit={submit}><fieldset><legend>Child details</legend><label><span>Child&apos;s name <em>optional</em></span><input name="display_name" placeholder="Name used in this app" /></label><label><span>Date of birth</span><input max={new Date().toISOString().slice(0, 10)} name="date_of_birth" required type="date" /></label><div className="form-group"><span>Sex recorded at birth</span><div className="radio-row"><label><input name="sex_recorded_at_birth" required type="radio" value="male" /> Male</label><label><input name="sex_recorded_at_birth" type="radio" value="female" /> Female</label></div></div></fieldset><fieldset><legend>Birth information</legend><div className="form-group"><span>Was your child born before 37 completed weeks?</span><div className="radio-row radio-row--stack">{(['yes', 'no', 'not_sure'] as const).map((value) => <label key={value}><input checked={premature === value} name="premature" onChange={() => setPremature(value)} required type="radio" /> {value === 'not_sure' ? 'Not sure' : value[0].toUpperCase() + value.slice(1)}</label>)}</div></div>{premature === 'yes' ? <label><span>Gestational age at birth</span><select defaultValue="" name="gestational_age_weeks" required><option disabled value="">Select completed weeks</option>{Array.from({ length: 17 }, (_, index) => index + 20).map((weeks) => <option key={weeks} value={weeks}>{weeks} weeks</option>)}</select></label> : null}<label><span>Birth-weight range</span><select defaultValue="" name="birth_weight_range" required><option disabled value="">Select a range</option><option>Less than 1.5 kg</option><option>1.5–1.99 kg</option><option>2.0–2.49 kg</option><option>2.5–2.99 kg</option><option>3.0–3.49 kg</option><option>3.5–3.99 kg</option><option>4.0 kg or more</option><option>Not sure / Record unavailable</option></select></label></fieldset><fieldset><legend>Languages spoken to your child</legend><p className="field-description">Select one or more languages regularly spoken by parents or caregivers.</p><div className="language-grid">{languages.map((value) => <label key={value}><input checked={languagesSelected.includes(value)} onChange={() => language(value)} type="checkbox" /> {value}</label>)}</div></fieldset>{error ? <p className="form-error">{error}</p> : null}<button className="primary-button primary-button--active" disabled={busy} type="submit">{busy ? 'Saving...' : 'Save child profile'}</button></form></section>
-}
-
-function AssessmentIntro({ profile, questionnaire, setView }: { profile: ChildProfile; questionnaire: Questionnaire; setView: (view: View) => void }) {
-  return <section className="page-content assessment-intro">
-    <button className="back-link" onClick={() => setView('dashboard')} type="button"><ArrowLeft size={17} /> Back to dashboard</button>
-    <div className="assessment-intro__lead">
-      <p className="eyebrow">{checkpointLabel(questionnaire.checkpoint_id)}</p>
-      <h1>Before you begin</h1>
-      <p className="lead">This check asks about everyday observations across three development areas. Answer based on what you usually see.</p>
-      <button className="primary-button primary-button--active" onClick={() => setView('questionnaire')} type="button">Begin questions</button>
-    </div>
-    <div className="assessment-intro__details">
-      <section className="assessment-summary"><div className="assessment-count">{questionnaire.questions.length}</div><div><h2>Questions for {profileName(profile)}</h2><p>This development check is matched to your child&apos;s current age.</p></div></section>
-      <div className="area-list"><div><span className="area-dot area-dot--blue" /><div><strong>Communication</strong><small>Everyday words and understanding</small></div><span className="included-pill">Included</span></div><div><span className="area-dot area-dot--pink" /><div><strong>Cognitive</strong><small>Thinking and problem-solving</small></div><span className="included-pill">Included</span></div><div><span className="area-dot" /><div><strong>Social-emotional</strong><small>Feelings and social responses</small></div><span className="included-pill">Included</span></div></div>
-      <section className="notice-card"><strong>This is a screening support tool.</strong><p>It does not diagnose a developmental condition or replace professional assessment.</p></section>
-    </div>
-  </section>
-}
-
-function QuestionnaireScreen({ questionnaire, complete }: { questionnaire: Questionnaire; complete: (responses: Record<string, string>) => Promise<void> }) {
-  const [index, setIndex] = useState(0); const [answers, setAnswers] = useState<Record<string, string>>({}); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const question = questionnaire.questions[index]; const answer = answers[question.id]; const last = index === questionnaire.questions.length - 1; const progress = ((index + 1) / questionnaire.questions.length) * 100
-  async function next() { if (!answer) return; if (!last) return setIndex((value) => value + 1); setBusy(true); setError(''); try { await complete(answers) } catch (reason) { setError(reason instanceof Error ? reason.message : 'Unable to process the screening.') } finally { setBusy(false) } }
-  const domainClass = question.domain === 'cognitive' ? 'question-domain--pink' : question.domain === 'social_emotional' ? 'question-domain--neutral' : ''
-  return <section className="page-content questionnaire-page">
-    <div className="questionnaire-progress"><div className="question-meta"><span>Question {index + 1} of {questionnaire.questions.length}</span><span>{Math.round(progress)}% complete</span></div><div className="progress-track"><span style={{ width: `${progress}%` }} /></div></div>
-    <div className="questionnaire-workspace">
-      <div className="questionnaire-prompt"><span className={`question-domain ${domainClass}`}>{domainLabel[question.domain]}</span><h1>{question.text}</h1><p className="lead">Choose the answer that best represents what you usually observe.</p></div>
-      <div className="questionnaire-response"><section className="question-card"><div className="answer-list">{questionnaire.response_options.map((option) => <label className={`answer-option ${answer === option.code ? 'answer-option--selected' : ''}`} key={option.code}><input checked={answer === option.code} name="answer" onChange={() => setAnswers((all) => ({ ...all, [question.id]: option.code }))} type="radio" /><span>{option.label}</span></label>)}</div></section>{error ? <p className="form-error">{error}</p> : null}<div className="question-actions"><button className="outline-button" disabled={index === 0 || busy} onClick={() => setIndex((value) => value - 1)} type="button">Previous</button><button className="primary-button primary-button--active" disabled={!answer || busy} onClick={next} type="button">{busy ? 'Preparing prediction...' : last ? 'View prediction' : 'Next question'}</button></div></div>
-    </div>
-    <p className="question-privacy-note">Your answers will be used to prepare the three-month monitoring prediction.</p>
-  </section>
-}
-
-type ExplanationObservation = CaregiverExplanation['domains'][number]['observations'][number]
-function ExplanationObservationItem({ observation, sourceAreaMessage }: { observation: ExplanationObservation; sourceAreaMessage?: string }) {
-  const sourceArea = domainLabel[observation.questionnaire_domain] ?? observation.questionnaire_domain.replaceAll('_', ' ')
-  return <li><span className="observation-domain">From the {sourceArea.toLowerCase()} questions</span><p>{observation.question}</p><span className="observation-response">Your answer: <strong>{observation.response}</strong></span>{sourceAreaMessage ? <small className="observation-area-status">{sourceAreaMessage}</small> : null}</li>
-}
-
-function Results({ result, explanation, explanationLoading, explanationError, goActivities, setView }: { result: Prediction; explanation: CaregiverExplanation | null; explanationLoading: boolean; explanationError: string; goActivities: () => void; setView: (view: View) => void }) {
-  if (result.status === 'incomplete') return <section className="page-content results-page"><h1>More answers are needed</h1><p className="lead">{result.message}</p><button className="primary-button primary-button--active" onClick={() => setView('questionnaire')} type="button">Return to questions</button></section>
-  const byDomain = new Map(explanation?.domains.map((item) => [item.domain, item]))
-  const flaggedDomains = result.domains.filter((domain) => domain.decision)
-  const unflaggedDomains = result.domains.filter((domain) => !domain.decision)
-  return <section className="page-content results-page">
-    <button className="back-link" onClick={() => setView('dashboard')} type="button"><ArrowLeft size={17} /> Back to dashboard</button>
-    <p className="eyebrow">Research prediction</p>
-    <h1>Three-month developmental monitoring prediction</h1>
-    <p className="lead">{result.overall_message}</p>
-    {flaggedDomains.length ? <>
-      <section className="results-attention-heading">
-        <span className="results-attention-heading__icon"><Flag aria-hidden="true" size={21} /></span>
-        <div><h2>Areas that may benefit from further attention</h2><p>These results suggest continued observation and, when appropriate, a conversation with a qualified healthcare professional.</p></div>
-        <span className="results-attention-heading__count">{flaggedDomains.length} of {result.domains.length} {result.domains.length === 1 ? 'area' : 'areas'}</span>
-      </section>
-      <div className="result-list">
-      {flaggedDomains.map((domain) => {
-        const details = byDomain.get(domain.domain)
-        const sameAreaObservations = details?.observations.filter((observation) => observation.questionnaire_domain === domain.domain) ?? []
-        const otherAreaObservations = details?.observations.filter((observation) => observation.questionnaire_domain !== domain.domain) ?? []
-        return <section className={`result-card result-card--detailed ${domain.domain === 'cognitive' ? 'result-card--pink' : domain.domain === 'social_emotional' ? 'result-card--neutral' : ''}`} key={domain.domain}>
-          <div className="result-card__content">
-            <div className="result-card__heading">
-              <span className="result-card__flag"><Flag aria-hidden="true" size={17} /></span>
-              <h2>{domain.title}</h2>
-              <span className="result-card__status">Further attention suggested</span>
-            </div>
-            <p className="result-card__message">Additional monitoring may be helpful.</p>
-            {details ? <details className="caregiver-explanation">
-              <summary>Why this result?<ChevronDown aria-hidden="true" size={17} /></summary>
-              <div className="caregiver-explanation__content">
-                <p className="explanation-intro">All your answers were considered together. The answers below played the largest part in this result, but no single answer decided it.</p>
-                {sameAreaObservations.length ? <section className="observation-group"><h3>Answers from this development area that mattered most</h3><ul className="explanation-observations">{sameAreaObservations.map((observation) => <ExplanationObservationItem key={observation.question} observation={observation} />)}</ul></section> : <p className="explanation-empty">No single answer from this development area stood out on its own.</p>}
-                {otherAreaObservations.length ? <details className="observation-more observation-more--other"><summary>Other answers that also played a part <span>{otherAreaObservations.length}</span></summary><div className="observation-more__content"><p>Some answers from other parts of the check also played a part. Children&apos;s skills can be connected across development areas.</p><ul className="explanation-observations">{otherAreaObservations.map((observation) => {
-                  const sourceResult = result.domains.find((item) => item.domain === observation.questionnaire_domain)
-                  const sourceName = domainLabel[observation.questionnaire_domain] ?? observation.questionnaire_domain.replaceAll('_', ' ')
-                  const sourceAreaMessage = sourceResult?.decision ? `${sourceName} is shown separately in your results.` : `${sourceName} was not separately highlighted for further monitoring.`
-                  return <ExplanationObservationItem key={observation.question} observation={observation} sourceAreaMessage={sourceAreaMessage} />
-                })}</ul></div></details> : null}
-                <p className="explanation-limitation">These answers do not identify a cause or provide a diagnosis.</p>
-              </div>
-            </details> : null}
-          </div>
-        </section>
-      })}
-      </div>
-      {unflaggedDomains.length ? <p className="unflagged-summary">The other development {unflaggedDomains.length === 1 ? 'area was' : 'areas were'} not identified for additional monitoring by this prediction.</p> : null}
-    </> : <section className="results-placeholder results-placeholder--clear"><Info size={22} /><div><strong>No development areas were identified for additional monitoring by this three-month prediction.</strong><p>This does not rule out developmental needs.</p></div></section>}
-    {flaggedDomains.length && explanationLoading ? <p className="explanation-loading">Preparing caregiver-friendly explanations...</p> : null}
-    {flaggedDomains.length && explanationError ? <p className="form-error">Screening results are available, but the explanation could not be prepared: {explanationError}</p> : null}
-    {flaggedDomains.length && explanation?.notice ? <details className="explanation-notice"><summary>About this explanation</summary><p>{explanation.notice}</p></details> : null}
-    <section className="notice-card"><strong>This research prediction is not a diagnosis or a guarantee of future development.</strong><p>Speak with a qualified healthcare professional if you have questions or concerns about your child&apos;s development.</p></section>
-    <div className="result-actions">{flaggedDomains.length ? <button className="primary-button primary-button--active" onClick={goActivities} type="button">Explore activity support</button> : null}<button className="text-button" onClick={() => setView('dashboard')} type="button">Return to dashboard</button></div>
-  </section>
-}
-
-function ActivitySuitability({ questions, options, submit, setView }: { questions: SafetyQuestion[]; options: { code: string; label: string }[]; submit: (responses: Record<string, string>) => Promise<void>; setView: (view: View) => void }) {
-  const [answers, setAnswers] = useState<Record<string, string>>({}); const [busy, setBusy] = useState(false); const [error, setError] = useState('')
-  const answeredCount = questions.filter((question) => Boolean(answers[question.id])).length
-  const complete = answeredCount === questions.length
-  async function send() { if (Object.keys(answers).length !== questions.length) return setError('Please answer every activity-suitability question.'); setBusy(true); setError(''); try { await submit(answers) } catch (reason) { setError(reason instanceof Error ? reason.message : 'Unable to load activities.') } finally { setBusy(false) } }
-  return <section className="page-content activity-page"><button className="back-link" onClick={() => setView('results')} type="button"><ArrowLeft size={17} /> Prediction results</button><p className="eyebrow">Activity support</p><h1>A few questions about current abilities</h1><p className="lead">These answers help identify age-appropriate activity suggestions.</p><div className="activity-form-progress"><div><strong>{complete ? 'All questions answered' : `${answeredCount} of ${questions.length} answered`}</strong><span>{complete ? 'Ready to find suitable activities.' : 'Please answer each question.'}</span></div><div aria-label={`${answeredCount} of ${questions.length} questions answered`} aria-valuemax={questions.length} aria-valuemin={0} aria-valuenow={answeredCount} className="activity-progress-track" role="progressbar"><span style={{ width: `${questions.length ? (answeredCount / questions.length) * 100 : 0}%` }} /></div></div><div className="suitability-list">{questions.map((question) => {
-    const heading = question.dimension.replaceAll('_', ' ').replace(/^./, (character) => character.toUpperCase())
-    return <fieldset className={`suitability-card ${answers[question.id] ? 'suitability-card--answered' : ''}`} key={question.id}><legend className="sr-only">{heading}</legend><div className="suitability-card__heading"><span aria-hidden="true" className="suitability-card__marker" /><h2 aria-hidden="true">{heading}</h2></div><p>{question.text}</p><div className="suitability-options">{options.map((option) => <label className={answers[question.id] === option.code ? 'suitability-option suitability-option--selected' : 'suitability-option'} key={option.code}><input checked={answers[question.id] === option.code} name={question.id} onChange={() => { setAnswers((all) => ({ ...all, [question.id]: option.code })); setError('') }} type="radio" value={option.code} /><span>{option.label}</span></label>)}</div></fieldset>
-  })}</div>{error ? <p className="form-error">{error}</p> : null}<div className="activity-form-footer"><section className="notice-card"><strong>Activity suggestions support everyday development.</strong><p>They do not diagnose a condition or replace professional advice.</p></section><button className="primary-button primary-button--active" disabled={!complete || busy} onClick={send} type="button">{busy ? 'Finding activities...' : 'See personalised activities'}</button></div></section>
-}
-
-function ActivityPlan({ activities, select, setView }: { activities: ActivityResponse; select: (title: string, instructions: string) => void; setView: (view: View) => void }) {
-  const cards = Array.from(activities.domains.reduce((unique, domain) => {
-    const label = domainLabel[domain.domain] ?? domain.domain
-    for (const activity of domain.activities) {
-      const key = `${activity.title}\u0000${activity.instructions}`
-      const existing = unique.get(key)
-      if (existing) {
-        if (!existing.domains.includes(label)) existing.domains.push(label)
-      } else {
-        unique.set(key, { ...activity, domains: [label] })
-      }
-    }
-    return unique
-  }, new Map<string, { title: string; instructions: string; domains: string[] }>()).values())
-  return <section className="page-content activity-page">
-    <button className="back-link" onClick={() => setView('results')} type="button"><ArrowLeft size={17} /> Prediction results</button>
-    <p className="eyebrow">Activity plan</p>
-    <h1>Activities for your child</h1>
-    <p className="lead">{activities.message}</p>
-    {cards.length ? <div className="activity-card-list">{cards.map((activity, index) => <article className={`activity-card ${index % 2 ? 'activity-card--pink' : ''}`} key={`${activity.title}-${activity.instructions}`}>
-      <span className="activity-number">{index + 1}</span>
-      <div className="activity-card__content"><span className="activity-domain">{activity.domains.join(' · ')}</span><h2>{activity.title}</h2><p>Open the activity to see the steps and safety guidance.</p></div>
-      <button aria-label={`View activity: ${activity.title}`} onClick={() => select(activity.title, activity.instructions)} type="button">View activity</button>
-    </article>)}</div> : <section className="results-placeholder"><Info size={21} /><div><strong>No targeted activity cards are available.</strong><p>{activities.message}</p></div></section>}
-    <button className="primary-button primary-button--active" onClick={() => setView('dashboard')} type="button">Return to dashboard</button>
-  </section>
-}
-
-function ActivityDetail({ detail, setView }: { detail: { title: string; instructions: string }; setView: (view: View) => void }) { return <section className="page-content activity-page"><button className="back-link" onClick={() => setView('activity-plan')} type="button"><ArrowLeft size={17} /> Activity plan</button><p className="eyebrow">Activity guidance</p><h1>{detail.title}</h1><section className="activity-detail-card"><h2>How to use this activity</h2><p>{detail.instructions}</p></section><section className="notice-card"><strong>Use safe, age-appropriate objects and supervision.</strong><p>Stop if your child becomes uncomfortable, and seek professional guidance when appropriate.</p></section><button className="primary-button primary-button--active" onClick={() => setView('activity-plan')} type="button">Back to activities</button></section> }
+import { useEffect, useMemo, useState } from 'react'
+import { api, type ActivityResponse, type CaregiverExplanation, type ChildProfile, type Prediction, type Questionnaire, type SafetyQuestion } from './api'
+import { RECOVERY_KEY as recoveryKey } from './app/constants'
+import type { DemoRecovery, ProfileMode, RecoverableView, View } from './app/types'
+import { AppShell } from './components/layout/AppShell'
+import { AuthShell } from './components/layout/AuthShell'
+import { ActivityDetail } from './features/activities/ActivityDetail'
+import { ActivityPlan, ActivitySuitability } from './features/activities/ActivityScreens'
+import { AssessmentIntro } from './features/assessment/AssessmentIntro'
+import { Dashboard } from './features/assessment/Dashboard'
+import { QuestionnaireScreen } from './features/assessment/QuestionnaireScreen'
+import { AuthScreen } from './features/auth/AuthScreen'
+import { NewProfile } from './features/profiles/NewProfile'
+import { ProfileDetails, Profiles } from './features/profiles/ProfileScreens'
+import { Results } from './features/results/Results'
 
 export function App() {
   const [view, setView] = useState<View>('auth'); const [email, setEmail] = useState<string | null>(null); const [profiles, setProfiles] = useState<ChildProfile[]>([]); const [profilesLoading, setProfilesLoading] = useState(false); const [profilesError, setProfilesError] = useState(''); const [profileMode, setProfileMode] = useState<ProfileMode>('manage'); const [profileDetails, setProfileDetails] = useState<ChildProfile | null>(null); const [selectedProfile, setSelectedProfile] = useState<ChildProfile | null>(null); const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null); const [assessmentResponses, setAssessmentResponses] = useState<Record<string, string>>({}); const [prediction, setPrediction] = useState<Prediction | null>(null); const [explanation, setExplanation] = useState<CaregiverExplanation | null>(null); const [explanationLoading, setExplanationLoading] = useState(false); const [explanationError, setExplanationError] = useState(''); const [safety, setSafety] = useState<{ questions: SafetyQuestion[]; options: { code: string; label: string }[] } | null>(null); const [safetyResponses, setSafetyResponses] = useState<Record<string, string>>({}); const [activities, setActivities] = useState<ActivityResponse | null>(null); const [detail, setDetail] = useState({ title: '', instructions: '' }); const [sidebarOpen, setSidebarOpen] = useState(false); const [recoveryReady, setRecoveryReady] = useState(false)
@@ -193,8 +28,8 @@ export function App() {
   function navigate(label: string) { if (label === 'Profile') return openProfiles('manage'); if (label === 'Mental Development') { sessionStorage.removeItem(recoveryKey); setSelectedProfile(null); setQuestionnaire(null); setAssessmentResponses({}); setSafetyResponses({}); setPrediction(null); setExplanation(null); setActivities(null); setProfileMode('select-for-assessment'); setSidebarOpen(false); return setView('dashboard') } setSidebarOpen(false) }
   useEffect(() => { if (view !== 'results' || !selectedProfile || !prediction || prediction.status !== 'complete' || explanation || explanationLoading || explanationError) return; setExplanationLoading(true); api.explain(selectedProfile.id, assessmentResponses).then(setExplanation).catch((reason) => setExplanationError(reason instanceof Error ? reason.message : 'Explanation unavailable.')).finally(() => setExplanationLoading(false)) }, [view, selectedProfile, prediction, explanation, explanationLoading, explanationError, assessmentResponses])
   const content = useMemo(() => { if (view === 'auth') return <AuthScreen onAuthenticated={(value) => { setEmail(value); setView('dashboard'); void loadProfiles() }} />; if (view === 'profiles') return <Profiles error={profilesError} loading={profilesLoading} mode={profileMode} profiles={profiles} select={selectProfile} setView={setView} showDetails={(profile) => { setProfileDetails(profile); setView('profile-detail') }} />; if (view === 'profile-detail' && profileDetails) return <ProfileDetails profile={profileDetails} setView={setView} />; if (view === 'new-profile') return <NewProfile created={(profile) => { setProfiles((all) => [...all, profile]); if (profileMode === 'select-for-assessment') void selectProfile(profile); else setView('profiles') }} setView={setView} />; if (view === 'assessment-intro' && selectedProfile && questionnaire) return <AssessmentIntro profile={selectedProfile} questionnaire={questionnaire} setView={setView} />; if (view === 'questionnaire' && selectedProfile && questionnaire) return <QuestionnaireScreen complete={processAssessment} questionnaire={questionnaire} />; if (view === 'results' && prediction) return <Results explanation={explanation} explanationError={explanationError} explanationLoading={explanationLoading} goActivities={openActivities} result={prediction} setView={setView} />; if (view === 'activity-suitability' && safety) return <ActivitySuitability options={safety.options} questions={safety.questions} setView={setView} submit={loadActivities} />; if (view === 'activity-plan' && activities) return <ActivityPlan activities={activities} select={(title, instructions) => { setDetail({ title, instructions }); setView('activity-detail') }} setView={setView} />; if (view === 'activity-detail') return <ActivityDetail detail={detail} setView={setView} />; return <Dashboard profile={selectedProfile} questionnaire={questionnaire} setView={setView} startSelection={() => openProfiles('select-for-assessment')} /> }, [view, profiles, profilesLoading, profilesError, profileMode, profileDetails, selectedProfile, questionnaire, prediction, explanation, explanationLoading, explanationError, safety, activities, detail])
-  if (!recoveryReady) return <div className="auth-shell"><header className="auth-topbar"><strong><span>Child</span> Care</strong></header><section className="page-content"><p className="lead">Restoring your demo session...</p></section></div>
-  if (!email || view === 'auth') return <div className="auth-shell"><header className="auth-topbar"><strong><span>Child</span> Care</strong></header>{content}</div>
+  if (!recoveryReady) return <AuthShell><section className="page-content"><p className="lead">Restoring your demo session...</p></section></AuthShell>
+  if (!email || view === 'auth') return <AuthShell>{content}</AuthShell>
   const activeLabel = (view === 'profiles' || view === 'profile-detail' || view === 'new-profile') && profileMode === 'manage' ? 'Profile' : 'Mental Development'
-  return <div className="app-shell"><Sidebar activeLabel={activeLabel} authenticated email={email} onClose={() => setSidebarOpen(false)} onNavigate={navigate} open={sidebarOpen} signOut={signOut} />{sidebarOpen ? <button aria-label="Close navigation overlay" className="backdrop" onClick={() => setSidebarOpen(false)} /> : null}<main className="main-content"><header className="topbar"><button aria-label="Open navigation" className="icon-button" onClick={() => setSidebarOpen(true)}><Menu size={23} /></button><span className="topbar__title">{activeLabel === 'Profile' ? 'Child Profiles' : 'Language, Cognitive and Socio-emotional Development'}</span><span className="avatar avatar--top">{email.slice(0, 1).toUpperCase()}</span></header>{content}</main></div>
+  return <AppShell activeLabel={activeLabel} closeSidebar={() => setSidebarOpen(false)} email={email} navigate={navigate} openSidebar={() => setSidebarOpen(true)} sidebarOpen={sidebarOpen} signOut={signOut}>{content}</AppShell>
 }
