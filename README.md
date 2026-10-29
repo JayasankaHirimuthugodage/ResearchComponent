@@ -22,7 +22,7 @@ Data validation, development-only model selection, frozen artifact creation and 
 - a local Streamlit research-review demo accepts manual answers or synthetic quick-fill examples and runs the three checksum-verified frozen domain artifacts without retraining;
 - the 125-participant locked-test partition was evaluated once after the complete configurations were frozen; no model was refitted and no threshold was adjusted on final-test data;
 - a future ports-and-adapters service architecture is documented;
-- no production database, application source, API, frontend, recommendation engine or LLM integration has been created.
+- a local FastAPI research API, React caregiver interface and deterministic approved-activity recommendation workflow have been created; no production database or LLM integration has been created.
 
 Versioned, serialized research model bundles are stored locally under the ignored `models/slc-development-models-v1/` directory. They include preprocessing, the fitted classifier, sigmoid calibrator and frozen threshold. They are inference artifacts, not evidence of clinical or production readiness.
 
@@ -69,6 +69,19 @@ For human review, `notebooks/development-model-comparison.ipynb` presents the fi
 python -m pip install -r requirements-notebook.txt
 python -m jupyter lab
 ```
+
+### Domain-specific six-input experiment
+
+The domain-specific training notebook evaluates separate communication, cognitive and
+social-emotional concern models. Each model uses only the baseline checkpoint identifier and
+the five baseline questionnaire items from the domain being predicted. Overall concern is
+derived from the three domain decisions rather than trained as a fourth model.
+
+The experiment uses shared repeated development folds, fold-local preprocessing, PR-AUC model
+ranking, nested calibration and threshold evaluation, and a predefined Logistic
+Regression–XGBoost hybrid. It validates dataset and split provenance before training, supports
+privacy-minimised resumable progress, and keeps the locked-test partition outside development
+selection.
 
 For a local question-and-answer prediction demonstration using the frozen models, install the separate UI dependency and run:
 
