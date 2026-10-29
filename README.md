@@ -6,6 +6,12 @@ Language/Communication and Cognitive/Problem-Solving developmental-monitoring co
 This project is non-diagnostic. It must not diagnose autism, developmental delay or any
 medical condition, and it does not replace assessment by a qualified healthcare professional.
 
+## Project information
+
+- **Group ID:** J26-SE-349
+- **Student name:** Hirimuthugodage J.
+- **Student ID:** IT23297968
+
 ## Current capabilities
 
 - Three separate domain-specific developmental-concern predictions.
