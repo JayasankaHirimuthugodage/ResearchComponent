@@ -54,12 +54,3 @@ npm run build
 ```
 
 Local configuration and startup guidance is available in the component-specific README files.
-
-## Documentation
-
-- [Research and ML specification](docs/research-ml-specification.md)
-- [ML training plan](docs/ml-training-plan.md)
-- [Service architecture](docs/service-architecture-plan.md)
-- [Decision log](docs/decision-log.md)
-- [Training package](training/README.md)
-- [Frontend](frontend/README.md)
