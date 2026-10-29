@@ -12,6 +12,9 @@ medical condition, and it does not replace assessment by a qualified healthcare 
 - **Student name:** Hirimuthugodage J.
 - **Student ID:** IT23297968
 
+This repository contains an individual research component developed as part of the J26-SE-349
+group project.
+
 ## Current capabilities
 
 - Three separate domain-specific developmental-concern predictions.
