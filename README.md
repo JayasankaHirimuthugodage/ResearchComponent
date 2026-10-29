@@ -52,5 +52,3 @@ npm install
 npm test
 npm run build
 ```
-
-Local configuration and startup guidance is available in the component-specific README files.
